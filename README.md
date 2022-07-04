@@ -38,53 +38,67 @@ Solution: He can join the app as a local and volunteer to meet up with tourists 
 <b>Pages </b>
 Sign Up Page:
 - Core Features:
---Store user inputs as username and password in a database
-Stretch:
-Allow users to sign up for FIDO authentication
+1. Store user inputs as username and password in a database
+
+- Stretch:
+3. Allow users to sign up for FIDO authentication
+
+
 Login Page: 
-Core Features: 
-Check to see if username is in the database
-If so compare inputted password with the password in the database
-Otherwise, return an error message
+- Core Features: 
+1. Check to see if username is in the database
+2. If so compare inputted password with the password in the database
+3. Otherwise, return an error message
+
 
 Set-up Profile Page:
-Core features
-Display header, navbar, content, and footer
-User profile picture
-Allow users to retrieve profile photos from their desktop 
-Allow users to take live profile photos
-Once user has selected a photo, store it in the database and retrieve it to use for their profile 
+- Core features
+1. Display header, navbar, content, and footer
+2. User profile picture
+3. Allow users to retrieve profile photos from their desktop 
+4. Allow users to take live profile photos
+5. Once user has selected a photo, store it in the database and retrieve it to use for their profile 
+
 Travel logistics: 
-Display a drop down menu of all the countries (likely store all the countries in an array?)  and store that info in the users profile
-Display a drop down menu of days, months and years and store user input in the user profile 
-Display accommodation options buttons (hotel, motel, hostels etc.)
+- Core features
+1. Display a drop down menu of all the countries (likely store all the countries in an array?)  and store that info in the users profile
+2. Display a drop down menu of days, months and years and store user input in the user profile 
+3. Display accommodation options buttons (hotel, motel, hostels etc.)
+
+
 Social media:
-Allow users to input links to their social media (store this in their user profiles) and create an icon for each corresponding link to be displayed on their profile
-Stretch features 
-Allow the user to make travel profiles for more than one country with varying travel preferences and dates 
-Allow user to input their budgets and more specific information
-Allow users to opt into seeing all travelers on the site regardless of their destination
+- Core features
+1. Allow users to input links to their social media (store this in their user profiles) and create an icon for each corresponding link to be displayed on their profile
+
+- Stretch features 
+3. Allow the user to make travel profiles for more than one country with varying travel preferences and dates 
+4. Allow user to input their budgets and more specific information
+5. Allow users to opt into seeing all travelers on the site regardless of their destination
+
+
 Getting to know you page:
-Core Features
-Display main components (header, nav bar, footer, etc)
-Drop down menu of employment fields- store information
-Grid layout of interest options in the form of buttons (keep track of states for each button and pass an array of the positive states as a prop to be used when generating the matches)
-Grid layout of activities (image, title, description, cost and link to book tickets) to do for the user's specified country from the Trip locator API.
-Stretch features
+- Core Features
+1. Display main components (header, nav bar, footer, etc)
+2. Drop down menu of employment fields- store information
+3. Grid layout of interest options in the form of buttons (keep track of states for each button and pass an array of the positive states as a prop to be used when generating the matches)
+4. Grid layout of activities (image, title, description, cost and link to book tickets) to do for the user's specified country from the Trip locator API.
+
+- Stretch features
 
 View Matches Page:
-Core features
-List matches with the user based off other users countries, travel months and accommodation preferences.
+- Core features
+1. List matches with the user based off other users countries, travel months and accommodation preferences.
 
-Stretch Features
-Rank matches based off overlapping interests and activities
-Allow users to like and dislike matches 
-Implement a chat feature for matches to communicate with
+- Stretch Features
+1. Rank matches based off overlapping interests and activities
+2. Allow users to like and dislike matches 
+3. Implement a chat feature for matches to communicate with
 
 View neighboring travelers/locals page:
-Core Features
-Display a map with pins of the location of  travelers in the users country using the google maps API
-Stretch features
-When user hovers on a pin, a bio and picture of that traveler pops up
-Users can elect whether or not to share their location
-Location is only shared with the matches that the user has liked.
+- Core Features
+1. Display a map with pins of the location of  travelers in the users country using the google maps API
+
+- Stretch features
+1. When user hovers on a pin, a bio and picture of that traveler pops up
+2. Users can elect whether or not to share their location
+3. Location is only shared with the matches that the user has liked.

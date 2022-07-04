@@ -34,7 +34,7 @@ Solution: He can join the app as a local and volunteer to meet up with tourists 
 
 
 Project Breakdown
-Pages 
+<b>Pages </b>
 Sign Up Page:
 Core Features:
 Store user inputs as username and password in a database

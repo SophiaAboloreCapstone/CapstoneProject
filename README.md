@@ -33,11 +33,12 @@ Problem: Ricardo’s knowledge of the world and everyone in it is limited to tho
 Solution: He can join the app as a local and volunteer to meet up with tourists and show them around his town while learning about them and their cultures
 
 
-Project Breakdown
+<b>Project Breakdown </b>
+
 <b>Pages </b>
 Sign Up Page:
-Core Features:
-Store user inputs as username and password in a database
+- Core Features:
+--Store user inputs as username and password in a database
 Stretch:
 Allow users to sign up for FIDO authentication
 Login Page: 

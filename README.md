@@ -133,6 +133,7 @@ Daily CheckList
 - [x] view matches page
 - [x] google maps pin page
 
-[] Create user data model
+[X] Create user data model
 
 <i> Stretch Features:</i>
+[] try setting up database to store user information

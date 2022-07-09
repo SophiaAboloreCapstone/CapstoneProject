@@ -145,7 +145,7 @@ Core:
 
 [x] Set up database to store user information
 
-[] Create endpoints for adding and retrieving user data
+[x] Create endpoints for adding and retrieving user data
 
 <i> Stretch Features:</i>
 

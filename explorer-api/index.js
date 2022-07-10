@@ -2,7 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const Parse = require("parse/node");
-const { PARSE_APP_ID, PARSE_JAVASCRIPT_KEY } = require("./config");
+const { PARSE_APP_ID, PARSE_JAVASCRIPT_KEY, MASTER_KEY } = require("./config");
 const { query } = require("express");
 const { Schema } = require("parse/node");
 console.log("id: ", PARSE_APP_ID);
@@ -13,7 +13,9 @@ app.use(express.json());
 app.use(morgan("tiny"));
 app.use(cors());
 
-Parse.initialize(PARSE_APP_ID, PARSE_JAVASCRIPT_KEY);
+Parse.initialize(PARSE_APP_ID, PARSE_JAVASCRIPT_KEY, MASTER_KEY);
+// Parse.initialize(appConfig.parse.PARSE_APP_ID);
+// Parse.masterKey = appConfig.parse.masterKey;
 Parse.serverURL = "https://parseapi.back4app.com";
 
 app.post("/register", async (req, res) => {
@@ -77,22 +79,6 @@ app.post("/messages", async (req, res) => {
 
 // Profile Information
 
-app.get("/profileInfo", async (req, res) => {
-  try {
-    const query = new Parse.Query("ProfileInfo");
-
-    query.descending("createdAt");
-    query.include("user");
-
-    profileInfo = await query.find();
-
-    res.send({ profileInfo: profileInfo });
-  } catch (error) {
-    res.status(400);
-    res.send({ error: "Sorry, this profile couldn't be retrieved: " + error });
-  }
-});
-
 app.post("/profileInfo", async (req, res) => {
   try {
     const profile = new Parse.Object(
@@ -110,7 +96,7 @@ app.post("/profileInfo", async (req, res) => {
 
     profile.set("user", user);
 
-    await profile.save();
+    await profile.save(null, {useMasterKey: true});
     res.status(201);
     res.send({ profile: profile });
   } catch (error) {
@@ -119,17 +105,40 @@ app.post("/profileInfo", async (req, res) => {
   }
 });
 
+app.get("/profileInfo", async (req, res) => {
+  try {
+    const query = new Parse.Query("ProfileInfo");
+
+    query.descending("createdAt");
+    query.include("user");
+
+    profileInfo = await query.find();
+
+    res.send({ profileInfo: profileInfo });
+  } catch (error) {
+    res.status(400);
+    res.send({ error: "Sorry, this profile couldn't be retrieved: " + error });
+  }
+});
+
+
 // matches Information
 app.get("/matches", async (req, res) => {
   try {
-    let profiles = new Parse.Schema("ProfileInfo");
-    res = await profiles.get();
-    console.log(Object.keys(res.fields));
+    const query = new Parse.Query("ProfileInfo");
+    // query.include("user");
+    query.descending("createdAt");
+    query.include("user");
+
+    profiles = await query.find();
+
+    res.send({ profiles: profiles});
   } catch (error) {
     res.status(400);
-    res.send({ error: "Sorry, your matches couldn't be retrieved: " + error });
+    res.send({ error: "Profile query failed: " + error });
   }
 });
+
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

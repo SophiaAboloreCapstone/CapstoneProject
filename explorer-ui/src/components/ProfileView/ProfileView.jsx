@@ -1,6 +1,8 @@
 import * as React from "react";
 import "./ProfileView.css";
+import MatchGrid from "../MatchGrid/MatchGrid"
 import axios from "axios";
+// import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import * as config from "../../config";
 // import {
 //     Link
@@ -13,6 +15,7 @@ export default function ProfileView({handleCreateProfile}) {
   const travelMonth = React.createRef();
   const accomodations = React.createRef();
   const [profileInfo, setProfile] = React.useState({});
+  const [matches, setMatches] = React.useState({});
   const handleSubmit = (event) => {
     event.preventDefault();
     setProfile({})
@@ -48,7 +51,22 @@ export default function ProfileView({handleCreateProfile}) {
       }
     })();
   }, []);
+    const fetchMatches = (async () => {
+      try {
+        const res = await axios.get(`${config.API_BASE_URL}/matches`);
+        setMatches(res.data.profiles)
+        console.log(
+          "matches :", matches
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    })();
   console.log("this is your profile: ", profileInfo)
+  console.log("these are your matches ", matches)
+  const showMatches = (() => {
+    <MatchGrid matches={matches} />
+  });
   // console.log("bio :", profile.bio)
   // console.log("accomodation: ", profile.accomodations)
   // console.log("travel month: ", profile.travelMonth)
@@ -92,7 +110,7 @@ export default function ProfileView({handleCreateProfile}) {
           <h2>Bio: {profileInfo.bio}</h2>
           <h2>Country: {profileInfo.country}</h2>
           <h2>Month: {profileInfo.travelMonth}</h2>
-          <button type="click">See Matches</button>
+          <button type="click" onClick={showMatches} >See Matches</button>
           <h2>Edit Profile</h2>
           <form onSubmit={handleSubmit}>
             <div className="title">Login</div>
@@ -130,7 +148,26 @@ export default function ProfileView({handleCreateProfile}) {
                 ref={accomodations}
               ></input>
             </label>
-            <button type="submit">Edit Profile</button>
+            <button type="submit" >Edit Profile</button>
+            <div className="match-grid">
+            <h1>Here are your matches!</h1>
+            {matches != null
+            ? matches.map((match, idx) => {
+                return (
+                <div className="match" key={idx}>
+                    <p className="matchNumber">Match #{idx}</p>
+                    <p className="macthPhoto">{match.picture}</p>
+                    <p className="macthBio">Bio: {match.bio}</p>
+                    <p className="macthDestination">Destination: {match.country}</p>
+                    <p className="macthAccomodation">Accomodation: {match.accomodation}</p>
+                    </div>
+
+                )
+            })
+            :<></>
+            }
+        </div>
+            {/* <MatchGrid matches={matches} /> */}
           </form>
         </div>
       )}

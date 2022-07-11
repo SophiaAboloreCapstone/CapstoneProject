@@ -1,0 +1,53 @@
+
+img{
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 250px;
+    
+  }
+.match-name{
+  text-align: center;
+}
+.image-container{
+  border: 1px;
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: none;
+}
+.match-img{
+    border-radius: 20px;
+    border: 1px;
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: none;
+}
+.match-card{
+    background-color: white;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 20px;
+    font-size: 30;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.match-card:hover{
+  transform: scale(1.05);
+}
+.match-name{
+    text-align: left;
+}
+.match-price{
+    text-align: center;
+}
+.match-quantity{
+    text-align: center;
+}
+.match-container{
+  display: grid
+}

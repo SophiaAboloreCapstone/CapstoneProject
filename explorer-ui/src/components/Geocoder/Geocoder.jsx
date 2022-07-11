@@ -15,6 +15,7 @@ function initialize()
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
   codeAddress(locationPoint);//call the function
 }
+initialize()
 
 function codeAddress(address) 
 {
@@ -36,7 +37,7 @@ function codeAddress(address)
 }
     return (
         <div className="geocoder">
-            <div id="map-canvas" style="width:710px; height:300px"></div>
+            <div id="map-canvas" ></div>
         </div>
     )
 }

@@ -1,8 +1,8 @@
 import * as React from "react"
 import "./MatchCard.css"
-import {
-  Link
-} from "react-router-dom";
+// import {
+//   Link
+// } from "react-router-dom";
 export default function matchCard({ name, bio, picture, country, accomodation }) {
   // const handleExpansion(match) => {
 

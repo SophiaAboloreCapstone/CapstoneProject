@@ -150,3 +150,12 @@ Core:
 <i> Stretch Features:</i>
 
 [] use the data from the users information to retrieve and display content from the API
+
+<b> Monday Week 2:</b>
+<i>Core Features:</i>
+[]Fix User profile display bug
+[]Display matches locations on the Google Maps API
+[]Properly save users profile pictures and display them
+[]Create pretty UI for the homepage
+<i>Stretch Features:</i>
+[]Look into other APIs for travel activities.

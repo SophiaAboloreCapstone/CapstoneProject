@@ -25,6 +25,7 @@ export default function App() {
     localStorage.getItem("current_user_id") != null
   );
   const [profileCreated, setProfileCreated] = useState(false);
+  const [profileEdited, setProfileEdited] = useState(false);
   // For every network request, add a custom header for the logged in user
   // The backend API can check the header for the user id
   //
@@ -56,7 +57,7 @@ export default function App() {
   };
 
   const handleCreateProfile = (profileInfo) => {
-    // console.log(profile)
+    console.log("your profile: ", profileInfo)
     localStorage.setItem("current_user_id", profileInfo["objectId"]);
     addAuthenticationHeader();
 
@@ -92,7 +93,7 @@ export default function App() {
       <main>
       <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       {isLoggedIn
-        ? <ProfileView handleCreateProfile={handleCreateProfile}/>
+        ? <ProfileView handleCreateProfile={handleCreateProfile} profileCreated={profileCreated} profileEdited={profileEdited}/>
         : <LoggedOutView handleLogin={handleLogin} />
       }
       </main>

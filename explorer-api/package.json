@@ -1,5 +1,5 @@
 {
-  "name": "parse-demo-api",
+  "name": "explore-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,13 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@googlemaps/react-wrapper": "^1.1.35",
-    "axios": "^0.27.2",
     "cors": "^2.8.5",
     "express": "^4.18.1",
-    "google-maps-react": "^2.0.6",
     "morgan": "^1.10.0",
-    "parse": "^3.4.2",
-    "react-router-dom": "^6.3.0"
+    "parse": "^3.4.2"
   }
 }

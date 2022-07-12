@@ -3,13 +3,16 @@ import "./ProfileView.css";
 import MatchGrid from "../MatchGrid/MatchGrid"
 import Geocoder from "../Geocoder/Geocoder";
 import axios from "axios";
+import Uploady from "@rpldy/uploady";
+import UploadButton from "@rpldy/upload-button";
+import UploadPreview from "@rpldy/upload-preview";
 // import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import * as config from "../../config";
 // import {
 //     Link
 //   } from "react-router-dom";
 
-export default function ProfileView({ handleCreateProfile }) {
+export default function ProfileView({ handleCreateProfile, profileCreated, profileEdited}) {
   const picture = React.createRef();
   const username = React.createRef();
   const bio = React.createRef();
@@ -18,7 +21,7 @@ export default function ProfileView({ handleCreateProfile }) {
   const travelMonth = React.createRef();
   const accomodations = React.createRef();
   const location = React.createRef();
-  const [profileInfo, setProfile] = React.useState({});
+  const [userProfile, setProfile] = React.useState({});
   const [matches, setMatches] = React.useState([]);
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -27,37 +30,39 @@ export default function ProfileView({ handleCreateProfile }) {
       try {
         console.log("Profile created");
         const res = await axios.post(`${config.API_BASE_URL}/profileInfo`, {
-          picture: picture.current.value,
+          picture: picture.current,
           age: age.current.value,
-          location: location.current.value,
-          username: username.current.value,
+         location: location.current.value,
+          // "username": username.current.value,
           bio: bio.current.value,
           country: country.current.value,
           travelMonth: travelMonth.current.value,
           accomodations: accomodations.current.value,
-        });
-        // handleCreateProfile(res.data.profile);
-        // handleCreateProfile(res.data.profileInfo);
+        })
+        handleCreateProfile(res.data.profile);
+        console.log("res:", res)
+        setProfile(res.data.profile);
+        
       } catch (err) {
-        alert(err);
-        console.log(err);
+        alert(err)
+        console.log(err)
       }
-    };
+    }
     profile();
-  };
+  }
   React.useEffect(() => {
     const fetchProfileInfo = (async () => {
       try {
         const res = await axios.get(`${config.API_BASE_URL}/profileInfo`);
         setProfile(res.data.profileInfo[res.data.profileInfo.length - 1]);
         console.log(
-          "profile :", profileInfo
+          "profile :", userProfile
         );
       } catch (err) {
         console.log(err);
       }
     })();
-  }, []);
+  }, [profileCreated]);
   React.useEffect(() => {
     const fetchMatches = (async () => {
       try {
@@ -70,12 +75,35 @@ export default function ProfileView({ handleCreateProfile }) {
         console.log(err);
       }
     })();
-  }, []);
-  console.log("this is your profile: ", profileInfo)
+  }, [profileEdited]);
+  // console.log("this is your profile: ", profileInfo)
   console.log("these are your matches ", matches)
   const showMatches = (() => {
     <MatchGrid matches={matches} />
   });
+  // const getBase64 = (file) => {
+  //   return new Promise((resolve,reject) => {
+  //      const reader = new FileReader();
+  //      reader.onload = () => resolve(reader.result);
+  //      reader.onerror = error => reject(error);
+  //      reader.readAsDataURL(file);
+  //   });
+  // }
+  const filterBySize = (file) => {
+    //filter out images larger than 5MB
+    return file.size <= 5242880;
+  };
+  
+  const imageUpload = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      let img = e.target.files[0];
+      this.setState({
+        image: URL.createObjectURL(img)
+      });
+    }
+
+};
+
   // console.log("bio :", profile.bio)
   // console.log("accomodation: ", profile.accomodations)
   // console.log("travel month: ", profile.travelMonth)
@@ -95,14 +123,24 @@ export default function ProfileView({ handleCreateProfile }) {
           </label>
           <label>
             <span>Profile Picture</span>
-            <input
+            <Uploady
+            ref={picture}
+    destination={{ url: "https://parseapi.back4app.com/classes/ProfileInfo" }}
+    fileFilter={filterBySize}
+    accept="image/*"
+  >
+    <UploadButton />
+    <UploadPreview />   
+  </Uploady>
+            {/* <input
               type="file"
               ref={picture}
-              id="picture"
+              id="profile-picture"
               name="picture"
               //   onChange={onChangePicture}
               accept="image/*"
-            ></input>
+              onChange={imageUpload}
+            ></input> */}
           </label>
           <label>
             <span>Bio</span>
@@ -369,37 +407,41 @@ export default function ProfileView({ handleCreateProfile }) {
           <label>
             <span>Month</span>
             <select ref={travelMonth} id="month">
-              <option value="1">January</option>
-              <option value="2">February</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option value="5">May</option>
-              <option value="6">June</option>
-              <option value="7">July</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
+              <option value="January">January</option>
+              <option value="February">February</option>
+              <option value="March">March</option>
+              <option value="April">April</option>
+              <option value="May">May</option>
+              <option value="June">June</option>
+              <option value="July">July</option>
+              <option value="August">August</option>
+              <option value="September">September</option>
+              <option value="October">October</option>
+              <option value="November">November</option>
+              <option value="December">December</option>
             </select>
           </label>
           <label>
             <span>Accomodations</span>
             <input ref={accomodations}></input>
           </label>
+          <button type="submit">Create Profile</button>
           <label>
             <span>Location</span>
             <input ref={location}></input>
+            <div className="map">
             <Geocoder location={location} />
+            </div>
           </label>
-          <button type="submit">Create Profile</button>
+          <button type="submit" >Create Profile</button>
         </form>
         </section>
-        <section className="matches">
         <div className="match-grid">
-              {/* <MatchGrid matches={matches} /> */}
+              <MatchGrid matches={matches} />
             </div>
-        </section>
+        {/* <section className="match-locations">
+          <Geocoder location={location} />
+        </section> */}
       {/* ) : ( */}
         {/* <div className="profileDisplay">
           <img className="profile-picture" src={profileInfo.picture}></img>

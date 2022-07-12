@@ -80,15 +80,11 @@ app.post("/messages", async (req, res) => {
 // Profile Information
 
 app.post("/profileInfo", async (req, res) => {
+  console.log("posted");
   try {
-    const profile = new Parse.Object(
-      "ProfileInfo",
-      req.body.picture,
-      req.body.bio,
-      req.body.country,
-      req.body.travelMonth,
-      req.body.accomodations
-    );
+    const profile = new Parse.Object("ProfileInfo", req.body);
+    console.log("req: ", req.body);
+    console.log("profile from post function: ", profile);
 
     currentUserId = req.headers["current_user_id"];
     const user = new Parse.User();
@@ -96,9 +92,10 @@ app.post("/profileInfo", async (req, res) => {
 
     profile.set("user", user);
 
-    await profile.save(null, {useMasterKey: true});
+    await profile.save(); //(null, { useMasterKey: true });
     res.status(201);
     res.send({ profile: profile });
+    console.log("posted");
   } catch (error) {
     res.status(400);
     res.send({ error: "Sorry, this profile couldn't be created " + error });
@@ -113,14 +110,13 @@ app.get("/profileInfo", async (req, res) => {
     query.include("user");
 
     profileInfo = await query.find();
-
+    console.log("profile info from app: ", profileInfo);
     res.send({ profileInfo: profileInfo });
   } catch (error) {
     res.status(400);
     res.send({ error: "Sorry, this profile couldn't be retrieved: " + error });
   }
 });
-
 
 // matches Information
 app.get("/matches", async (req, res) => {
@@ -132,13 +128,12 @@ app.get("/matches", async (req, res) => {
 
     profiles = await query.find();
 
-    res.send({ profiles: profiles});
+    res.send({ profiles: profiles });
   } catch (error) {
     res.status(400);
     res.send({ error: "Profile query failed: " + error });
   }
 });
-
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

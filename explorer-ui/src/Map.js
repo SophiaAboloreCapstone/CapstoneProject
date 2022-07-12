@@ -1,18 +1,15 @@
 import React, { Component } from "react";
-import "./Geocoder.css";
-import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
-const mapStyles = {
-  position: "absolute",
-  width: "50%",
-  height: "50%",
-};
+import { GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
+
+import CurrentLocation from "./Map";
 
 export class MapContainer extends Component {
   state = {
-    showingInfoWindow: false, // Hides or shows the InfoWindow
-    activeMarker: {}, // Shows the active marker upon click
-    selectedPlace: {}, // Shows the InfoWindow to the selected place upon a marker
+    showingInfoWindow: false,
+    activeMarker: {},
+    selectedPlace: {},
   };
+
   onMarkerClick = (props, marker, e) =>
     this.setState({
       selectedPlace: props,
@@ -28,21 +25,11 @@ export class MapContainer extends Component {
       });
     }
   };
+
   render() {
     return (
-      <Map
-        google={this.props.google}
-        zoom={14}
-        style={mapStyles}
-        initialCenter={{
-          lat: -1.2884,
-          lng: 36.8233,
-        }}
-      >
-        <Marker
-          onClick={this.onMarkerClick}
-          name={"Kenyatta International Convention Centre"}
-        />
+      <CurrentLocation centerAroundCurrentLocation google={this.props.google}>
+        <Marker onClick={this.onMarkerClick} name={"Current Location"} />
         <InfoWindow
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}
@@ -52,7 +39,7 @@ export class MapContainer extends Component {
             <h4>{this.state.selectedPlace.name}</h4>
           </div>
         </InfoWindow>
-      </Map>
+      </CurrentLocation>
     );
   }
 }

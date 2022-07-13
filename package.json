@@ -1,6 +1,19 @@
 {
   "dependencies": {
+    "@parse/react-native": "^0.0.1-alpha.18",
+    "@react-native-async-storage/async-storage": "^1.17.7",
+    "@react-native-community/async-storage": "^1.12.1",
+    "body-parser": "^1.20.0",
+    "constant-keys": "^0.0.2",
+    "express": "^4.18.1",
     "google-maps-react": "^2.0.6",
-    "prop-types": "^15.8.1"
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "papaparse": "^5.3.2",
+    "parse": "^3.4.3",
+    "path-win32": "^1.0.1",
+    "prop-types": "^15.8.1",
+    "react-native-image-picker": "^4.8.4",
+    "react-native-web": "^0.18.6"
   }
 }

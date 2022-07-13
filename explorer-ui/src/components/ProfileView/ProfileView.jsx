@@ -1,19 +1,22 @@
 import * as React from "react";
+
 import "./ProfileView.css";
-import MatchGrid from "../MatchGrid/MatchGrid"
+import MatchGrid from "../MatchGrid/MatchGrid";
 import Geocoder from "../Geocoder/Geocoder";
 import axios from "axios";
-import Uploady from "@rpldy/uploady";
-import UploadButton from "@rpldy/upload-button";
-import UploadPreview from "@rpldy/upload-preview";
 // import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import * as config from "../../config";
-// import {
-//     Link
-//   } from "react-router-dom";
+// import resolve from "node:path/win32";
+import imageToBase64 from "image-to-base64";
+import ProfileDisplay from "./ProfileDisplay/ProfileDisplay";
 
-export default function ProfileView({ handleCreateProfile, profileCreated, profileEdited}) {
-  const picture = React.createRef();
+export default function ProfileView({
+  handleCreateProfile,
+  profileCreated,
+  profileEdited,
+}) {
+  const [picture, setPicture] = React.useState("");
+  // const picture = React.createRef();
   const username = React.createRef();
   const bio = React.createRef();
   const age = React.createRef();
@@ -23,41 +26,64 @@ export default function ProfileView({ handleCreateProfile, profileCreated, profi
   const location = React.createRef();
   const [userProfile, setProfile] = React.useState({});
   const [matches, setMatches] = React.useState([]);
+  const [locations, setLocations] = React.useState([]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    setProfile({})
+    setProfile({});
     const profile = async () => {
       try {
         console.log("Profile created");
         const res = await axios.post(`${config.API_BASE_URL}/profileInfo`, {
-          picture: picture.current,
+          picture: picture,
           age: age.current.value,
-         location: location.current.value,
-          // "username": username.current.value,
+          location: location.current.value,
+          "username": username.current.value,
           bio: bio.current.value,
           country: country.current.value,
           travelMonth: travelMonth.current.value,
           accomodations: accomodations.current.value,
-        })
+          maxContentLength: Infinity, maxBodyLength: Infinity 
+        }, { maxContentLength: Infinity, maxBodyLength: Infinity });
         handleCreateProfile(res.data.profile);
-        console.log("res:", res)
+        console.log("res:", res);
         setProfile(res.data.profile);
-        
       } catch (err) {
-        alert(err)
-        console.log(err)
+        alert(err);
+        console.log(err);
       }
-    }
+    };
     profile();
-  }
+    // <ProfileDisplay name={username} picture={picture} age={} bio, country, month, accomodation, location
+  };
+
+  let base64code = ""
+  const onChange = e => {
+    const files = e.target.files;
+    const file = files[0];
+    getBase64(file);
+  };
+  const onLoad = fileString => {
+    console.log(fileString);
+    base64code = fileString
+    setPicture(base64code)
+    console.log("picture: ", picture)
+  };
+  const getBase64 = file => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      onLoad(reader.result);
+    };
+
+  };
+
   React.useEffect(() => {
     const fetchProfileInfo = (async () => {
       try {
         const res = await axios.get(`${config.API_BASE_URL}/profileInfo`);
         setProfile(res.data.profileInfo[res.data.profileInfo.length - 1]);
-        console.log(
-          "profile :", userProfile
-        );
+        console.log("profile :", userProfile);
       } catch (err) {
         console.log(err);
       }
@@ -67,50 +93,17 @@ export default function ProfileView({ handleCreateProfile, profileCreated, profi
     const fetchMatches = (async () => {
       try {
         const res = await axios.get(`${config.API_BASE_URL}/matches`);
-        setMatches(res.data.profiles)
-        console.log(
-          "matches :", matches
-        );
+        setMatches(res.data.profiles);
+        console.log("matches :", matches);
       } catch (err) {
         console.log(err);
       }
     })();
   }, [profileEdited]);
-  // console.log("this is your profile: ", profileInfo)
-  console.log("these are your matches ", matches)
-  const showMatches = (() => {
-    <MatchGrid matches={matches} />
-  });
-  // const getBase64 = (file) => {
-  //   return new Promise((resolve,reject) => {
-  //      const reader = new FileReader();
-  //      reader.onload = () => resolve(reader.result);
-  //      reader.onerror = error => reject(error);
-  //      reader.readAsDataURL(file);
-  //   });
-  // }
-  const filterBySize = (file) => {
-    //filter out images larger than 5MB
-    return file.size <= 5242880;
-  };
-  
-  const imageUpload = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      let img = e.target.files[0];
-      this.setState({
-        image: URL.createObjectURL(img)
-      });
-    }
-
-};
-
-  // console.log("bio :", profile.bio)
-  // console.log("accomodation: ", profile.accomodations)
-  // console.log("travel month: ", profile.travelMonth)
   return (
     <div className="profile">
       <section className="profile-input">
-      {/* {profileInfo == null ? ( */}
+        {/* {profileInfo == null ? ( */}
         <form onSubmit={handleSubmit}>
           <div className="title">Login</div>
           <label>
@@ -123,24 +116,19 @@ export default function ProfileView({ handleCreateProfile, profileCreated, profi
           </label>
           <label>
             <span>Profile Picture</span>
-            <Uploady
-            ref={picture}
-    destination={{ url: "https://parseapi.back4app.com/classes/ProfileInfo" }}
-    fileFilter={filterBySize}
-    accept="image/*"
-  >
-    <UploadButton />
-    <UploadPreview />   
-  </Uploady>
-            {/* <input
+            {/* <SafeAreaView style={styles.container}>
+              <ImageUpload />
+            </SafeAreaView> */}
+            <input
               type="file"
-              ref={picture}
+              // ref={picture}
               id="profile-picture"
               name="picture"
               //   onChange={onChangePicture}
               accept="image/*"
-              onChange={imageUpload}
-            ></input> */}
+              value={base64code}
+              onChange={onChange }
+            ></input>
           </label>
           <label>
             <span>Bio</span>
@@ -201,7 +189,9 @@ export default function ProfileView({ handleCreateProfile, profileCreated, profi
               <option value="CO">Colombia</option>
               <option value="KM">Comoros</option>
               <option value="CG">Congo</option>
-              <option value="CD">Congo, Democratic Republic of the Congo</option>
+              <option value="CD">
+                Congo, Democratic Republic of the Congo
+              </option>
               <option value="CK">Cook Islands</option>
               <option value="CR">Costa Rica</option>
               <option value="CI">Cote D'Ivoire</option>
@@ -282,7 +272,9 @@ export default function ProfileView({ handleCreateProfile, profileCreated, profi
               <option value="LT">Lithuania</option>
               <option value="LU">Luxembourg</option>
               <option value="MO">Macao</option>
-              <option value="MK">Macedonia, the Former Yugoslav Republic of</option>
+              <option value="MK">
+                Macedonia, the Former Yugoslav Republic of
+              </option>
               <option value="MG">Madagascar</option>
               <option value="MW">Malawi</option>
               <option value="MY">Malaysia</option>
@@ -359,7 +351,9 @@ export default function ProfileView({ handleCreateProfile, profileCreated, profi
               <option value="SB">Solomon Islands</option>
               <option value="SO">Somalia</option>
               <option value="ZA">South Africa</option>
-              <option value="GS">South Georgia and the South Sandwich Islands</option>
+              <option value="GS">
+                South Georgia and the South Sandwich Islands
+              </option>
               <option value="SS">South Sudan</option>
               <option value="ES">Spain</option>
               <option value="LK">Sri Lanka</option>
@@ -430,20 +424,20 @@ export default function ProfileView({ handleCreateProfile, profileCreated, profi
             <span>Location</span>
             <input ref={location}></input>
             <div className="map">
-            <Geocoder location={location} />
+              <Geocoder locations={locations} />
             </div>
           </label>
-          <button type="submit" >Create Profile</button>
+          <button type="submit">Create Profile</button>
         </form>
-        </section>
-        <div className="match-grid">
-              <MatchGrid matches={matches} />
-            </div>
-        {/* <section className="match-locations">
+      </section>
+      <div className="match-grid">
+        <MatchGrid matches={matches} />
+      </div>
+      {/* <section className="match-locations">
           <Geocoder location={location} />
         </section> */}
       {/* ) : ( */}
-        {/* <div className="profileDisplay">
+      {/* <div className="profileDisplay">
           <img className="profile-picture" src={profileInfo.picture}></img>
           <h2>Bio: {profileInfo.bio}</h2>
           <h2>Country: {profileInfo.country}</h2>
@@ -759,6 +753,5 @@ export default function ProfileView({ handleCreateProfile, profileCreated, profi
         </div>
       )} */}
     </div>
-
   );
 }

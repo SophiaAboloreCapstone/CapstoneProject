@@ -19,12 +19,13 @@ import {
   DirectionsRenderer,
 } from '@react-google-maps/api'
 import { useRef, useState } from 'react'
-
+// const { REACT_APP_GOOGLE_MAPS_API_KEY } = require("./config");
+// import { REACT_APP_GOOGLE_MAPS_API_KEY} from require('config');
 const center = { lat: 48.8584, lng: 2.2945 }
 
-function MapContainer() {
+function MapContainer({coordinates}) {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0",
+    googleMapsApiKey:"AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0",
     libraries: ['places'],
   })
 
@@ -66,6 +67,12 @@ function MapContainer() {
     originRef.current.value = ''
     destiantionRef.current.value = ''
   }
+  var marker = new google.maps.Marker({
+    position: center,
+    title:"Hello World!"
+});
+marker.setMap(GoogleMap)
+
 
   return (
     <Flex
@@ -87,9 +94,9 @@ function MapContainer() {
             mapTypeControl: false,
             fullscreenControl: false,
           }}
-          onLoad={map => setMap(map)}
-        >
+          onLoad={map => setMap(map)}>
           <Marker position={center} />
+          <Marker position={{ lat: 48.8584, lng: 2.2944 }} />
           {directionsResponse && (
             <DirectionsRenderer directions={directionsResponse} />
           )}

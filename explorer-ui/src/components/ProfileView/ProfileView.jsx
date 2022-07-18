@@ -96,7 +96,7 @@ export default function ProfileView({
         console.log(err);
       }
     })();
-  }, [profileCreated]);
+  }, []);
   React.useEffect(() => {
     const fetchProfiles = (async () => {
       try {
@@ -113,7 +113,7 @@ export default function ProfileView({
       {!profileCreated ? (
         <div className="profile-creation">
           <form onSubmit={handleSubmit}>
-            <div className="title">Login</div>
+            <div className="title">Set up your profile</div>
             <label>
               <span>Username</span>
               <input ref={username}></input>
@@ -440,30 +440,19 @@ export default function ProfileView({
             </label>
             <button type="submit">Create Profile</button>
           </form>
-          ReactDOM.render(
-          <React.StrictMode>
-            <ChakraProvider theme={theme}>
-              <MapContainer />
-            </ChakraProvider>
-          </React.StrictMode>
-          , document.getElementById('root') )
-          {/* <MatchGrid profiles={profiles} userProfile={userProfile}/>
-        <AllUsers profiles={profiles} /> */}
+          {/* <MatchGrid profiles={profiles} userProfile={userProfile}/> */}
+        <AllUsers profiles={profiles} /> 
         </div>
       ) : (
         <div className="display-profile">
           <ProfileDisplay profileInfo={userProfile} />
         </div>
-      )}
+      )
+      }
+       
+      <div className="match-grid">
 
-      {/*  
-      <div className="match-grid">
-        <AllUsers profiles={profiles} />
       </div>
-      <label><span>These are your matches</span></label>
-      <div className="match-grid">
-        <MatchGrid profiles={profiles} userProfile={userProfile}  />
-      </div> */}
     </div>
   );
 }

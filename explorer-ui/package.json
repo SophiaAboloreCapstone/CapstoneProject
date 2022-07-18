@@ -8,11 +8,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/styled": "^11.9.3",
+    "@react-google-maps/api": "^2.12.0",
     "@rpldy/upload-button": "^1.0.0",
     "@rpldy/upload-preview": "^1.0.0",
     "@rpldy/uploady": "^1.0.0",
     "axios": "^0.27.2",
     "constant-keys": "^0.0.2",
+    "google-map-react": "^2.2.0",
     "image-to-base64": "^2.2.0",
     "react": "^18.0.0",
     "react-cookie": "^4.1.1",

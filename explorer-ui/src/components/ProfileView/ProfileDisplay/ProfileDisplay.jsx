@@ -34,13 +34,11 @@ export default function ProfileDisplay({ profileInfo }) {
   useEffect(() => {
     setProfile(profileInfo);
   }, [userProfile]);
-  console.log(userProfile);
   const handleSubmit = (event) => {
     event.preventDefault();
     setProfile({});
     const profile = async () => {
       try {
-        console.log("Profile created");
         const res = await axios.post(
           `${config.API_BASE_URL}/profileInfo`,
           {
@@ -59,7 +57,6 @@ export default function ProfileDisplay({ profileInfo }) {
           { maxContentLength: Infinity, maxBodyLength: Infinity }
         );
         handleCreateProfile(res.data.profile);
-        console.log("res:", res.data.profile);
         setProfile(res.data.profile);
       } catch (err) {
         alert(err);

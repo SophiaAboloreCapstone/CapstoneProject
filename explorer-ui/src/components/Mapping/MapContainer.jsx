@@ -15,17 +15,17 @@ import {
   useJsApiLoader,
   GoogleMap,
   Marker,
+  InfoWindow,
   Autocomplete,
   DirectionsRenderer,
   useLoadScript,
 } from "@react-google-maps/api";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 // const { REACT_APP_GOOGLE_MAPS_API_KEY } = require("./config");
 // import { REACT_APP_GOOGLE_MAPS_API_KEY} from require('config');
 const center = { lat: 48.8584, lng: 2.2945 };
-const libraries = ['places']
+const libraries = ["places"];
 function MapContainer({ coordinates }) {
-console.log("coordinates: ", coordinates)
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0",
     libraries,
@@ -35,6 +35,22 @@ console.log("coordinates: ", coordinates)
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
+  const [showingInfoWindow, setshowingInfoWindow] = useState(false);
+  const [activeMarker, setActiveMarker] = useState({});
+  const [selectedPlace, setSelectedPlace] = useState({});
+
+  const onMarkerClick = (props, marker) => {
+    setSelectedPlace(props);
+    setActiveMarker(marker);
+    setshowingInfoWindow(true);
+  };
+
+  const onClose = async (e) => {
+    if (showingInfoWindow) {
+      setshowingInfoWindow(false);
+      setActiveMarker(null);
+    }
+  };
 
   /** @type React.MutableRefObject<HTMLInputElement> */
   const originRef = useRef();
@@ -70,7 +86,6 @@ console.log("coordinates: ", coordinates)
     destiantionRef.current.value = "";
   }
 
-
   return (
     <Flex
       position="relative"
@@ -82,7 +97,7 @@ console.log("coordinates: ", coordinates)
       <Box position="absolute" left={0} top={0} h="100%" w="100%">
         {/* Google Map Box */}
         <GoogleMap
-          center={center}
+          center={{lat: 37.550201, lng: -121.980827}}
           zoom={15}
           mapContainerStyle={{ width: "100%", height: "100%" }}
           options={{
@@ -95,16 +110,35 @@ console.log("coordinates: ", coordinates)
         >
           {/* <Marker position={center} />
           <Marker position={{ lat: 48.8584, lng: 2.2944 }} /> */}
-          {coordinates != null && coordinates.map((profile, idx) => {
+          {coordinates != null &&
+            coordinates.map((profile, idx) => {
               console.log("profile position: ", profile.position);
-              return(
-              <Marker position={profile.position} key={idx} />
-              )
-            })
-          }
+              <Marker position={{lat: 37.550201, lng: -121.980827}} />
+              return (
+                <div className="user-marker">
+                  <Marker
+                    position={profile.position}
+                    onClick={() => onMarkerClick(profile.user.address, idx)}
+                    name={profile.user.username}
+                    key={idx}
+                  />
+         
+          </div>
+            );
+          })}
+
           {directionsResponse && (
             <DirectionsRenderer directions={directionsResponse} />
           )}
+           {/* <InfoWindow
+            marker={activeMarker}
+            visible={showingInfoWindow}
+            onClose={onClose}
+          >
+            <div>
+              <h4>{selectedPlace}</h4>
+            </div>
+          </InfoWindow> */}
         </GoogleMap>
       </Box>
       <Box

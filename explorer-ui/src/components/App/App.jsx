@@ -49,7 +49,6 @@ export default function App() {
   };
 
   const handleLogin = (user) => {
-    console.log(user);
     localStorage.setItem("current_user_id", user["objectId"]);
     addAuthenticationHeader();
 
@@ -57,13 +56,12 @@ export default function App() {
   };
 
   const handleCreateProfile = (profileInfo) => {
-    console.log("your profile: ", profileInfo)
     localStorage.setItem("current_user_id", profileInfo["objectId"]);
     addAuthenticationHeader();
 
     // setIsLoggedIn(true);
     setProfileCreated(true)
-    // console.log("profile creation stat: ", profileCreated)
+
   };
   
 

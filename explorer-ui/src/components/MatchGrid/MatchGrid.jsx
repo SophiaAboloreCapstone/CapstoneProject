@@ -17,8 +17,6 @@ import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
 //   return <h1>{status}</h1>;
 // };
 export default function MatchGrid({ profiles, userProfile }) {
-  console.log("profiles from grid: ", profiles);
-  console.log("user profile from grid: ", userProfile);
   const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
   const [matches, setMatches] = useState([]);
   const userProfiles = userProfile
@@ -29,7 +27,6 @@ export default function MatchGrid({ profiles, userProfile }) {
 }, [])
   // TODO: Create a function that filters through the list of users to get the matches of this specific user
   const getMatches = () => {
-    console.log("these are the available profiles to be matched: ", profiles);
     for (let i = 0; i < profiles.length; i++) {
       if (
         profiles[i].country == userProfile.country 
@@ -43,7 +40,6 @@ export default function MatchGrid({ profiles, userProfile }) {
   };
 
 
-  console.log("here are your matches: ", matches);
   // getMatches(userProfile, profiles)
   //   };
   //   // TODO: Create a list of the matches locations
@@ -66,7 +62,6 @@ export default function MatchGrid({ profiles, userProfile }) {
               
             },
             (error) => {
-              console.log("this address is invalid: ", matches[i].location)
               console.error(error);
             }
           );
@@ -80,9 +75,7 @@ export default function MatchGrid({ profiles, userProfile }) {
 //   });
 
 getCoordinates (matches);
-  console.log("here are your matches coordinates: ", matchesPlusCoordinates);
   const userCoordinates = getCoordinates(userProfile.location, 0);
-  console.log("user Address: ", userProfile.location)
   return (
     <div className="match-grid">
       <h1>Here are your matches!</h1>

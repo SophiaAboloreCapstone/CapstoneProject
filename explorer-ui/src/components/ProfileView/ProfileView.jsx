@@ -36,7 +36,6 @@ export default function ProfileView({
     setProfile({});
     const profile = async () => {
       try {
-        console.log("Profile created");
         const res = await axios.post(
           `${config.API_BASE_URL}/profileInfo`,
           {
@@ -55,7 +54,6 @@ export default function ProfileView({
           { maxContentLength: Infinity, maxBodyLength: Infinity }
         );
         handleCreateProfile(res.data.profile);
-        console.log("res:", res.data.profile);
         setProfile(res.data.profile);
       } catch (err) {
         alert(err);
@@ -73,10 +71,8 @@ export default function ProfileView({
     getBase64(file);
   };
   const onLoad = (fileString) => {
-    console.log(fileString);
     base64code = fileString;
     setPicture(base64code);
-    console.log("picture: ", picture);
   };
   const getBase64 = (file) => {
     let reader = new FileReader();
@@ -91,7 +87,6 @@ export default function ProfileView({
       try {
         const res = await axios.get(`${config.API_BASE_URL}/profileInfo`);
         setProfile(res.data.profileInfo[res.data.profileInfo.length - 1]);
-        console.log("profile :", userProfile);
       } catch (err) {
         console.log(err);
       }
@@ -102,7 +97,7 @@ export default function ProfileView({
       try {
         const res = await axios.get(`${config.API_BASE_URL}/matches`);
         setProfiles(res.data.profiles);
-        console.log("profiles :", profiles);
+
       } catch (err) {
         console.log(err);
       }

@@ -22,7 +22,6 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { ChakraProvider, theme } from "@chakra-ui/react";
 export default function AllUsers({profiles}) {
-    console.log("profiles from AllUsers: ", profiles)
     const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
     const [userCoordinates, setUserCoordinates] = useState([]);
     useEffect(() => {
@@ -30,19 +29,13 @@ export default function AllUsers({profiles}) {
         // getUserCoords(profiles[0])
     }, [profiles])
     const getCoordinates = (profiles) => {
-        console.log("profiles are: ", profiles)
-        console.log("profiles in getCoordinates are: ", profiles)
         if (profiles) {
           for (let i = 0; i < profiles.length; i++) {
-            console.log("this profile is: ", profiles[i])
             if(profiles[i].address != null || profiles[i].address!="" ){
-                console.log("address is not")
             Geocode.fromAddress(profiles[i].address).then(
               (response) => {
                 const { lat, lng } = response.results[0].geometry.location;
                 setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {id: i, position: {lat, lng}, user: profiles[i]}])
-                console.log("Adding to list: ",{id: i, position: {lat, lng}, user: profiles[i]} )
-                console.log("matchesPlusCoordinates so far ...", matchesPlusCoordinates)
               },
               (error) => {
                 console.error(error);
@@ -58,16 +51,12 @@ export default function AllUsers({profiles}) {
         (response) => {
           const { lat, lng } = response.results[0].geometry.location;
           setUserCoordinates( {id: 0, position: {lat, lng}, user: user})
-          console.log("Adding to list: ",{id: i, position: {lat, lng}, user: user} )
-          console.log("user's coords ...", userCoordinates)
         },
         (error) => {
           console.error(error);
         }
       );
     }
-    
-      console.log("here are the profile coordinates: ", matchesPlusCoordinates);
     return (
         <div className="match-grid">
             <h1>Here are all the users on the app!</h1>

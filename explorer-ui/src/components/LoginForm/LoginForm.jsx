@@ -26,6 +26,7 @@ export default function LoginForm({handleLogin}) {
     }
   
     return (
+      <div className="login">
       <form onSubmit={handleSubmit}>
         <div className="title">Login</div>
         <label>
@@ -38,5 +39,6 @@ export default function LoginForm({handleLogin}) {
         </label>
         <button type="submit">Login</button>
       </form>
+      </div>
     )
 }

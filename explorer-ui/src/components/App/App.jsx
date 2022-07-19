@@ -18,7 +18,7 @@ import Home from "../Home/Home"
 import MatchGrid from "../MatchGrid/MatchGrid"
 import { useState } from "react";
 import { useEffect } from "react";
-// import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import axios from "axios";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -87,20 +87,20 @@ export default function App() {
     //   </BrowserRouter>
     // </div>
     <div className="App">
-      {/* <BrowserRouter> */}
+      <BrowserRouter>
       <main>
-      <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      {/* <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       {isLoggedIn
         ? <ProfileView handleCreateProfile={handleCreateProfile} profileCreated={profileCreated} profileEdited={profileEdited}/>
         : <LoggedOutView handleLogin={handleLogin} />
-      }
-      </main>
-      {/* <Routes>
+      } */}
+      <Routes>
         <Route path="/" element={<Home />}/>
+        <Route path="login" element={<LoggedOutView />}/>
         <Route path="/matches" elememt={<MatchGrid />}/>
         </Routes>
       </main>
-      </BrowserRouter> */}
+      </BrowserRouter> 
     </div>
   );
 }

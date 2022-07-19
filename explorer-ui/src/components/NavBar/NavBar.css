@@ -42,7 +42,7 @@ span, div, p, h1, h2, h3, h4, h5, h6, ul, ol {
 .pages:hover{
     /* background-color: #c18f9c; */
     color: black;
-    text-decoration: underline;
+    text-decoration: none;
     padding-bottom: 10px;
     border-bottom-color: black;
 }
@@ -141,5 +141,6 @@ button:hover,
 button:focus {
   background-color: #f7a9e3;
   color: #f2ed01;
+  text-decoration: none;
 
 }

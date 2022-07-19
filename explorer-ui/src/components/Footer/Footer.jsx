@@ -1,12 +1,12 @@
 import * as React from "react"
-import "./Footer.css"
+import "../Footer.css"
 
 export default function Footer() {
     return (
         <footer class="footer">
             <div className="content">
                 <div className="top">
-                    <div className="links">
+                    <div className="footer-links">
                         <div className="link-column">
                             <h4>Categories</h4>
                             <ul>

@@ -30,6 +30,7 @@ export default function RegisterForm({ handleLogin }) {
     }
 
     return (
+        <div className="register">
         <form onSubmit={handleSubmit}>
             <div className="title">Register</div>
             <label>
@@ -49,6 +50,7 @@ export default function RegisterForm({ handleLogin }) {
                 <input ref={age}></input>
             </label>
             <button type="submit">Register</button>
-        </form>        
+        </form>   
+        </div>     
     )
 }

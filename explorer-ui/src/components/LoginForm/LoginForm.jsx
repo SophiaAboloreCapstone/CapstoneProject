@@ -12,7 +12,6 @@ export default function LoginForm({handleLogin}) {
 
         const login = async () => {
             try {
-                console.log("Logging in")
                 const res = await axios.post(`${config.API_BASE_URL}/login`, {
                     "username" : username.current.value,
                     "password" : password.current.value
@@ -27,6 +26,7 @@ export default function LoginForm({handleLogin}) {
     }
   
     return (
+      <div className="login">
       <form onSubmit={handleSubmit}>
         <div className="title">Login</div>
         <label>
@@ -39,5 +39,6 @@ export default function LoginForm({handleLogin}) {
         </label>
         <button type="submit">Login</button>
       </form>
+      </div>
     )
 }

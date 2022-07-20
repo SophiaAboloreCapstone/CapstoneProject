@@ -34,3 +34,9 @@ matches{
 .profileDisplay{
     background-color: aqua;
 }
+.profile-creation{
+    background: #ffd9e3;
+}
+.display-map{
+    padding-top: 500px;
+}

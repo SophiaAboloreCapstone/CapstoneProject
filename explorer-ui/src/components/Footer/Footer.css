@@ -4,7 +4,7 @@
     height: 350px;  
     padding-left: 200px;
     padding-right: 200px;
-    background: #b37d8b;
+    /* background: #b37d8b; */
 }
 * {
     
@@ -67,7 +67,7 @@ body {
     font-family: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #b37d8b;
+    /* background: #b37d8b; */
 }
 :root {
     --side-padding: 40px;

@@ -1,21 +1,12 @@
 import * as React from "react";
 // import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
-// import Home from "./components/Home/Home";
-// import Navbar from "./components/Home/Navbar/Navbar";
-// import Footer from "./components/Footer/Footer";
-// import Login from "./components/Login/Login";
-// import SignIn from "./components/Login/SignIn";
-// import SignUp from "./components/Login/SignUp";
-// import Profile from "./components/Profile/Profile";
-// import MatchGrid from "./components/MatchGrid/MatchGrid";
-// import TravellerMap from "./components/TravellerMap/TravellerMap";
-import NavBar from "../NavBar/NavBar";
-import MessagesView from "../MessagesView/MessagesView";
 import LoggedOutView from "../LoggedOutView/LoggedOutView";
 import ProfileView from "../ProfileView/ProfileView";
 import Home from "../Home/Home"
 import MatchGrid from "../MatchGrid/MatchGrid"
+import RegisterForm from "../LoginForm/RegisterForm/RegisterForm";
+import NotFound from "../NotFound/NotFound";
 import { useState } from "react";
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
@@ -96,8 +87,13 @@ export default function App() {
       } */}
       <Routes>
         <Route path="/" element={<Home />}/>
-        <Route path="login" element={<LoggedOutView />}/>
+        <Route path="login" element={<LoggedOutView handleLogin={handleLogin}/>}/>
         <Route path="/matches" elememt={<MatchGrid />}/>
+        <Route path="/register" element={<RegisterForm />} />
+        {isLoggedIn
+         ? <Route path="/profileView" element={<ProfileView handleCreateProfile={handleCreateProfile} profileCreated={profileCreated} profileEdited={profileEdited}/>}/>
+         : <Route path="/notFound" element={<NotFound />}/>
+        }
         </Routes>
       </main>
       </BrowserRouter> 

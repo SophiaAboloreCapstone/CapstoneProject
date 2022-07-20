@@ -1,6 +1,6 @@
 import * as React from "react";
 import "./NavBar.css";
-import Logo from "../Home/Logo/Logo";
+import Logo from "../Logo/Logo";
 import { Link } from 'react-router-dom';
 export default function NavBar({ isLoggedIn, handleLogout }) {
   const onClick = (event) => {

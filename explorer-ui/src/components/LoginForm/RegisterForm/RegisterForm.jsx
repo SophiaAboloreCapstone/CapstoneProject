@@ -3,7 +3,7 @@ import "./RegisterForm.css"
 import axios from "axios"
 import * as config from "../../../config"
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import Footer from "../../Home/Footer/Footer";
 import NavBar from "../../Home/NavBar/NavBar";
 export default function RegisterForm({ handleLogin }) {
@@ -11,7 +11,7 @@ export default function RegisterForm({ handleLogin }) {
     const password = React.createRef();
     const age = React.createRef();
     const email = React.createRef();
-
+    const navigate = useNavigate();
     const handleSubmit = event => {
         event.preventDefault();
 
@@ -24,6 +24,7 @@ export default function RegisterForm({ handleLogin }) {
                     "email": email.current.value
                     })
                 handleLogin(res.data.user)    
+                navigate("/profileView")
             } catch (err) {
                 alert(err)
                 console.log(err)
@@ -119,16 +120,16 @@ backdrop-filter: blur(25px);
       <h2 className="welcome-text">Welcome</h2>
       <div className="register-form-input-container">
         <div className="input-container">
-        <input className="register-input" ref={email} type="email" placeholder="Email" />
+        <input className="register-input" ref={email} type="email" placeholder="Email" ></input>
         </div>
         <div className="input-container">
-        <input className="register-input" ref={username} type="text" placeholder="Username" />
+        <input className="register-input" ref={username} type="text" placeholder="Username"></input>
         </div>
         <div className="input-container">
-        <input className="register-input" ref={age} type="text" placeholder="Age" />
+        <input className="register-input" ref={age} type="text" placeholder="Age" ></input>
         </div>
         <div className="input-container">
-        <input className="register-input" ref={password} type="password" placeholder="Password" />
+        <input className="register-input" ref={password} type="password" placeholder="Password"></input>
         </div>
       </div>
       <div className="register-button-container">

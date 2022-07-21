@@ -59,13 +59,6 @@ export default function AllUsers({profiles}) {
     }
     return (
         <div className="match-grid">
-            <h1>Here are all the users on the app!</h1>
-            {profiles != null && profiles.map((profile, idx) => {
-                return (
-                    <MatchCard name="Sophia" bio={profile.bio} picture={profile.picture} country={profile.country} accomodation={profile.accomodation} key={idx} />
-                )
-            })
-        }
             <h1>Here is the map of all users</h1>
             <div className="display-map">
           <React.StrictMode>
@@ -75,6 +68,14 @@ export default function AllUsers({profiles}) {
           </React.StrictMode>
           </div> 
 
+            {/* <h1>Here are all the users on the app!</h1>
+            {profiles != null && profiles.map((profile, idx) => {
+                return (
+                    <MatchCard name="Sophia" bio={profile.bio} picture={profile.picture} country={profile.country} accomodation={profile.accomodation} key={idx} />
+                )
+            })
+        } */}
+          
         </div>
     )
 }

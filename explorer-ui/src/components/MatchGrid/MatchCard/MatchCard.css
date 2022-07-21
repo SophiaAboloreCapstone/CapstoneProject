@@ -7,8 +7,13 @@ img{
     
   }
 .match-name{
+  color: black;
   text-align: center;
 }
+.match-country{
+  color: black;
+}
+
 .image-container{
   border: 1px;
   width: 100%;
@@ -27,7 +32,12 @@ img{
   background-repeat: none;
 }
 .match-card{
-    background-color: white;
+  height: 100%;
+  width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+    background-color: #f7a9e3;
+    color: black;
     padding-top: 10px;
     padding-bottom: 20px;
     padding-left: 20px;
@@ -36,18 +46,8 @@ img{
     font-size: 30;
     font-family: Arial, Helvetica, sans-serif;
 }
+
 .match-card:hover{
   transform: scale(1.05);
 }
-.match-name{
-    text-align: left;
-}
-.match-price{
-    text-align: center;
-}
-.match-quantity{
-    text-align: center;
-}
-.match-container{
-  display: grid
-}
+

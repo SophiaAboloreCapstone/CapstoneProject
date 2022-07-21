@@ -89,10 +89,10 @@ export default function App() {
         <Route path="/" element={<Home />}/>
         <Route path="login" element={<LoggedOutView handleLogin={handleLogin}/>}/>
         <Route path="/matches" elememt={<MatchGrid />}/>
-        <Route path="/register" element={<RegisterForm />} />
+        <Route path="/register" element={<RegisterForm handleLogin={handleLogin}/>} />
         {isLoggedIn
          ? <Route path="/profileView" element={<ProfileView handleCreateProfile={handleCreateProfile} profileCreated={profileCreated} profileEdited={profileEdited}/>}/>
-         : <Route path="/notFound" element={<NotFound />}/>
+         : <Route path="/profileView" element={<NotFound />}/>
         }
         </Routes>
       </main>

@@ -11,7 +11,8 @@ import ReactDOM from "react-dom";
 import ProfileDisplay from "./ProfileDisplay/ProfileDisplay";
 import AllUsers from "../MatchGrid/AllUsers/AllUsers";
 import { ChakraProvider, theme } from "@chakra-ui/react";
-
+import Footer from "../Home/Footer/Footer";
+import NavBar from "../Home/NavBar/NavBar";
 export default function ProfileView({
   handleCreateProfile,
   profileCreated,
@@ -104,6 +105,8 @@ export default function ProfileView({
     })();
   }, []);
   return (
+    <div className="profile-view">
+      <NavBar />
     <div className="profile">
       {!profileCreated ? (
         <div className="profile-creation">
@@ -437,17 +440,17 @@ export default function ProfileView({
           </form>
           {/* <MatchGrid profiles={profiles} userProfile={userProfile}/> */}
         <AllUsers profiles={profiles} /> 
+        <Footer />
         </div>
-      ) : (
+      ) 
+      : (
         <div className="display-profile">
           <ProfileDisplay profileInfo={userProfile} />
         </div>
       )
       }
-       
-      <div className="match-grid">
 
-      </div>
+    </div>
     </div>
   );
 }

@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FaLocationArrow, FaTimes } from "react-icons/fa";
-
+import MatchCard from "../MatchGrid/MatchCard/MatchCard";
 import {
   useJsApiLoader,
   GoogleMap,
@@ -21,9 +21,9 @@ import {
   useLoadScript,
 } from "@react-google-maps/api";
 import { useRef, useState, useEffect } from "react";
+
 // const { REACT_APP_GOOGLE_MAPS_API_KEY } = require("./config");
 // import { REACT_APP_GOOGLE_MAPS_API_KEY} from require('config');
-const center = { lat: 48.8584, lng: 2.2945 };
 const libraries = ["places"];
 function MapContainer({ coordinates }) {
   const { isLoaded } = useLoadScript({
@@ -36,15 +36,31 @@ function MapContainer({ coordinates }) {
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [showingInfoWindow, setshowingInfoWindow] = useState(false);
-  const [activeMarker, setActiveMarker] = useState({});
-  const [selectedPlace, setSelectedPlace] = useState({});
-
-  const onMarkerClick = (props, marker) => {
-    setSelectedPlace(props);
+  const [activeMarker, setActiveMarker] = useState();
+  const [selectedPlace, setSelectedPlace] = useState();
+  const [activeProfile, setActiveProfile] = useState(false);
+  const [currProfile, setCurrProfile] = useState(null);
+  const origin = {lat: 37.550201, lng: -121.980827}
+  const originString= "Facebook, Fremont Street, San Francisco, CA, USA"
+  const onMarkerClick = (user, marker) => {
+    setActiveProfile(true);
+    calculateRouteBetweenUsers(user.user.address);
+    setSelectedPlace(user.user.address);
     setActiveMarker(marker);
     setshowingInfoWindow(true);
-  };
+    setCurrProfile(user);
 
+  };
+  // const onMouseOver = (profile, marker) => {
+  //   console.log("user address: ", profile.address)
+  //   setSelectedPlace(profile.user.address);
+  //   setActiveMarker(marker);
+  //   setshowingInfoWindow(true);
+  //   setCurrProfile(profile)
+  //   // console.log("user is: ", user);
+  //   // setActiveProfile(user);
+  //   // calculateRouteBetweenUsers(user.address)
+  // };
   const onClose = async (e) => {
     if (showingInfoWindow) {
       setshowingInfoWindow(false);
@@ -73,9 +89,31 @@ function MapContainer({ coordinates }) {
       // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING,
     });
+    console.log("route is :", results)
     setDirectionsResponse(results);
     setDistance(results.routes[0].legs[0].distance.text);
     setDuration(results.routes[0].legs[0].duration.text);
+  }
+  async function calculateRouteBetweenUsers(profileLocation) {
+  console.log("called")
+    if (originString  === "" || String(profileLocation) === "") {
+      console.log("missing info")
+      console.log("origin is: ", originString)
+      console.log("destination is: ", profileLocation)
+      return;
+    }
+    // eslint-disable-next-line no-undef
+    const directionsService = new google.maps.DirectionsService();
+    const results = await directionsService.route({
+      origin: originString,
+      destination: profileLocation,
+      // eslint-disable-next-line no-undef
+      travelMode: google.maps.TravelMode.DRIVING,
+    });
+    console.log("route is :", results)
+    setDirectionsResponse(results);
+    // setDistance(results.routes[0].legs[0].distance.text);
+    // setDuration(results.routes[0].legs[0].duration.text);
   }
 
   function clearRoute() {
@@ -87,17 +125,19 @@ function MapContainer({ coordinates }) {
   }
 
   return (
+    <div className="map-container">
     <Flex
       position="relative"
       flexDirection="column"
       alignItems="center"
       h="100vh"
       w="100vw"
+
     >
       <Box position="absolute" left={0} top={0} h="100%" w="100%">
         {/* Google Map Box */}
         <GoogleMap
-          center={{lat: 37.550201, lng: -121.980827}}
+          center={origin}
           zoom={15}
           mapContainerStyle={{ width: "100%", height: "100%" }}
           options={{
@@ -112,21 +152,42 @@ function MapContainer({ coordinates }) {
           <Marker position={{ lat: 48.8584, lng: 2.2944 }} /> */}
           {coordinates != null &&
             coordinates.map((profile, idx) => {
-              console.log("profile position: ", profile.position);
-              <Marker position={{lat: 37.550201, lng: -121.980827}} />
+              // TODO: Figure out a central location to pass in here
+               // Maybe take in the users location when they register
+              <Marker position={origin} />
               return (
                 <div className="user-marker">
                   <Marker
                     position={profile.position}
-                    onClick={() => onMarkerClick(profile.user.address, idx)}
+                    // onClick={onMarkerClick(profile.user)}
                     name={profile.user.username}
                     key={idx}
+                    // onMouseOver={() => onMouseOver(profile, idx)}
+                    onClick={()=> onMarkerClick(profile, idx)}
                   />
-         
+                  <div className="info-window">
+                  {currProfile != null
+          ?<InfoWindow
+                  position={currProfile.position}
+                  marker={activeMarker}
+                  visible={showingInfoWindow}
+                  color={"black"}
+                  onClose={onClose}
+                  icon={currProfile.user.picture}>
+                  
+                  <div>
+                    <img src={currProfile.user.picture} ></img>
+                    <h2>{currProfile.user.username} is at {selectedPlace}!</h2>
+                  </div>
+                </InfoWindow>
+          :<></>
+          }
+                </div>    
           </div>
+
             );
           })}
-
+          
           {directionsResponse && (
             <DirectionsRenderer directions={directionsResponse} />
           )}
@@ -171,6 +232,7 @@ function MapContainer({ coordinates }) {
               Calculate Route
             </Button>
             <IconButton
+            bg={"black"}
               aria-label="center back"
               icon={<FaTimes />}
               onClick={clearRoute}
@@ -178,20 +240,27 @@ function MapContainer({ coordinates }) {
           </ButtonGroup>
         </HStack>
         <HStack spacing={4} mt={4} justifyContent="space-between">
-          <Text>Distance: {distance} </Text>
-          <Text>Duration: {duration} </Text>
+          <Text color={"black"}>Distance: {distance} </Text>
+          <Text color={"black"}>Duration: {duration} </Text>
           <IconButton
             aria-label="center back"
             icon={<FaLocationArrow />}
+            bg={"black"}
             isRound
             onClick={() => {
-              map.panTo(center);
+              map.panTo(origin);
               map.setZoom(15);
             }}
           />
         </HStack>
       </Box>
     </Flex>
+     {activeProfile != false
+      ? <MatchCard name={currProfile.user.name} bio={currProfile.user.bio} picture={currProfile.user.picture} country={currProfile.user.country} accomodation={currProfile.user.accomodation}/>
+      : <></>
+      }
+      
+    </div>
   );
 }
 

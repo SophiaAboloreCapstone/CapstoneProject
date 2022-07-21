@@ -2,16 +2,16 @@ import * as React from "react"
 import "./LoginForm.css"
 import axios from "axios"
 import * as config from "../../config"
-import Button from "./Button"
-import Icon from "./Icon"
-import Input from "./Input"
 import styled from "styled-components";
 import Footer from "../Home/Footer/Footer"
-import { Link } from "react-router-dom"
+import ProfileView from "../ProfileView/ProfileView";
+import { Link, Route, useNavigate } from "react-router-dom"
+import { useState } from "react";
+import NotFound from "../NotFound/NotFound";
 export default function LoginForm({handleLogin}) {
     const username = React.createRef();
     const password = React.createRef();
-
+    const navigate = useNavigate();
     const handleSubmit = event => {
         event.preventDefault();
 
@@ -21,10 +21,15 @@ export default function LoginForm({handleLogin}) {
                     "username" : username.current.value,
                     "password" : password.current.value
                     })                
-                handleLogin(res.data.user)    
+                handleLogin(res.data.user)
+                console.log("logged in")
+                navigate("/profileView");
+
+
             } catch (err) {
                 alert(err)
                 console.log(err)
+                setSuccessful("failure")
             }
         }
         login()
@@ -126,12 +131,12 @@ const HorizontalRule = styled.hr`
       <div className="login-button-container">
       <Link to="/register">
         <button className="login-page-button"  content="Register">Register</button>
+        
         </Link>
       </div>
     </MainContainer>
     <Footer />
     </div>
-    
       // <div className="login">
       // <form onSubmit={handleSubmit}>
       //   <div className="title">Login</div>

@@ -21,7 +21,7 @@ import {
   useLoadScript,
 } from "@react-google-maps/api";
 import { useRef, useState, useEffect } from "react";
-
+import { ChakraProvider, theme } from "@chakra-ui/react";
 // const { REACT_APP_GOOGLE_MAPS_API_KEY } = require("./config");
 // import { REACT_APP_GOOGLE_MAPS_API_KEY} from require('config');
 const libraries = ["places"];
@@ -49,6 +49,7 @@ function MapContainer({ coordinates }) {
     setActiveMarker(marker);
     setshowingInfoWindow(true);
     setCurrProfile(user);
+    console.log("curr profile is changing state: ", currProfile)
 
   };
   // const onMouseOver = (profile, marker) => {
@@ -126,6 +127,7 @@ function MapContainer({ coordinates }) {
 
   return (
     <div className="map-container">
+      {/* <ChakraProvider theme={theme}></ChakraProvider> */}
     <Flex
       position="relative"
       flexDirection="column"
@@ -154,7 +156,7 @@ function MapContainer({ coordinates }) {
             coordinates.map((profile, idx) => {
               // TODO: Figure out a central location to pass in here
                // Maybe take in the users location when they register
-              <Marker position={origin} />
+              // <Marker position={origin} />
               return (
                 <div className="user-marker">
                   <Marker
@@ -165,7 +167,11 @@ function MapContainer({ coordinates }) {
                     // onMouseOver={() => onMouseOver(profile, idx)}
                     onClick={()=> onMarkerClick(profile, idx)}
                   />
-                  <div className="info-window">
+          </div>
+
+            );
+          })}
+          <div className="info-window">
                   {currProfile != null
           ?<InfoWindow
                   position={currProfile.position}
@@ -183,10 +189,6 @@ function MapContainer({ coordinates }) {
           :<></>
           }
                 </div>    
-          </div>
-
-            );
-          })}
           
           {directionsResponse && (
             <DirectionsRenderer directions={directionsResponse} />

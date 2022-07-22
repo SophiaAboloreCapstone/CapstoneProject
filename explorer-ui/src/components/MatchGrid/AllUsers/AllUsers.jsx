@@ -61,11 +61,9 @@ export default function AllUsers({profiles}) {
         <div className="match-grid">
             <h1>Here is the map of all users</h1>
             <div className="display-map">
-          <React.StrictMode>
             <ChakraProvider theme={theme}>
               <MapContainer coordinates={matchesPlusCoordinates}/>
             </ChakraProvider>
-          </React.StrictMode>
           </div> 
 
             {/* <h1>Here are all the users on the app!</h1>

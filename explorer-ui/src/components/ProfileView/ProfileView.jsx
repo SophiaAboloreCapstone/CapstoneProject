@@ -13,6 +13,7 @@ import AllUsers from "../MatchGrid/AllUsers/AllUsers";
 import { ChakraProvider, theme } from "@chakra-ui/react";
 import Footer from "../Home/Footer/Footer";
 import NavBar from "../Home/NavBar/NavBar";
+import Activities from "../Activities/Activities";
 export default function ProfileView({
   handleCreateProfile,
   profileCreated,
@@ -82,6 +83,7 @@ export default function ProfileView({
       onLoad(reader.result);
     };
   };
+
 
   React.useEffect(() => {
     const fetchProfileInfo = (async () => {
@@ -440,6 +442,7 @@ export default function ProfileView({
           </form>
           {/* <MatchGrid profiles={profiles} userProfile={userProfile}/> */}
         <AllUsers profiles={profiles} /> 
+        <Activities currCountry={"Mexico"}/>
         <Footer />
         </div>
       ) 

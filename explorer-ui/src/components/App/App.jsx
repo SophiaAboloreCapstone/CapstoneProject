@@ -54,7 +54,19 @@ export default function App() {
     setProfileCreated(true)
 
   };
-  
+
+  //  // HANDLE SUBMIT FOR UPDATE
+  // handleTripSubmit = (e) => {
+  //    e.prevent.Default();
+  //    let tripNotes = {
+  //      title: e.target.title.value,
+  //      description: e.target.description.value,
+  //      likes: e.target.likes.value,
+  //      dislikes: e.target.dislikes.value,
+       
+  //    }
+  //    this.postNotes(tripNotes);
+  // }
 
   return (
     // <div className="app">

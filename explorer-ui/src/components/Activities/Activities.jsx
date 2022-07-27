@@ -40,11 +40,11 @@ export default function Activities() {
 
   // This block uses the placename from input textbox and gets place location from API. If place was found it calls list loading function:
 
-  function handleTripSubmit(event) {
+const  handleTripSubmit= async(event) => {
     event.preventDefault();
     console.log("clicked");
     let name = "Moscow";
-    apiGet("geoname", "name=" + name).then(function (data) {
+    const data = await  apiGet("geoname", "name=" + name)
       let message = "Name not found";
       if (data.status == "OK") {
         message = data.name + ", " + "Moscow";
@@ -53,7 +53,7 @@ export default function Activities() {
         firstLoad();
       }
       document.getElementById("info").innerHTML = `${message}`;
-    });
+
     return;
   }
   // This function gets total objects count within 1000 meters from specified location (lon, lat) and then loads first objects page:
@@ -74,18 +74,17 @@ export default function Activities() {
 
   // This function load POI's list page to the left pane. It uses 1000 meters radius for objects search:
 
-  function loadList() {
-    apiGet(
+const loadList = async() => {
+    const data = await apiGet(
       "radius",
       `radius=1000&limit=${pageLength}&offset=${offset}&lon=${37.6173}&lat=${55.7558}&rate=2&format=json`
-    ).then(function (data) {
+    )
       let list = document.getElementById("list");
       list.innerHTML = "";
       console.log("data: ", data);
       setEventData(data);
-      console.log("events are: ", events)
       console.log("event data: ", eventData);
-      // getXIP(eventData)
+      getXIP(eventData)
       // data.forEach(item => list.appendChild(createListItem(item)));
       let nextBtn = document.getElementById("next_button");
       if (count < offset + pageLength) {
@@ -94,7 +93,6 @@ export default function Activities() {
         nextBtn.style.visibility = "visible";
         nextBtn.innerText = `Next (${offset + pageLength} of ${count})`;
       }
-    });
   }
 
 
@@ -174,7 +172,7 @@ const getXIP = async(events) => {
     <div className="activities">
       <form id="search-form">
         <input id="textbox"></input>
-        <button type="submit" onClick={handleTripSubmit}>
+        <button type="submit" onClick={handleTripSubmit()}>
           search
         </button>
         <p id="info">Not Null</p>

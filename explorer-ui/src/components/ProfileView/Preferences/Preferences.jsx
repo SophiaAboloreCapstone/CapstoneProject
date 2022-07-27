@@ -5,10 +5,12 @@ import NavBar from "../../Home/NavBar/NavBar";
 import Activities from "../../Activities/Activities";
 import interestsJSON from "../../../data/interests.json"
 import employmentJSON from "../../../data/employment_fields.json";
+import budgets from "../../../data/budget_ranges.json";
 import Card from "../../Card/Card";
 export default function Preferences() {
     let interestsArr = interestsJSON.interests;
-    let employment_fields = employmentJSON.employment
+    let employment_fields = employmentJSON.employment;
+    let budgestsArr = budgets.ranges;
     console.log("interestsArr: ", interestsArr)
   const [preferenceInfo, setPreferenceInfo] = useState({});
   const [employment, setEmployment] = useState(null);
@@ -43,13 +45,21 @@ export default function Preferences() {
         </div>
         <div className="tourist-attractions">
           <h3>Select the following tourist attractions interest you?</h3>
-          
+          <Activities country={"Moscow"} />
         </div>
         <div className="curr-location">
           <h3>Where are you currently located</h3>
+          <input className="country"></input>
         </div>
         <div className="budget">
           <h3>Please select the range of your budget for this trip</h3>
+          <select id="budgest-range" name="budgest-range">
+          {
+            budgestsArr.map((range, idx) =>(
+                <option>{range}</option>
+            ))
+          }
+          </select>
         </div>
         <div className="visibility-preference">
           <h3>

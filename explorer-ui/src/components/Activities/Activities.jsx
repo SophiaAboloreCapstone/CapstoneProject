@@ -43,8 +43,8 @@ export default function Activities({country}) {
 
   // This block uses the placename from input textbox and gets place location from API. If place was found it calls list loading function:
 
-  function handleTripSubmit(event) {
-    event.preventDefault();
+  function handleTripSubmit() {
+    // event.preventDefault();
     console.log("clicked");
     let name = "Moscow";
     apiGet("geoname", "name=" + name).then(function (data) {
@@ -59,6 +59,7 @@ export default function Activities({country}) {
     });
     return;
   }
+  handleTripSubmit()
   // This function gets total objects count within 1000 meters from specified location (lon, lat) and then loads first objects page:
 
   function firstLoad() {
@@ -116,7 +117,7 @@ const getXID = async(events) => {
 
   return (
     <div className="activities">
-      <form id="search-form">
+      {/* <form id="search-form">
         <input id="textbox"></input>
         <button type="submit" onClick={handleTripSubmit}>
           search
@@ -124,7 +125,7 @@ const getXID = async(events) => {
         <p id="info">Not Null</p>
         <li id="list"></li>
         <div id="poi"></div>
-      </form>
+      </form> */}
       <div className="activities-grid">
       {eventData != [] ? (
             eventData.map((event, idx) => {
@@ -144,8 +145,8 @@ const getXID = async(events) => {
             <p>Sorry no activities available</p>
           )}
       </div>
-      <button id="next_button" type="click" onClick={(e) => loadMoreActivities(e)}>
-          Next
+      <button className="next_button" type="click" onClick={(e) => loadMoreActivities(e)}>
+          Load More Attractions
         </button>
       {/* <ActivityGrid eventData={eventData}/> */}
     </div>

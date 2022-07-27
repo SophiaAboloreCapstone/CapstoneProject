@@ -1,7 +1,7 @@
 // This function calls API methods by fetch function (you can use XMLHttpRequest or $.ajax instead):
-import ActivityGrid from "../ActivityGrid/ActivityGrid";
+import Grid from "../Grid/Grid";
 import { useState, useEffect } from "react";
-import ActivityCard from "../ActivityCard/ActivityCard";
+import Card from "../Card/Card";
 import "./Activities.css"
 //You should get your API key at https://opentripmap.io
 const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
@@ -129,7 +129,7 @@ const getXID = async(events) => {
       {eventData != [] ? (
             eventData.map((event, idx) => {
               return (
-                <ActivityCard
+                <Card
                   name={event.name}
                   // image={xid.image}
                   // address={xid.address}

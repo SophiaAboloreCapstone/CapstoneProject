@@ -1,10 +1,10 @@
 import * as React from "react"
-import "./ActivityCard.css"
+import "./Card.css"
 import {
     Link
 } from "react-router-dom";
 // import {useState} from React
-export default function ActivityCard({name, points, kinds}) {
+export default function Card({name, points, kinds}) {
     return (
         <div className="activity-card">
             <button className="activity">{name}</button>

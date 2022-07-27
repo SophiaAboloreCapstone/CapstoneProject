@@ -7,6 +7,7 @@ import Home from "../Home/Home"
 import MatchGrid from "../MatchGrid/MatchGrid"
 import RegisterForm from "../LoginForm/RegisterForm/RegisterForm";
 import NotFound from "../NotFound/NotFound";
+import Preferences from "../ProfileView/Preferences/Preferences";
 import { useState } from "react";
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
@@ -102,6 +103,7 @@ export default function App() {
         <Route path="login" element={<LoggedOutView handleLogin={handleLogin}/>}/>
         <Route path="/matches" elememt={<MatchGrid />}/>
         <Route path="/register" element={<RegisterForm handleLogin={handleLogin}/>} />
+        <Route path="/preferences" element={<Preferences/>} />
         {isLoggedIn
          ? <Route path="/profileView" element={<ProfileView handleCreateProfile={handleCreateProfile} profileCreated={profileCreated} profileEdited={profileEdited}/>}/>
          : <Route path="/profileView" element={<NotFound />}/>

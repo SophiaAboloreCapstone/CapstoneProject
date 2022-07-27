@@ -1,0 +1,28 @@
+.preferences{
+    /* all: initial; */
+    background-color: black;
+    padding-left: 200px;
+    padding-right: 200px;
+}
+.questionaire{
+    padding-top: 100px;
+}
+.grid {
+    max-width: 1800px;
+    margin: 0 auto;
+    display: grid;
+    gap: 1rem;
+    /* #ffd9e3(166, 224, 255); */
+  }
+  @media (min-width: 1200px) {
+    .grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+
+  @media (min-width: 900px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (min-width: 600px) {
+    .grid { grid-template-columns: repeat(4 , 1fr); }
+  }

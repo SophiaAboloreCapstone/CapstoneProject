@@ -4,7 +4,7 @@ import {
     Link
 } from "react-router-dom";
 // import {useState} from React
-export default function Card({name, points, kinds}) {
+export default function Card({name}) {
     return (
         <div className="activity-card">
             <button className="activity">{name}</button>

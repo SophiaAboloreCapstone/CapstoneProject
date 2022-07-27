@@ -4,9 +4,11 @@ import "./Preferences.css";
 import NavBar from "../../Home/NavBar/NavBar";
 import Activities from "../../Activities/Activities";
 import interestsJSON from "../../../data/interests.json"
+import employmentJSON from "../../../data/employment_fields.json";
 import Card from "../../Card/Card";
 export default function Preferences() {
     let interestsArr = interestsJSON.interests;
+    let employment_fields = employmentJSON.employment
     console.log("interestsArr: ", interestsArr)
   const [preferenceInfo, setPreferenceInfo] = useState({});
   const [employment, setEmployment] = useState(null);
@@ -21,6 +23,13 @@ export default function Preferences() {
       <div className="questionaire">
         <div className="employment">
           <h3>What best describes the field you work in?</h3>
+          <select id="occupation" name="occupation">
+          {
+            employment_fields.map((occupation, idx) =>(
+                <option>{occupation}</option>
+            ))
+          }
+          </select>
         </div>
         <div className="interests">
           <h3>Select the following interests that apply to you</h3>
@@ -33,7 +42,8 @@ export default function Preferences() {
           </div>
         </div>
         <div className="tourist-attractions">
-          <h3>Which of the following tourist attractions interest you?</h3>
+          <h3>Select the following tourist attractions interest you?</h3>
+          
         </div>
         <div className="curr-location">
           <h3>Where are you currently located</h3>

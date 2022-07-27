@@ -1,10 +1,18 @@
-.activity-card{
+.activity{
     background-color: pink;
   padding: 1rem;
-  height: 150px;
-  width: 300px;
+  height: 100px;
+  width: 150px;
+  border-radius: 20px;
     font-family: Arial, Helvetica, sans-serif;
 }
-.activity-card:hover{
+.activity:hover{
+    background-color: rgb(221, 192, 255);
+    color: black;
+  transform: scale(1.05);
+}
+.activity:visited{
+    background-color: rgb(221, 192, 255);
+    color: black;
   transform: scale(1.05);
 }

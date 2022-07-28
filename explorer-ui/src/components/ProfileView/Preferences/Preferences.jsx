@@ -105,7 +105,7 @@ function handleOccupationsSelected(event, occupation) {
   // RETURN
   return (
     <div className="preferences">
-      {/* <NavBar /> */}
+        <NavBar />
       <form className="questionaire" onSubmit={(event) =>handleSubmit(event)}>
         <div className="employment">
           <h3>What best describes the field you work in?</h3>
@@ -164,7 +164,7 @@ function handleOccupationsSelected(event, occupation) {
             <option>No</option>
           </select>
         </div>
-        <button type="submit">Complete Profile</button>
+        <button className="profile-complete" type="submit">Complete Profile</button>
       </form>
     </div>
   );

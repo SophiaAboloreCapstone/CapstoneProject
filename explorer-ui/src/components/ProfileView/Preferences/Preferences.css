@@ -35,6 +35,30 @@
   border-radius: 20px;
     font-family: Arial, Helvetica, sans-serif;
 }
+.questionaire{
+    background-color: black;
+}
+.interests{
+    background-color: black;
+}
+.employment{
+    background-color: black;
+}
+.grid{
+    background-color: black;
+}
+.tourist-attractions{
+    background-color: black;
+}
+.curr-location{
+    background-color: black;
+}
+.budget{
+    background-color: black;
+}
+.visibility-preference{
+    background-color: black;
+}
 .card:hover{
     background-color: rgb(221, 192, 255);
     color: black;
@@ -44,7 +68,4 @@
     background-color: rgb(221, 192, 255);
     color: black;
   transform: scale(1.05);
-}
-.questionaire{
-    background-color: black;
 }

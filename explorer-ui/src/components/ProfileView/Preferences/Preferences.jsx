@@ -13,13 +13,20 @@ export default function Preferences() {
     let budgestsArr = budgets.ranges;
     console.log("interestsArr: ", interestsArr)
   const [preferenceInfo, setPreferenceInfo] = useState({"interests": new Set(), "attractions": new Set(), "occupation": "", "budget": "", "currLocation":"", "visibility": ""});
-  const [employment, setEmployment] = useState(null);
+  const [employment, setEmployment] = useState();
   const [interests, setInterests] = useState([]);
   const [touristAttractions, setTouristAttractions] = useState([]);
-  const [currLocation, setCurrLocation] = useState(null);
+  const [currLocation, setCurrLocation] = useState({});
   const [budget, setBudget] = useState();
   const [visibility, setVisibility] = useState(null);
+  const budgetOption = React.createRef();
+  const visibilityOption = React.createRef();
+  const employmentOption = React.createRef();
+  const country = React.createRef();
+  const province = React.createRef();
+  const city = React.createRef();
 
+//TODO: Figure out how to set all the states at once? and add useEffects to all the function calls
 // Update the state array for the users interests
 function handleInterestSelected(event, interest) {
     event.preventDefault();
@@ -41,7 +48,7 @@ function handleAttractionsSelected(event, attraction) {
   // Update the state array for the users attractions interests
 function handleOccupationsSelected(event, occupation) {
     event.preventDefault();
-    setEmployment(occupation)
+    setEmployment(occupation.current.value,)
     setPreferenceInfo({"interests": preferenceInfo.interests, "attractions": preferenceInfo.attractions, "occupation": employment, "budget": preferenceInfo.budget, "currLocation": preferenceInfo.currLocation, "visibility": preferenceInfo.visibility})
     console.log("occupation is: ", employment)
   };
@@ -49,7 +56,7 @@ function handleOccupationsSelected(event, occupation) {
   // Update the state array for the users attractions interests
   function handleBudgetSelected(event, selectedBudget) {
     event.preventDefault();
-    setBudget(selectedBudget)
+    setBudget(selectedBudget.current.value)
     setPreferenceInfo({"interests": preferenceInfo.interests, "attractions": preferenceInfo.attractions, "occupation": preferenceInfo.occupation, "budget": budget, "currLocation": preferenceInfo.currLocation, "visibility": preferenceInfo.visibility})
     console.log("budget is: ", budget)
   };
@@ -57,20 +64,27 @@ function handleOccupationsSelected(event, occupation) {
     // Update the state array for the users attractions interests
     function handleVisibilitySelected(event, visibililityChoice) {
         event.preventDefault();
-        setVisibility(visibililityChoice)
+        setVisibility(visibililityChoice.current.value)
         setPreferenceInfo({"interests": preferenceInfo.interests, "attractions": preferenceInfo.attractions, "occupation": preferenceInfo.occupation, "budget": preferenceInfo.budget, "currLocation": preferenceInfo.currLocation, "visibility": visibility})
         console.log("visibility is: ", visibililityChoice)
       };
+  // Update the state array for the users attractions interests
+  function handleLocationSet(event, country, province, city) {
+    event.preventDefault();
+    setCurrLocation({"country":country.current.value, "province":province.current.value, "city": city.current.value})
+    setPreferenceInfo({"interests": preferenceInfo.interests, "attractions": preferenceInfo.attractions, "occupation": preferenceInfo.employment, "budget": preferenceInfo.budget, "currLocation": currLocation, "visibility": preferenceInfo.visibility})
+    console.log("current location is: ", currLocation)
+  };
   return (
     <div className="preferences">
       {/* <NavBar /> */}
       <div className="questionaire">
         <div className="employment">
           <h3>What best describes the field you work in?</h3>
-          <select id="occupation" name="occupation" >
+          <select id="occupation" name="occupation" ref={employmentOption} onClick={(event) => handleOccupationsSelected(event, employmentOption)}>
           {
             employment_fields.map((occupation, idx) =>(
-                <option on>{occupation}</option>
+                <option >{occupation}</option>
             ))
           }
           </select>
@@ -92,17 +106,20 @@ function handleOccupationsSelected(event, occupation) {
           <Activities country={"Moscow"}  handleAttractionsSelected={handleAttractionsSelected}/>
         </div>
         <div className="curr-location">
+            <form className="set-location" onSubmit={(event) => handleLocationSet(event, country, province, city)}>
           <h3>Where are you currently located</h3>
           <span>Country</span>
-          <input className="country"></input>
+          <input ref={country}className="country"></input>
           <span>State/Province</span>
-          <input className="state"></input>
+          <input ref={province}className="state"></input>
           <span>City/Town</span>
-          <input className="city"></input>
-        </div>
+          <input ref={city}className="city"></input>
+          <button type="submit">Submit</button>
+          </form>
+        </div> 
         <div className="budget">
           <h3>Please select the range of your budget for this trip</h3>
-          <select id="budgest-range" name="budgest-range">
+          <select id="budgest-range" name="budgest-range" ref={budgetOption} onClick={(event) => handleBudgetSelected(event, budgetOption)}>
           {
             budgestsArr.map((range, idx) =>(
                 <option>{range}</option>
@@ -114,7 +131,7 @@ function handleOccupationsSelected(event, occupation) {
           <h3>
             Would you like to share your location with all travellers near you
           </h3>
-          <select id="visibility" name="visibility">
+          <select id="visibility" name="visibility" ref={visibilityOption} onClick={(event) => handleVisibilitySelected(event, visibilityOption)}>
             <option>Yes</option>
             <option>No</option>
           </select>

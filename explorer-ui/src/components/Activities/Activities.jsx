@@ -16,7 +16,7 @@ const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
   let count; // total objects count
 
 
-export default function Activities({country, handleAttractionsSelected}) {
+export default function Activities({country, province, city, handleAttractionsSelected}) {
   const [eventData, setEventData] = useState([]);
   const [xidList, setXIDList] = useState([]);
   const [events, setEvents] = useState([]);
@@ -46,11 +46,11 @@ export default function Activities({country, handleAttractionsSelected}) {
   function handleTripSubmit() {
     // event.preventDefault();
     console.log("clicked");
-    let name = "Moscow";
+    let name = country;
     apiGet("geoname", "name=" + name).then(function (data) {
       let message = "Name not found";
       if (data.status == "OK") {
-        message = data.name + ", " + "Moscow";
+        message = data.name + ", " + country;
         lon = 105.3188;
         lat = 61.524;
         firstLoad();

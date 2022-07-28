@@ -50,8 +50,6 @@ export default function ProfileView({
             country: country.current.value,
             travelMonth: travelMonth.current.value,
             accomodations: accomodations.current.value,
-            maxContentLength: Infinity,
-            maxBodyLength: Infinity,
           },
           { maxContentLength: Infinity, maxBodyLength: Infinity }
         );

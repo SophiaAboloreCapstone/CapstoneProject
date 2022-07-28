@@ -16,7 +16,7 @@ const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
   let count; // total objects count
 
 
-export default function Activities({country}) {
+export default function Activities({country, handleAttractionsSelected}) {
   const [eventData, setEventData] = useState([]);
   const [xidList, setXIDList] = useState([]);
   const [events, setEvents] = useState([]);
@@ -117,15 +117,6 @@ const getXID = async(events) => {
 
   return (
     <div className="activities">
-      {/* <form id="search-form">
-        <input id="textbox"></input>
-        <button type="submit" onClick={handleTripSubmit}>
-          search
-        </button>
-        <p id="info">Not Null</p>
-        <li id="list"></li>
-        <div id="poi"></div>
-      </form> */}
       <div className="activities-grid">
       {eventData != [] ? (
             eventData.map((event, idx) => {
@@ -136,6 +127,7 @@ const getXID = async(events) => {
                   // address={xid.address}
                   points={event.point}
                   kinds={event.kinds}
+                  handleAttractionsSelected={handleAttractionsSelected}
                   // wikiextract={xid.wikipedia_extracts}
                   key={idx}
                 />

@@ -103,7 +103,7 @@ export default function App() {
         <Route path="login" element={<LoggedOutView handleLogin={handleLogin}/>}/>
         <Route path="/matches" elememt={<MatchGrid />}/>
         <Route path="/register" element={<RegisterForm handleLogin={handleLogin}/>} />
-        <Route path="/preferences" element={<Preferences/>} />
+        <Route path="/preferences" element={<Preferences />} />
         {isLoggedIn
          ? <Route path="/profileView" element={<ProfileView handleCreateProfile={handleCreateProfile} profileCreated={profileCreated} profileEdited={profileEdited}/>}/>
          : <Route path="/profileView" element={<NotFound />}/>

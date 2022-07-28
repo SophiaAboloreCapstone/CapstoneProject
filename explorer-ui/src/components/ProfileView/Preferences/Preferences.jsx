@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./Preferences.css";
 import NavBar from "../../Home/NavBar/NavBar";
 import Activities from "../../Activities/Activities";
@@ -181,7 +182,7 @@ Geocode.fromAddress(country.current.value).then(
             <option>No</option>
           </select>
         </div>
-        <button className="profile-complete" type="submit">Complete Profile</button>
+        <button className="profile-complete" type="submit">Complete Profile and View Matches</button>
       </form>
     </div>
   );

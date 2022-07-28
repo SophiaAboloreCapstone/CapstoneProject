@@ -3,6 +3,7 @@ import Grid from "../Grid/Grid";
 import { useState, useEffect } from "react";
 import Card from "../Card/Card";
 import "./Activities.css"
+import AttractionContainer from "./AttractionContainer";
 //You should get your API key at https://opentripmap.io
 const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
   // Init global variables for paging:
@@ -18,7 +19,7 @@ const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
 
 export default function Activities({currCountry, currProvince, currCity, latitude, longitude, handleAttractionsSelected}) {
   const [eventData, setEventData] = useState([]);
-  const [xidList, setXIDList] = useState([]);
+  const [xid, setXID] = useState([]);
   const [events, setEvents] = useState([]);
 
 // Fetch data from the open trips maps API
@@ -101,14 +102,11 @@ export default function Activities({currCountry, currProvince, currCity, latitud
 const getXID = async(events) => {
   console.log("events are: ",events)
   try{
-    for (let i = 0; i < events.length; i++) {
-      console.log(i)
-      const xid = await apiGet("xid/" + events[i].xid)
-      setXIDList(xidList => [...xidList, xid]);
-      console.log("xid list so far: ", xidList)
-      console.log("xid is: ", xid); 
-    }
-    return xidList
+      const xidData = await apiGet("xid/" + events.xid)
+      setXID(xidData);
+      console.log("xid list so far: ", xid)
+      console.log("xid is: ", xidData); 
+    // return xidList
   }
   catch(error){
     console.log(error);
@@ -121,6 +119,7 @@ const getXID = async(events) => {
       {eventData != [] ? (
             eventData.map((event, idx) => {
               return (
+                <div className="activities">
                 <Card
                   name={event.name}
                   // image={xid.image}
@@ -131,6 +130,12 @@ const getXID = async(events) => {
                   // wikiextract={xid.wikipedia_extracts}
                   key={idx}
                 />
+                <button className="more-info" onclick={getXID(event.xid)}>More Info</button>
+                {xid.xid == event.xid
+                ? <AttractionContainer name={xid.name} image={xid.image} description={xid.info.descr} source={xid.wikipedia} />
+                : <></>
+              }
+                </div>
               );
             })
           ) : (

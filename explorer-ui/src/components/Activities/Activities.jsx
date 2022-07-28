@@ -16,7 +16,7 @@ const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
   let count; // total objects count
 
 
-export default function Activities({country, province, city, handleAttractionsSelected}) {
+export default function Activities({currCountry, currProvince, currCity, latitude, longitude, handleAttractionsSelected}) {
   const [eventData, setEventData] = useState([]);
   const [xidList, setXIDList] = useState([]);
   const [events, setEvents] = useState([]);
@@ -46,13 +46,13 @@ export default function Activities({country, province, city, handleAttractionsSe
   function handleTripSubmit() {
     // event.preventDefault();
     console.log("clicked");
-    let name = country;
+    let name = currCountry;
     apiGet("geoname", "name=" + name).then(function (data) {
       let message = "Name not found";
       if (data.status == "OK") {
-        message = data.name + ", " + country;
-        lon = 105.3188;
-        lat = 61.524;
+        message = data.name + ", " + currCountry;
+        lon = longitude;
+        lat = latitude;
         firstLoad();
       }
       document.getElementById("info").innerHTML = `${message}`;
@@ -65,7 +65,7 @@ export default function Activities({country, province, city, handleAttractionsSe
   function firstLoad() {
     apiGet(
       "radius",
-      `radius=1000&limit=${pageLength}&offset=${offset}&lon=${37.6173}&lat=${55.7558}&rate=2&format=count`
+      `radius=1000&limit=${pageLength}&offset=${offset}&lon=${longitude}&lat=${latitude}&rate=2&format=count`
     ).then(function (data) {
       count = data.count;
       offset = 0;
@@ -81,7 +81,7 @@ export default function Activities({country, province, city, handleAttractionsSe
   function loadList() {
     apiGet(
       "radius",
-      `radius=1000&limit=${pageLength}&offset=${offset}&lon=${37.6173}&lat=${55.7558}&rate=2&format=json`
+      `radius=1000&limit=${pageLength}&offset=${offset}&lon=${longitude}&lat=${latitude}&rate=2&format=json`
     ).then(function (data) {
       console.log("data: ", data);
       data.forEach(element => setEventData(eventData => [...eventData, element]));

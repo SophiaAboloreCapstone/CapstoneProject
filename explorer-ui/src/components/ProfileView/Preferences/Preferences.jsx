@@ -8,6 +8,9 @@ import employmentJSON from "../../../data/employment_fields.json";
 import budgets from "../../../data/budget_ranges.json";
 import axios from "axios";
 import * as config from "../../../config";
+import Geocode from "react-geocode";
+// set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
+Geocode.setApiKey("AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0");
 import Card from "../../Card/Card";
 export default function Preferences() {
     let interestsArr = interestsJSON.interests;
@@ -21,6 +24,7 @@ export default function Preferences() {
   const [currLocation, setCurrLocation] = useState({});
   const [budget, setBudget] = useState();
   const [visibility, setVisibility] = useState(null);
+  const [position, setPosition] = useState({"lat": null, "lng":null})
   const budgetOption = React.createRef();
   const visibilityOption = React.createRef();
   const employmentOption = React.createRef();
@@ -75,9 +79,22 @@ function handleOccupationsSelected(event, occupation) {
     event.preventDefault();
     setCurrLocation({"country":country.current.value, "province":province.current.value, "city": city.current.value})
     setPreferenceInfo({"interests": preferenceInfo.interests, "attractions": preferenceInfo.attractions, "occupation": preferenceInfo.employment, "budget": preferenceInfo.budget, "currLocation": currLocation, "visibility": preferenceInfo.visibility})
+    // Get latitude & longitude from address.
+Geocode.fromAddress(country.current.value).then(
+    (response) => {
+      const { lat, lng } = response.results[0].geometry.location;
+      setPosition({"lat":lat, "lng": lng})
+      console.log(lat, lng);
+    },
+    (error) => {
+      console.error(error);
+    }
+  );
+  
     console.log("current location is: ", currLocation)
   };
 
+  
 
 // Send the profile information to the database 
   function handleSubmit(event) {
@@ -143,7 +160,7 @@ function handleOccupationsSelected(event, occupation) {
         </div> 
         <div className="tourist-attractions">
           <h3>Select the following tourist attractions that interest you</h3>
-          <Activities country={"Moscow"}  handleAttractionsSelected={handleAttractionsSelected}/>
+          <Activities currCountry={country} currProvince={province} currCity={city} latitude={position.lat} longitude={position.lng} handleAttractionsSelected={handleAttractionsSelected}/>
         </div>
         <div className="budget">
           <h3>Please select the range of your budget for this trip</h3>

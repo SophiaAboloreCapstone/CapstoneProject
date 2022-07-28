@@ -6,6 +6,8 @@ import Activities from "../../Activities/Activities";
 import interestsJSON from "../../../data/interests.json"
 import employmentJSON from "../../../data/employment_fields.json";
 import budgets from "../../../data/budget_ranges.json";
+import axios from "axios";
+import * as config from "../../../config";
 import Card from "../../Card/Card";
 export default function Preferences() {
     let interestsArr = interestsJSON.interests;
@@ -75,10 +77,36 @@ function handleOccupationsSelected(event, occupation) {
     setPreferenceInfo({"interests": preferenceInfo.interests, "attractions": preferenceInfo.attractions, "occupation": preferenceInfo.employment, "budget": preferenceInfo.budget, "currLocation": currLocation, "visibility": preferenceInfo.visibility})
     console.log("current location is: ", currLocation)
   };
+
+
+// Send the profile information to the database 
+  function handleSubmit(event) {
+    console.log("submitted")
+    event.preventDefault();
+    const preferences = async () => {
+      try {
+        const res = await axios.post(
+          `${config.API_BASE_URL}/profileInfo`,
+          {
+            preferenceInfo: preferenceInfo
+          },
+          { maxContentLength: Infinity, maxBodyLength: Infinity }
+        );
+      } catch (err) {
+        alert(err);
+        console.log(err);
+      }
+    };
+    preferences();
+    console.log("preferences posted!")
+  };
+
+
+  // RETURN
   return (
     <div className="preferences">
       {/* <NavBar /> */}
-      <div className="questionaire">
+      <form className="questionaire" onSubmit={(event) =>handleSubmit(event)}>
         <div className="employment">
           <h3>What best describes the field you work in?</h3>
           <select id="occupation" name="occupation" ref={employmentOption} onClick={(event) => handleOccupationsSelected(event, employmentOption)}>
@@ -101,12 +129,8 @@ function handleOccupationsSelected(event, occupation) {
           }
           </div>
         </div>
-        <div className="tourist-attractions">
-          <h3>Select the following tourist attractions that interest you</h3>
-          <Activities country={"Moscow"}  handleAttractionsSelected={handleAttractionsSelected}/>
-        </div>
         <div className="curr-location">
-            <form className="set-location" onSubmit={(event) => handleLocationSet(event, country, province, city)}>
+            <form className="set-location" onClick={(event) => handleLocationSet(event, country, province, city)}>
           <h3>Where are you currently located</h3>
           <span>Country</span>
           <input ref={country}className="country"></input>
@@ -114,9 +138,13 @@ function handleOccupationsSelected(event, occupation) {
           <input ref={province}className="state"></input>
           <span>City/Town</span>
           <input ref={city}className="city"></input>
-          <button type="submit">Submit</button>
+          <button type="click">Submit</button>
           </form>
         </div> 
+        <div className="tourist-attractions">
+          <h3>Select the following tourist attractions that interest you</h3>
+          <Activities country={"Moscow"}  handleAttractionsSelected={handleAttractionsSelected}/>
+        </div>
         <div className="budget">
           <h3>Please select the range of your budget for this trip</h3>
           <select id="budgest-range" name="budgest-range" ref={budgetOption} onClick={(event) => handleBudgetSelected(event, budgetOption)}>
@@ -136,7 +164,8 @@ function handleOccupationsSelected(event, occupation) {
             <option>No</option>
           </select>
         </div>
-      </div>
+        <button type="submit">Complete Profile</button>
+      </form>
     </div>
   );
 }

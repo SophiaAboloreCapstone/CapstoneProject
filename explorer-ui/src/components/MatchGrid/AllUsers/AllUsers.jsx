@@ -31,7 +31,7 @@ export default function AllUsers({profiles}) {
     const getCoordinates = (profiles) => {
         if (profiles) {
           for (let i = 0; i < profiles.length; i++) {
-            if(profiles[i].address != null || profiles[i].address!="" ){
+            if(( profiles[i].address != null || profiles[i].address!="") && profiles[i].profileInfo.visibility =="yes"){
             Geocode.fromAddress(profiles[i].address).then(
               (response) => {
                 const { lat, lng } = response.results[0].geometry.location;

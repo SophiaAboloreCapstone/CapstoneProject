@@ -17,7 +17,7 @@ const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
   let count; // total objects count
 
 
-export default function Activities({currCountry, currProvince, currCity, latitude, longitude, handleAttractionsSelected}) {
+export default function Activities({region, latitude, longitude, handleAttractionsSelected}) {
   const [eventData, setEventData] = useState([]);
   const [xid, setXID] = useState([]);
   const [events, setEvents] = useState([]);
@@ -44,23 +44,22 @@ export default function Activities({currCountry, currProvince, currCity, latitud
 
   // This block uses the placename from input textbox and gets place location from API. If place was found it calls list loading function:
 
-  function handleTripSubmit() {
-    // event.preventDefault();
-    console.log("clicked");
-    let name = currCountry;
-    apiGet("geoname", "name=" + name).then(function (data) {
-      let message = "Name not found";
-      if (data.status == "OK") {
-        message = data.name + ", " + currCountry;
-        lon = longitude;
-        lat = latitude;
-        firstLoad();
-      }
-      document.getElementById("info").innerHTML = `${message}`;
-    });
-    return;
-  }
-  handleTripSubmit()
+  // function handleTripSubmit() {
+  //   console.log("clicked");
+  //   let name = region;
+  //   apiGet("geoname", "name=" + name).then(function (data) {
+  //     let message = "Name not found";
+  //     if (data.status == "OK") {
+  //       message = data.name + ", " +region;
+  //       lon = longitude;
+  //       lat = latitude;
+  //       firstLoad();
+  //     }
+  //   });
+  //   // return;
+  // }
+  // handleTripSubmit()
+
   // This function gets total objects count within 1000 meters from specified location (lon, lat) and then loads first objects page:
 
   function firstLoad() {
@@ -70,9 +69,6 @@ export default function Activities({currCountry, currProvince, currCity, latitud
     ).then(function (data) {
       count = data.count;
       offset = 0;
-      document.getElementById(
-        "info"
-      ).innerHTML += `<p>${count} objects with description in a 1km radius</p>`;
       loadList();
     });
   }
@@ -91,6 +87,7 @@ export default function Activities({currCountry, currProvince, currCity, latitud
   }
 
  function loadMoreActivities(event){
+  event.preventDefault();
   offset += pageLength;
   console.log("offset: ", offset)
   console.log("page length: ", pageLength)
@@ -99,10 +96,11 @@ export default function Activities({currCountry, currProvince, currCity, latitud
 
  // useEffect(() => {
       // This function create a list item at the left pane:
-const getXID = async(events) => {
+const getXID = async(event, id) => {
+  event.preventDefault();
   console.log("events are: ",events)
   try{
-      const xidData = await apiGet("xid/" + events.xid)
+      const xidData = await apiGet("xid/" + id.xid)
       setXID(xidData);
       console.log("xid list so far: ", xid)
       console.log("xid is: ", xidData); 
@@ -122,15 +120,12 @@ const getXID = async(events) => {
                 <div className="activities">
                 <Card
                   name={event.name}
-                  // image={xid.image}
-                  // address={xid.address}
                   points={event.point}
                   kinds={event.kinds}
                   handleAttractionsSelected={handleAttractionsSelected}
-                  // wikiextract={xid.wikipedia_extracts}
                   key={idx}
                 />
-                <button className="more-info" onclick={getXID(event.xid)}>More Info</button>
+                {/* <button className="more-info" type="click" onclick={(event) => getXID(event, event.xid)}>More Info</button> */}
                 {xid.xid == event.xid
                 ? <AttractionContainer name={xid.name} image={xid.image} description={xid.info.descr} source={xid.wikipedia} />
                 : <></>
@@ -145,7 +140,6 @@ const getXID = async(events) => {
       <button className="next_button" type="click" onClick={(e) => loadMoreActivities(e)}>
           Load More Attractions
         </button>
-      {/* <ActivityGrid eventData={eventData}/> */}
     </div>
 
   );

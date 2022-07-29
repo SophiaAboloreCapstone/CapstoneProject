@@ -39,6 +39,10 @@ export default function MatchGrid({ profiles, userProfile }) {
     }
   };
 
+  // Rank Matches
+  const rankMatches = (matches) =>{
+    let highestOverlap = 0;
+  }
 
   // getMatches(userProfile, profiles)
   //   };

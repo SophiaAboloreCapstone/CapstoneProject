@@ -19,6 +19,7 @@ import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
 export default function MatchGrid({ profiles, userProfile }) {
   const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
   const [matches, setMatches] = useState([]);
+  const [rankedMatches, setRankedMatches] = useState([])
   const userProfiles = userProfile
 
 
@@ -39,9 +40,20 @@ export default function MatchGrid({ profiles, userProfile }) {
     }
   };
 
-  // Rank Matches
+    // Calculate the intersections between interests and attractions
+  function findIntersections(match){
+    let interstIntersection = userProfile.preferenceInfo.interest.filter(x => match.preferenceInfo.interest.includes(x));
+    let attractionIntersection = userProfile.preferenceInfo.attractions.filter(y =>  match.preferenceInfo.attractions(y));
+    return {"interestIntersection": interstIntersection, "attractionIntersection": attractionIntersection, "match": match};
+  }
+  
   const rankMatches = (matches) =>{
-    let highestOverlap = 0;
+    // Create a state to keep track of the intersection data and iterate through each match to get that data
+    matches.forEach(setRankedMatches(rankedMatches => [...rankedMatches, findIntersections]))
+    // Sort the matches in descending order based off the length of the 
+    // attraction and interest intersection arrays
+    let sorted = rankedMatches.sort((a, b) => b.attractionIntersection.length - a.attractionIntersection.length)
+    return sorted
   }
 
   // getMatches(userProfile, profiles)
@@ -83,15 +95,15 @@ getCoordinates (matches);
   return (
     <div className="match-grid">
       <h1>Here are your matches!</h1>
-      {matches != null ? (
-        matches.map((match, idx) => {
+      {sorted != null ? (
+        sorted.map((sortedMatch, idx) => {
           return (
             <MatchCard
               name="Sophia"
-              bio={match.bio}
-              picture={match.picture}
-              country={match.country}
-              accomodation={match.accomodation}
+              bio={sortedMatch.match.bio}
+              picture={sortedMatch.match.picture}
+              country={sortedMatch.match.country}
+              accomodation={sortedMatch.match.accomodation}
               key={idx}
             />
           );

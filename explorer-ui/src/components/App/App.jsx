@@ -1,24 +1,16 @@
 import * as React from "react";
 // import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
-// import Home from "./components/Home/Home";
-// import Navbar from "./components/Home/Navbar/Navbar";
-// import Footer from "./components/Footer/Footer";
-// import Login from "./components/Login/Login";
-// import SignIn from "./components/Login/SignIn";
-// import SignUp from "./components/Login/SignUp";
-// import Profile from "./components/Profile/Profile";
-// import MatchGrid from "./components/MatchGrid/MatchGrid";
-// import TravellerMap from "./components/TravellerMap/TravellerMap";
-import NavBar from "../NavBar/NavBar";
-import MessagesView from "../MessagesView/MessagesView";
 import LoggedOutView from "../LoggedOutView/LoggedOutView";
 import ProfileView from "../ProfileView/ProfileView";
 import Home from "../Home/Home"
 import MatchGrid from "../MatchGrid/MatchGrid"
+import RegisterForm from "../LoginForm/RegisterForm/RegisterForm";
+import NotFound from "../NotFound/NotFound";
+import Preferences from "../ProfileView/Preferences/Preferences";
 import { useState } from "react";
 import { useEffect } from "react";
-// import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import axios from "axios";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -49,7 +41,6 @@ export default function App() {
   };
 
   const handleLogin = (user) => {
-    console.log(user);
     localStorage.setItem("current_user_id", user["objectId"]);
     addAuthenticationHeader();
 
@@ -57,15 +48,26 @@ export default function App() {
   };
 
   const handleCreateProfile = (profileInfo) => {
-    console.log("your profile: ", profileInfo)
     localStorage.setItem("current_user_id", profileInfo["objectId"]);
     addAuthenticationHeader();
 
     // setIsLoggedIn(true);
     setProfileCreated(true)
-    // console.log("profile creation stat: ", profileCreated)
+
   };
-  
+
+  //  // HANDLE SUBMIT FOR UPDATE
+  // handleTripSubmit = (e) => {
+  //    e.prevent.Default();
+  //    let tripNotes = {
+  //      title: e.target.title.value,
+  //      description: e.target.description.value,
+  //      likes: e.target.likes.value,
+  //      dislikes: e.target.dislikes.value,
+       
+  //    }
+  //    this.postNotes(tripNotes);
+  // }
 
   return (
     // <div className="app">
@@ -89,20 +91,26 @@ export default function App() {
     //   </BrowserRouter>
     // </div>
     <div className="App">
-      {/* <BrowserRouter> */}
+      <BrowserRouter>
       <main>
-      <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      {/* <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       {isLoggedIn
         ? <ProfileView handleCreateProfile={handleCreateProfile} profileCreated={profileCreated} profileEdited={profileEdited}/>
         : <LoggedOutView handleLogin={handleLogin} />
-      }
-      </main>
-      {/* <Routes>
+      } */}
+      <Routes>
         <Route path="/" element={<Home />}/>
+        <Route path="login" element={<LoggedOutView handleLogin={handleLogin}/>}/>
         <Route path="/matches" elememt={<MatchGrid />}/>
+        <Route path="/register" element={<RegisterForm handleLogin={handleLogin}/>} />
+        <Route path="/preferences" element={<Preferences />} />
+        {isLoggedIn
+         ? <Route path="/profileView" element={<ProfileView handleCreateProfile={handleCreateProfile} profileCreated={profileCreated} profileEdited={profileEdited}/>}/>
+         : <Route path="/profileView" element={<NotFound />}/>
+        }
         </Routes>
       </main>
-      </BrowserRouter> */}
+      </BrowserRouter> 
     </div>
   );
 }

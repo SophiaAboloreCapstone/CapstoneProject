@@ -145,27 +145,27 @@ export default function Preferences() {
     console.log("current location is: ", currLocation);
   }
 
-//   // Send the profile information to the database
-//   function handleSubmit(event) {
-//     console.log("submitted");
-//     event.preventDefault();
-//     const preferences = async () => {
-//       try {
-//         const res = await axios.post(
-//           `${config.API_BASE_URL}/profileInfo`,
-//           {
-//             preferenceInfo: preferenceInfo,
-//           },
-//           { maxContentLength: Infinity, maxBodyLength: Infinity }
-//         );
-//       } catch (err) {
-//         alert(err);
-//         console.log(err);
-//       }
-//     };
-//     preferences();
-//     console.log("preferences posted!");
-//   }
+// Send the profile information to the database
+  function handleSubmit(event) {
+    console.log("submitted");
+    event.preventDefault();
+    const preferences = async () => {
+      try {
+        const res = await axios.post(
+          `${config.API_BASE_URL}/profileInfo`,
+          {
+            preferenceInfo: preferenceInfo,
+          },
+          { maxContentLength: Infinity, maxBodyLength: Infinity }
+        );
+      } catch (err) {
+        alert(err);
+        console.log(err);
+      }
+    };
+    preferences();
+    console.log("preferences posted!");
+  }
 
   // RETURN
   return (
@@ -261,10 +261,10 @@ export default function Preferences() {
             <option>No</option>
           </select>
         </div>
-        {/* <button className="profile-complete" type="submit">
-          Complete Profile and View Matches
-        </button> */}
       </div>
+      <button className="profile-complete" type="click" onClick={(event) => handleSubmit(event)}>
+          Complete Profile and View Matches
+        </button>
     </div>
   );
 }

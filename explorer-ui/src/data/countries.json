@@ -1,4 +1,5 @@
-[
+{
+  "list": [
     {"name": "Afghanistan", "code": "AF"}, 
     {"name": "Åland Islands", "code": "AX"}, 
     {"name": "Albania", "code": "AL"}, 
@@ -243,3 +244,4 @@
     {"name": "Zambia", "code": "ZM"}, 
     {"name": "Zimbabwe", "code": "ZW"} 
   ]
+}

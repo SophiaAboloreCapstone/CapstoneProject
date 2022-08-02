@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { FaLocationArrow, FaTimes } from "react-icons/fa";
 import MatchCard from "../MatchGrid/MatchCard/MatchCard";
+import MatchDisplay from "../MatchGrid/MatchCard/MatchDisplay";
 import {
   useJsApiLoader,
   GoogleMap,
@@ -20,12 +21,17 @@ import {
   DirectionsRenderer,
   useLoadScript,
 } from "@react-google-maps/api";
+import Geocode from "react-geocode";
+Geocode.setApiKey("AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0");
+Geocode.setLanguage("en");
+Geocode.setLocationType("ROOFTOP");
+Geocode.enableDebug();
 import { useRef, useState, useEffect } from "react";
 import { ChakraProvider, theme } from "@chakra-ui/react";
 // const { REACT_APP_GOOGLE_MAPS_API_KEY } = require("./config");
 // import { REACT_APP_GOOGLE_MAPS_API_KEY} from require('config');
 const libraries = ["places"];
-function MapContainer({ coordinates }) {
+function MapContainer({ coordinates, currLocation}) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0",
     libraries,
@@ -40,8 +46,9 @@ function MapContainer({ coordinates }) {
   const [selectedPlace, setSelectedPlace] = useState();
   const [activeProfile, setActiveProfile] = useState(false);
   const [currProfile, setCurrProfile] = useState(null);
-  const origin = {lat: 37.550201, lng: -121.980827}
-  const originString= "Facebook, Fremont Street, San Francisco, CA, USA"
+  const [attractionCoords, setAttractionCoords] = useState([])
+  const origin = currLocation.position
+  const originString= currLocation.string;
   const onMarkerClick = (user, marker) => {
     setActiveProfile(true);
     calculateRouteBetweenUsers(user.user.address);
@@ -49,6 +56,7 @@ function MapContainer({ coordinates }) {
     setActiveMarker(marker);
     setshowingInfoWindow(true);
     setCurrProfile(user);
+    generateAttractionCoordinates(user)
     console.log("curr profile is changing state: ", currProfile)
 
   };
@@ -75,7 +83,8 @@ function MapContainer({ coordinates }) {
   const destiantionRef = useRef();
 
   if (!isLoaded) {
-    return <SkeletonText />;
+    return <></>
+    // return <SkeletonText />;
   }
 
   async function calculateRoute() {
@@ -98,15 +107,12 @@ function MapContainer({ coordinates }) {
   async function calculateRouteBetweenUsers(profileLocation) {
   console.log("called")
     if (originString  === "" || String(profileLocation) === "") {
-      console.log("missing info")
-      console.log("origin is: ", originString)
-      console.log("destination is: ", profileLocation)
       return;
     }
     // eslint-disable-next-line no-undef
     const directionsService = new google.maps.DirectionsService();
     const results = await directionsService.route({
-      origin: originString,
+      origin: currLocation.string,
       destination: profileLocation,
       // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING,
@@ -116,6 +122,28 @@ function MapContainer({ coordinates }) {
     // setDistance(results.routes[0].legs[0].distance.text);
     // setDuration(results.routes[0].legs[0].duration.text);
   }
+
+  const generateAttractionCoordinates = (currProfile) => {
+    let attractions = currProfile.user.preferenceInfo.attractions;
+    console.log("profile I'm pulling attractions from: ", currProfile)
+    if (attractions) {
+      for (let i = 0; i < attractions.length; i++) {
+        if(( attractions[i] != null || attractions[i]!="")){ //&& profiles[i].preferenceInfo.visibility =="yes"){
+        Geocode.fromAddress(attractions[i]).then(
+          (response) => {
+            const { lat, lng } = response.results[0].geometry.location;
+            setAttractionCoords(attractionCoords => [...attractionCoords,  {lat, lng}])
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+        }
+      }
+      // Get latitude & longitude from address.
+    }
+    console.log("got attractions: ", attractionCoords)
+  };
 
   function clearRoute() {
     setDirectionsResponse(null);
@@ -150,13 +178,14 @@ function MapContainer({ coordinates }) {
           }}
           onLoad={(map) => setMap(map)}
         >
-          {/* <Marker position={center} />
-          <Marker position={{ lat: 48.8584, lng: 2.2944 }} /> */}
+           <Marker 
+              position={currLocation.position} 
+              icon="http://maps.google.com/mapfiles/ms/icons/pink-dot.png"
+                />
           {coordinates != null &&
             coordinates.map((profile, idx) => {
               // TODO: Figure out a central location to pass in here
                // Maybe take in the users location when they register
-              // <Marker position={origin} />
               return (
                 <div className="user-marker">
                   <Marker
@@ -167,6 +196,18 @@ function MapContainer({ coordinates }) {
                     // onMouseOver={() => onMouseOver(profile, idx)}
                     onClick={()=> onMarkerClick(profile, idx)}
                   />
+                  {activeProfile != false
+                    ?attractionCoords.map((coords, idx) => 
+                    {
+                      return(
+                        <Marker
+                    position={coords}
+                    icon="http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
+                />
+                      )
+                    })
+                    :<></>
+                  }
           </div>
 
             );
@@ -215,15 +256,16 @@ function MapContainer({ coordinates }) {
       >
         <HStack spacing={2} justifyContent="space-between">
           <Box flexGrow={1}>
-            <Autocomplete>
-              <Input type="text" placeholder="Origin" ref={originRef} />
+            <Autocomplete color={"black"}>
+              <Input type="text" placeholder="Origin" color={"black"} ref={originRef} />
             </Autocomplete>
           </Box>
           <Box flexGrow={1}>
-            <Autocomplete>
+            <Autocomplete color={"black"}>
               <Input
                 type="text"
                 placeholder="Destination"
+                color={"black"}
                 ref={destiantionRef}
               />
             </Autocomplete>
@@ -258,7 +300,7 @@ function MapContainer({ coordinates }) {
       </Box>
     </Flex>
      {activeProfile != false
-      ? <MatchCard name={currProfile.user.name} bio={currProfile.user.bio} picture={currProfile.user.picture} country={currProfile.user.country} accomodation={currProfile.user.accomodation}/>
+      ? <MatchDisplay name={currProfile.user.name} age={currProfile.user.age} bio={currProfile.user.bio} picture={currProfile.user.picture} country={currProfile.user.country} accomodation={currProfile.user.accomodations} preferences={currProfile.user.preferenceInfo.attractions}/>
       : <></>
       }
       

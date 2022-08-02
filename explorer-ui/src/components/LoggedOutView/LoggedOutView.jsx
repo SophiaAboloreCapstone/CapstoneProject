@@ -4,11 +4,11 @@ import RegisterForm from "../LoginForm/RegisterForm/RegisterForm"
 import NavBar from "../Home/NavBar/NavBar"
 import "./LoggedOutView.css"
 
-export default function LoggedOutView({handleLogin}) {
+export default function LoggedOutView({profileCreated, handleLogin, findProfile, isLoggedIn, handleLogout}) {
     return (
         <div className="logged-out">
-            <NavBar />
-            <LoginForm handleLogin={handleLogin} />
+            <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>
+            <LoginForm profileCreated={profileCreated} findProfile={findProfile} handleLogin={handleLogin} />
             {/* <RegisterForm handleLogin={handleLogin} /> */}
         </div>
     )

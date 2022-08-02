@@ -9,7 +9,6 @@ import {
   HStack,
   IconButton,
   Input,
-  SkeletonText,
   Text,
 } from '@chakra-ui/react'
 Geocode.setApiKey("AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0");
@@ -18,12 +17,12 @@ Geocode.setLocationType("ROOFTOP");
 Geocode.enableDebug();
 import MatchCard from "../MatchCard/MatchCard"
 import MapContainer from "../../Mapping/MapContainer";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChakraProvider, theme } from "@chakra-ui/react";
 export default function AllUsers({profiles}) {
     const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
-    const [userCoordinates, setUserCoordinates] = useState([]);
+    const [userCoordinates, setUserCoordinates] = useState({"string":"", "position":{}});
+    const region = useRef();
     useEffect(() => {
         getCoordinates(profiles);
         // getUserCoords(profiles[0])
@@ -31,7 +30,7 @@ export default function AllUsers({profiles}) {
     const getCoordinates = (profiles) => {
         if (profiles) {
           for (let i = 0; i < profiles.length; i++) {
-            if(( profiles[i].address != null || profiles[i].address!="") && profiles[i].profileInfo.visibility =="yes"){
+            if(( profiles[i].address != null || profiles[i].address!="")){ //&& profiles[i].preferenceInfo.visibility =="yes"){
             Geocode.fromAddress(profiles[i].address).then(
               (response) => {
                 const { lat, lng } = response.results[0].geometry.location;
@@ -46,24 +45,33 @@ export default function AllUsers({profiles}) {
           // Get latitude & longitude from address.
         }
       };
-      const getUserCoords = (user) => 
-      {Geocode.fromAddress(user.address).then(
-        (response) => {
-          const { lat, lng } = response.results[0].geometry.location;
-          setUserCoordinates( {id: 0, position: {lat, lng}, user: user})
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
-    }
+      function getCurrLocation(event){
+        event.preventDefault();
+        Geocode.fromAddress(region.current.value).then(
+          (response) => {
+            const { lat, lng } = response.results[0].geometry.location;
+            setUserCoordinates({"string": region.current.value, "position": {lat, lng}})
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+      }
+ 
     return (
         <div className="match-grid">
+          <h3>Where are you currently located</h3>
+            <span>Region</span>
+            <input className="country" ref={region}></input>
+            <button type="click" onClick={(event) => getCurrLocation(event)}>Save Region</button>
             <h1>Here is the map of all users</h1>
             <div className="display-map">
-            <ChakraProvider theme={theme}>
-              <MapContainer coordinates={matchesPlusCoordinates}/>
-            </ChakraProvider>
+            {userCoordinates.position != {"string":"", "position":{}}
+            ?<ChakraProvider theme={theme}>
+            <MapContainer coordinates={matchesPlusCoordinates} currLocation ={userCoordinates}/>
+          </ChakraProvider>
+          :<></>
+          }
           </div> 
 
             {/* <h1>Here are all the users on the app!</h1>

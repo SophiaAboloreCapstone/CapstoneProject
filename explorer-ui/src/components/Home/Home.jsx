@@ -6,10 +6,10 @@ import Testimonials from "../Testimonials/Testimonials"
 import Footer from "./Footer/Footer"
 import Activities from "../Activities/Activities"
 // import Hero from "../Hero/Hero"
-export default function Home() {
+export default function Home({ isLoggedIn, handleLogout }) {
     return (
         <div className="home">
-            <NavBar />
+            <NavBar  isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>
             <Hero />
             <Testimonials />
             <Footer />

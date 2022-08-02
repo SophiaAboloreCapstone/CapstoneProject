@@ -55,6 +55,21 @@ app.get("/messages", async (req, res) => {
     res.send({ error: "Message query failed: " + error });
   }
 });
+app.get("/currUser", (req, res) => {
+  try {
+    const currentUser = Parse.User.current();
+    if (currentUser !== null) {
+      Alert.alert(
+        "Success!",
+        `${currentUser.get("username")} is the current user!`
+      );
+    }
+    res.send({ currUser: currentUser });
+  } catch (error) {
+    res.status(400);
+    res.send({ error: "Failed to get current user " + error });
+  }
+});
 
 app.post("/messages", async (req, res) => {
   try {
@@ -131,128 +146,5 @@ app.get("/matches", async (req, res) => {
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-
-// These are our 'endpoints'
-app.get("/trip", getTrip); //Get latitude/longitude
-app.put("/trip/:id", putTrip);
-app.post("/trip", postTrip);
-
-app.get("/notes", getNotes);
-app.post("/notes", postNotes);
-app.put("/notes/:id", putNotes);
-app.delete("/notes/:id", deleteNotes);
-
-// Request
-async function getTrip(request, response, next) {
-  const { location } = request.query;
-  console.log(location);
-  verifyUser(request, async (err, user) => {
-    console.log(verifyUser);
-    if (err) {
-      response.send((err.message, "Invalid token"));
-    } else {
-      trip(location)
-        .then((summaries) => response.send(summaries))
-        .catch((error) => {
-          console.error(error.message);
-          response.status(200).send("getTrip function is NOT functioning.");
-        });
-    }
-  });
-}
-///LOCAL TEST FUNCTION : Use http://localhost:3001/all?location=miami in Thunderclient
-app.get("/all", getAll);
-// This function will 'get' data from the api database.
-async function getAll(request, response, next) {
-  const { location } = request.query;
-  console.log(location);
-
-  trip(location)
-    .then((summaries) => response.send(summaries))
-    .catch((error) => {
-      console.error(error.message);
-      response.status(200).send("getTrip function is functioning.");
-    });
-}
-
-async function getNotes(request, response, next) {
-  try {
-    let results = await Notes.find();
-    response.status(200).send(results);
-  } catch (err) {
-    next(err);
-  }
-}
-
-// Create
-async function postTrip(request, response, next) {
-  console.log(request.body);
-  try {
-    let createdTrip = await Notes.create(request.body);
-    response.status(200).send(createdTrip);
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function postNotes(request, response, next) {
-  try {
-    let createNote = await Notes.create(request.body);
-    response.status(200).send(createNote);
-  } catch (err) {
-    next(err);
-  }
-}
-
-// Update
-async function putTrip(request, response, next) {
-  try {
-    let id = request.params.id;
-    let updatedTrip = await trip.findByIdAndUpdate(id, request.body, {
-      new: true,
-      overwrite: true,
-    });
-    response.status(200).send(updatedTrip);
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function putNotes(request, response, next) {
-  try {
-    let id = request.params.id;
-    let updatedNotes = await Notes.findByIdAndUpdate(id, request.body, {
-      new: true,
-      overwrite: true,
-    });
-    response.status(200).send(updatedNotes);
-  } catch (error) {
-    next(error);
-  }
-}
-
-// Delete
-app.delete("/trip/:id", deleteTrip);
-async function deleteTrip(request, response, next) {
-  try {
-    let id = request.params.id;
-    console.log(request.params.id);
-    await trip.findByIdAndDelete(id);
-    response.status(200).send("trip was deleted");
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function deleteNotes(request, response, next) {
-  try {
-    let id = request.params.id;
-    console.log(id);
-    await Notes.findByIdAndDelete(id);
-    response.status(200).send("Notes were deleted");
-  } catch (err) {
-    next(err);
-  }
-}
 
 app.listen(port, () => {});

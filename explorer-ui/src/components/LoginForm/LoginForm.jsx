@@ -5,12 +5,13 @@ import * as config from "../../config"
 import styled from "styled-components";
 import Footer from "../Home/Footer/Footer"
 import ProfileView from "../ProfileView/ProfileView";
-import { Link, Route, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react";
 import NotFound from "../NotFound/NotFound";
-export default function LoginForm({handleLogin}) {
+export default function LoginForm({profileCreated, findProfile, handleLogin}) {
     const username = React.createRef();
     const password = React.createRef();
+    const [currentUser, setCurrentUser] = useState(null);
     const navigate = useNavigate();
     const handleSubmit = event => {
         event.preventDefault();
@@ -20,16 +21,23 @@ export default function LoginForm({handleLogin}) {
                 const res = await axios.post(`${config.API_BASE_URL}/login`, {
                     "username" : username.current.value,
                     "password" : password.current.value
-                    })                
+                    })          
+                console.log("res.data.user: ", res.data.user)  
                 handleLogin(res.data.user)
+                findProfile(res.data.user)
                 console.log("logged in")
-                navigate("/profileView");
+                if(profileCreated){
+                  navigate("/profileView");
+                }
+                else{
+                  navigate("/profileDisplay");
+                }
 
 
             } catch (err) {
                 alert(err)
                 console.log(err)
-                setSuccessful("failure")
+                // setSuccessful("failure")
             }
         }
         login()

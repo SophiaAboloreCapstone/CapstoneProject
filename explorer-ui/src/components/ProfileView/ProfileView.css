@@ -3,6 +3,7 @@
 } */
 .profile{
     background-color: black;
+    color: black;
 }
 .map{
     padding-top: 100px;
@@ -22,6 +23,7 @@
 }
 .profile-creation{
     background: black;
+    color: black;
 }
 .display-map{
     padding-top: 50px;

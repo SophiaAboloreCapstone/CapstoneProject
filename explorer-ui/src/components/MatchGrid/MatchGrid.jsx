@@ -16,26 +16,29 @@ import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
 // const render = (status) => {
 //   return <h1>{status}</h1>;
 // };
-export default function MatchGrid({ profiles, userProfile }) {
+export default function MatchGrid({ profiles , userProfile}) {
   const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
   const [matches, setMatches] = useState([]);
   const [rankedMatches, setRankedMatches] = useState([])
-  const userProfiles = userProfile
+  const [sorted, setSorted] = useState([])
+  const [userCoordinates, setUserCoordinates] = useState([]);
 
-
-  useEffect(() => {
+useEffect(() => {
     getMatches(profiles);
+    
+    rankMatches(matches)
 }, [])
   // TODO: Create a function that filters through the list of users to get the matches of this specific user
   const getMatches = () => {
     for (let i = 0; i < profiles.length; i++) {
       if (
         profiles[i].country == userProfile.country 
-        // &&
-        // profiles[i].travelMonth == userProfile.travelMonth &&
-        // profiles[i].accomodation == userProfile.accomodation
+        &&
+        profiles[i].travelMonth == userProfile.travelMonth &&
+        profiles[i].accomodation == userProfile.accomodation
       ) {
-        setMatches([...matches, profiles[i]])
+        setMatches(matches => [...matches, profiles[i]])
+        console.log("matches are: ", matches)
       }
     }
   };
@@ -48,14 +51,18 @@ export default function MatchGrid({ profiles, userProfile }) {
   }
   
   const rankMatches = (matches) =>{
+    if(matches){
     // Create a state to keep track of the intersection data and iterate through each match to get that data
-    matches.forEach(setRankedMatches(rankedMatches => [...rankedMatches, findIntersections]))
+    // matches.forEach(setRankedMatches(rankedMatches => [...rankedMatches, findIntersections]))
+    matches.forEach((match) => setRankedMatches(rankedMatches => [...rankedMatches, findIntersections(match)]))
     // Sort the matches in descending order based off the length of the 
     // attraction and interest intersection arrays
-    let sorted = rankedMatches.sort((a, b) => b.attractionIntersection.length - a.attractionIntersection.length)
-    return sorted
+    setSorted(rankedMatches.sort((a, b) => b.attractionIntersection.length - a.attractionIntersection.length))
+    console.log("sorted array: ", sorted)
+    }
   }
-
+ 
+  
   // getMatches(userProfile, profiles)
   //   };
   //   // TODO: Create a list of the matches locations
@@ -65,13 +72,14 @@ export default function MatchGrid({ profiles, userProfile }) {
 
   useEffect(() => {
       getCoordinates(profiles);
-  }, [])
+      getUserCoords(userProfile)
+  }, [profiles])
   const getCoordinates = (matches) => {
       if (matches) {
         for (let i = 0; i < matches.length; i++) {
-          if(matches[i].location != null || matches[i].location!="" ){
-
-          Geocode.fromAddress(matches[i].location).then(
+          if(matches[i].address != null || matches[i].address !="" ){
+          
+          Geocode.fromAddress(matches[i].address).then(
             (response) => {
               const { lat, lng } = response.results[0].geometry.location;
               setMatchesPlusCoordinates([...matchesPlusCoordinates, {id: i, position: {lat, lng}, user: matches[i]}])
@@ -86,20 +94,30 @@ export default function MatchGrid({ profiles, userProfile }) {
         // Get latitude & longitude from address.
       }
     };
+    const getUserCoords = (user) => 
+    {Geocode.fromAddress(user.address).then(
+      (response) => {
+        const { lat, lng } = response.results[0].geometry.location;
+        setUserCoordinates( {id: 0, position: {lat, lng}, user: user})
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
 //   const { isLoaded } = useLoadScript({
 //     googleMapsApiKey: "", // Add your API key
 //   });
 
-getCoordinates (matches);
-  const userCoordinates = getCoordinates(userProfile.location, 0);
+
   return (
     <div className="match-grid">
       <h1>Here are your matches!</h1>
-      {sorted != null ? (
+      {sorted != [] ? (
         sorted.map((sortedMatch, idx) => {
           return (
             <MatchCard
-              name="Sophia"
+              name={sortedMatch.match.name}
               bio={sortedMatch.match.bio}
               picture={sortedMatch.match.picture}
               country={sortedMatch.match.country}
@@ -109,19 +127,8 @@ getCoordinates (matches);
           );
         })
       ) : (
-        <div className="no-matches">
           <h1> Sorry we couldn't find any matches for you!</h1>
-        </div>
       )}
-      <div className="match-map">
- 
-        <h1>React with Google Maps</h1>
-        <div className="map">
-          <h1> Here's the map of your natches</h1>
-       
-            </div>
-  
-      </div>
     </div>
   );
 }

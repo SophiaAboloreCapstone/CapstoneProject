@@ -13,11 +13,6 @@ export default function NavBar({ isLoggedIn, handleLogout }) {
       <div className="content">
         <div className="navbar-logo">
           <Logo />
-          {isLoggedIn && (
-            <a href="#" onClick={onClick}>
-              Logout
-            </a>
-          )}
         </div>
         <ul className="links">
           <li>
@@ -46,7 +41,8 @@ export default function NavBar({ isLoggedIn, handleLogout }) {
             </a>
           </li>
         </ul>
-        <div className="nav-directory">
+        {isLoggedIn != true
+        ? <div className="nav-directory">
           <li>
             <Link 
             to="/login">
@@ -56,6 +52,17 @@ export default function NavBar({ isLoggedIn, handleLogout }) {
             </Link>
           </li>
         </div>
+      : <div className="nav-directory">
+      <li>
+        <Link 
+        to="/login">
+        <button className="login-button" href="">
+          Logout
+        </button>
+        </Link>
+      </li>
+    </div>
+}
       </div>
     </div>
   );

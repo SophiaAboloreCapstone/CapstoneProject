@@ -1,6 +1,6 @@
 import * as React from "react"
 import "./NotFound.css"
-
+import { Link } from "react-router-dom"
 export default function NotFound() {
   return (
     <div class="not-found">
@@ -9,7 +9,7 @@ export default function NotFound() {
         <h2 className="not-found-h2">404</h2>
         <h3 className="not-found-h3">Oops, nothing here...</h3>
         <p className="not-found-p">Please Check the URL</p>
-        <p className="not-found-p">Otherwise, <a href="#Home">Click here</a> to redirect to homepage.</p>
+        <p className="not-found-p">Otherwise, <Link to="/">Click here </Link> to redirect to homepage.</p>
       </div>
     </div>
   )

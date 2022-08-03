@@ -45,18 +45,6 @@ export default function App() {
     }
   };
 
-  // useEffect(() => {
-  //   fetchCurrUser();
-  // }, [profileCreated]);
-  // const fetchCurrUser = (async () => {
-  //   try {
-  //     const res = await axios.get(`${config.API_BASE_URL}/currUser`);
-  //     // setCurrUser(res.data.currUser);
-  //     // console.log("currUser :", currUser);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // })
   addAuthenticationHeader();
 
   const handleLogout = () => {
@@ -79,7 +67,6 @@ export default function App() {
     localStorage.setItem("current_user_id", profileInfo.user["objectId"]);
     addAuthenticationHeader();
     setProfile(profileInfo)
-    // setIsLoggedIn(true);
     setProfileCreated(true);
   };
 
@@ -96,63 +83,12 @@ export default function App() {
   }, [id]);
 
   const findProfile = () => {
-    // setId(localStorage.getItem("current_user_id"));
     setCurrUser(profileList.find(profile => profile.user.objectId == id))
-    // setCurrUser(found);
-    // console.log("found: ", found)
-    console.log("profiles: ", profileList)
-    console.log("curr user: ", currUser)
   }
-  // const setUserProfile = (userProfile) =>{
-  //   let user = localStorage.getItem(userId)
-  //   console.log("current user is: ", user)
-  //   // setCurrUser(userProfile);
-  // }
-
-  
-  
-  //  // HANDLE SUBMIT FOR UPDATE
-  // handleTripSubmit = (e) => {
-  //    e.prevent.Default();
-  //    let tripNotes = {
-  //      title: e.target.title.value,
-  //      description: e.target.description.value,
-  //      likes: e.target.likes.value,
-  //      dislikes: e.target.dislikes.value,
-
-  //    }
-  //    this.postNotes(tripNotes);
-  // }
 
   return (
-    // <div className="app">
-    //   <BrowserRouter>
-    //     <main>
-    //       {/* YOUR CODE HERE! */}
-    //       <Navbar />
-    //       {/* <Sidebar /> */}
-    //       <Routes>
-    //         <Route path="/" element={<Home />} />
-    //         {/* <Route path="/login" element={<Login />} /> */}
-    //         <Route path="/login" element={<Login />} />
-    //         <Route exact path="/sign-up" element={<SignUp />} />
-    //         <Route path="/sign-in" element={<SignIn />} />
-    //         <Route path="/profile" element={<Profile />} />
-    //         <Route path="/matches" element={<MatchGrid />} />
-    //         <Route path="/map" element={<TravellerMap />} />
-    //       </Routes>
-    //       <Footer />
-    //     </main>
-    //   </BrowserRouter>
-    // </div>
     <div className="App">
       <Router>
-        {/* <main> */}
-          {/* <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-      {isLoggedIn
-        ? <ProfileView handleCreateProfile={handleCreateProfile} profileCreated={profileCreated} profileEdited={profileEdited}/>
-        : <LoggedOutView handleLogin={handleLogin} />
-      } */}
           <Routes>
             <Route element={<PrivateRoutes/>}>
               <Route path="/preferences" element={<Preferences  isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>} />

@@ -15,7 +15,7 @@ Geocode.setLanguage("en");
 Geocode.setLocationType("ROOFTOP");
 Geocode.enableDebug();
 import { ChakraProvider, theme } from "@chakra-ui/react";
-export default function ProfileDisplay({userProfile}) {
+export default function ProfileDisplay({profiles, userProfile}) {
   const [picture, setPicture] = React.useState("");
   // const picture = React.createRef();
   const username = React.createRef();
@@ -28,59 +28,154 @@ export default function ProfileDisplay({userProfile}) {
   const location = React.createRef();
   // const [userProfile, setProfile] = React.useState({});
   const [profileInfo, setProfileInfo] = React.useState()
-  
-  const [profiles, setProfiles] = React.useState([]);
 
   let countryList = countries.list;
   let monthList = months.list;
+  // const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
+  // const [userCoordinates, setUserCoordinates] = useState({"string":"", "position":{}});
   const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
-  const [userCoordinates, setUserCoordinates] = useState({"string":"", "position":{}});
-  const region = useRef();
+  const [matches, setMatches] = useState([]);
+  const [rankedMatches, setRankedMatches] = useState([])
+  const [matchesLoadingComplete, setMatchesLoadingComplete] = useState(false)
+  const [matchesSortingComplete, setMatchesSortingComplete] = useState(false)
+  const [coordsLoaded, setCoordsLoaded] = useState(false)
+  const [userCoordinates, setUserCoordinates] = useState([]);
+  const [allLoadingComplete, setAllLoadingComplete] = useState(false)
+  // useEffect(() => {
+  //     rankMatches(matches)
+  //     getCoordinates(rankedMatches);
+  //     getCurrLocation(userProfile)
+  //     // getUserCoords(profiles[0])
+  // }, [profiles, userProfile])
   useEffect(() => {
-      getCoordinates(profiles);
-      // getUserCoords(profiles[0])
-  }, [])
-  const getCoordinates = (profiles) => {
-      if (profiles) {
-        for (let i = 0; i < profiles.length; i++) {
-          if(( profiles[i].address != null || profiles[i].address!="")){ //&& profiles[i].preferenceInfo.visibility =="yes"){
-          Geocode.fromAddress(profiles[i].address).then(
+    console.log("second rendering");
+    getMatches(profiles); 
+    setMatchesLoadingComplete(true)
+    getCurrLocation(userProfile)
+  }, [profiles, userProfile, matchesLoadingComplete, matchesSortingComplete, coordsLoaded,])
+  useEffect(() =>{
+    rankMatches(matches)
+    setMatchesSortingComplete(true)
+    getCoordinates(rankedMatches)
+  }, [matches])
+    // TODO: Create a function that filters through the list of users to get the matches of this specific user
+    const getMatches = () => {
+      console.log("getting matches")
+      const profilesToAdd = new Set();
+      for (let i = 0; i <Object.keys(profiles).length; i++) {
+        console.log("user country: ", userProfile.country),
+          console.log("profile country: ", profiles[i].country)
+        if (
+          profiles[i].country === userProfile.country 
+          &&
+          profiles[i].travelMonth == userProfile.travelMonth &&
+          profiles[i].accomodation == userProfile.accomodation
+        ) {
+          console.log("it's a match!")
+          console.log("profiles[i]: ", profiles[i])
+          // profilesToAdd.push(profiles[i])
+          profilesToAdd.add(profiles[i])
+        }
+      }
+      setMatches([...matches, ...profilesToAdd])
+      console.log("profilesToAdd: ", profilesToAdd)
+      
+    };
+  
+      // Calculate the intersections between interests and attractions
+    function findIntersections(match){
+      console.log("find intersections")
+      if(match.preferenceInfo.interests && userProfile.preferenceInfo.interests){
+        console.log("match.preferenceInfo.interest: ", match.preferenceInfo.interests)
+        let interstIntersection = userProfile.preferenceInfo.interests.filter(x => match.preferenceInfo.interests.includes(x));
+        console.log("userProfile.preferenceInfo.interest: ", userProfile.preferenceInfo.interests)
+        let attractionIntersection = userProfile.preferenceInfo.attractions.filter(y =>  match.preferenceInfo.attractions.includes(y));
+        return {"interestIntersection": interstIntersection, "attractionIntersection": attractionIntersection, "match": match};
+      }
+      console.log("intersection: ", interstIntersection)
+      return {"interestIntersection": {}, "attractionIntersection": {}, "match": match};
+    }
+    
+    const rankMatches = (matches) =>{
+      console.log("rank matches")
+      console.log("matches are: ", matches)
+      if(matches){
+      // Create a state to keep track of the intersection data and iterate through each match to get that data
+      const matchesToRank = []
+      matches.forEach((match) => matchesToRank.push(findIntersections(match)))
+      matchesToRank.sort((a, b) => b.attractionIntersection.length - a.attractionIntersection.length)
+      setRankedMatches(matchesToRank)
+      console.log("ranked matches: ", rankedMatches)
+      console.log("matchesToRank: ", matchesToRank)
+      }
+    }
+
+    const getCoordinates = (rankedMatches) => {
+      if (rankedMatches) {
+        for (let i = 0; i < rankedMatches.length; i++) {
+          if(rankedMatches[i].match.address != null || rankedMatches[i].match.address !="" ){
+          
+          Geocode.fromAddress(rankedMatches[i].match.address).then(
             (response) => {
               const { lat, lng } = response.results[0].geometry.location;
-              setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {id: i, position: {lat, lng}, user: profiles[i]}])
+              setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {id: i, position: {lat, lng}, user: matches[i]}])
+              
             },
             (error) => {
               console.error(error);
             }
           );
-          }
         }
+        }
+        setCoordsLoaded(true);
+        console.log("matchesPlusCoordinates: ", matchesPlusCoordinates)
         // Get latitude & longitude from address.
       }
     };
-    function getCurrLocation(event){
-      event.preventDefault();
-      Geocode.fromAddress(region.current.value).then(
+    function getCurrLocation(userProfile){
+      Geocode.fromAddress(userProfile.address).then(
         (response) => {
           const { lat, lng } = response.results[0].geometry.location;
-          setUserCoordinates({"string": region.current.value, "position": {lat, lng}})
+          setUserCoordinates({"string": userProfile.address, "position": {lat, lng}})
         },
         (error) => {
           console.error(error);
         }
       );
+      console.log("curr location: ", userCoordinates)
+     
     }
-    React.useEffect(() => {
-      const fetchProfiles = (async () => {
-        try {
-          const res = await axios.get(`${config.API_BASE_URL}/matches`);
-          setProfiles(res.data.profiles);
+
+  // const getCoordinates = (profiles) => {
+  //     if (profiles) {
+  //       for (let i = 0; i < profiles.length; i++) {
+  //         if(( profiles[i].address != null || profiles[i].address!="")){ //&& profiles[i].preferenceInfo.visibility =="yes"){
+  //         Geocode.fromAddress(profiles[i].address).then(
+  //           (response) => {
+  //             const { lat, lng } = response.results[0].geometry.location;
+  //             setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {id: i, position: {lat, lng}, user: profiles[i]}])
+  //           },
+  //           (error) => {
+  //             console.error(error);
+  //           }
+  //         );
+  //         }
+  //       }
+  //       // Get latitude & longitude from address.
+  //     }
+  //   };
+
+    // React.useEffect(() => {
+    //   const fetchProfiles = (async () => {
+    //     try {
+    //       const res = await axios.get(`${config.API_BASE_URL}/matches`);
+    //       setProfiles(res.data.profiles);
   
-        } catch (err) {
-          console.log(err);
-        }
-      })();
-    }, []);
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
+    //   })();
+    // }, []);
   // useEffect(() => {
   //   const fetchProfiles = (async () => {
   //     try {
@@ -217,7 +312,7 @@ export default function ProfileDisplay({userProfile}) {
       ) : (
         <NotFound />
       )} */}
-      <MatchGrid profiles={profiles} userProfile={userProfile} />
+      <MatchGrid matches={rankedMatches} userProfile={userProfile} />
       <ChakraProvider theme={theme}>
       <MapContainer coordinates={matchesPlusCoordinates} currLocation ={userCoordinates}/>
       </ChakraProvider>

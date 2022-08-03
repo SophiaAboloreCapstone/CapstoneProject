@@ -16,112 +16,148 @@ import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
 // const render = (status) => {
 //   return <h1>{status}</h1>;
 // };
-export default function MatchGrid({ profiles , userProfile}) {
-  const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
-  const [matches, setMatches] = useState([]);
-  const [rankedMatches, setRankedMatches] = useState([])
-  const [sorted, setSorted] = useState([])
-  const [userCoordinates, setUserCoordinates] = useState([]);
-
+export default function MatchGrid({ matches , userProfile}) {
+  // const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
+  // const [matches, setMatches] = useState([]);
+  // const [rankedMatches, setRankedMatches] = useState([])
+  // const [sorted, setSorted] = useState([])
+  // const [matchesLoadingComplete, setMatchesLoadingComplete] = useState(false)
+  // const [userCoordinates, setUserCoordinates] = useState([]);
+  const [loadingComplete, setLoadingComplete] = useState(false)
 useEffect(() => {
-    getMatches(profiles);
+    setLoadingComplete(true)
+}, [matches])
+// useEffect(() => {
+//   getMatches(profiles); 
+//   rankMatches(matches)
+//   getCoordinates(profiles);
+//   getUserCoords(userProfile)
+// }, [profiles, matchesLoadingComplete])
+//   // TODO: Create a function that filters through the list of users to get the matches of this specific user
+//   const getMatches = () => {
+//     console.log("getting matches")
+//     const profilesToAdd = [];
+//     for (let i = 0; i <Object.keys(profiles).length; i++) {
+//       console.log("user country: ", userProfile.country),
+//         console.log("profile country: ", profiles[i].country)
+//       if (
+//         profiles[i].country === userProfile.country 
+//         &&
+//         profiles[i].travelMonth == userProfile.travelMonth &&
+//         profiles[i].accomodation == userProfile.accomodation
+//       ) {
+//         console.log("it's a match!")
+//         console.log("profiles[i]: ", profiles[i])
+//         profilesToAdd.push(profiles[i])
+//       }
+//     }
+//     setMatches([...matches, ...profilesToAdd])
+//     setMatchesLoadingComplete(true)
+//     console.log("profilesToAdd: ", profilesToAdd)
     
-    rankMatches(matches)
-}, [])
-  // TODO: Create a function that filters through the list of users to get the matches of this specific user
-  const getMatches = () => {
-    for (let i = 0; i < profiles.length; i++) {
-      if (
-        profiles[i].country == userProfile.country 
-        &&
-        profiles[i].travelMonth == userProfile.travelMonth &&
-        profiles[i].accomodation == userProfile.accomodation
-      ) {
-        setMatches(matches => [...matches, profiles[i]])
-        console.log("matches are: ", matches)
-      }
-    }
-  };
+//   };
 
-    // Calculate the intersections between interests and attractions
-  function findIntersections(match){
-    let interstIntersection = userProfile.preferenceInfo.interest.filter(x => match.preferenceInfo.interest.includes(x));
-    let attractionIntersection = userProfile.preferenceInfo.attractions.filter(y =>  match.preferenceInfo.attractions(y));
-    return {"interestIntersection": interstIntersection, "attractionIntersection": attractionIntersection, "match": match};
-  }
+//     // Calculate the intersections between interests and attractions
+//   function findIntersections(match){
+//     console.log("find intersections")
+//     console.log("match.preferenceInfo.interest: ", match.preferenceInfo.interests)
+//     console.log("userProfile.preferenceInfo.interest: ", userProfile.preferenceInfo.interests)
+//     let interstIntersection = userProfile.preferenceInfo.interests.filter(x => match.preferenceInfo.interests.includes(x));
+//     console.log("intersection: ", interstIntersection)
+//     let attractionIntersection = userProfile.preferenceInfo.attractions.filter(y =>  match.preferenceInfo.attractions.includes(y));
+//     return {"interestIntersection": interstIntersection, "attractionIntersection": attractionIntersection, "match": match};
+//   }
   
-  const rankMatches = (matches) =>{
-    if(matches){
-    // Create a state to keep track of the intersection data and iterate through each match to get that data
-    // matches.forEach(setRankedMatches(rankedMatches => [...rankedMatches, findIntersections]))
-    matches.forEach((match) => setRankedMatches(rankedMatches => [...rankedMatches, findIntersections(match)]))
-    // Sort the matches in descending order based off the length of the 
-    // attraction and interest intersection arrays
-    setSorted(rankedMatches.sort((a, b) => b.attractionIntersection.length - a.attractionIntersection.length))
-    console.log("sorted array: ", sorted)
-    }
-  }
+//   const rankMatches = (matches) =>{
+//     console.log("rank matches")
+//     console.log("matches are: ", matches)
+//     if(matches){
+//     // Create a state to keep track of the intersection data and iterate through each match to get that data
+//     // matches.forEach(setRankedMatches(rankedMatches => [...rankedMatches, findIntersections]))
+//     matches.forEach((match) => setRankedMatches(rankedMatches => [...rankedMatches, findIntersections(match)]))
+//     console.log("ranked matches: ", rankedMatches)
+//     // Sort the matches in descending order based off the length of the 
+//     // attraction and interest intersection arrays
+//     setSorted(rankedMatches.sort((a, b) => b.attractionIntersection.length - a.attractionIntersection.length))
+//     console.log("sorted array: ", sorted)
+//     }
+//   }
+
  
-  
-  // getMatches(userProfile, profiles)
-  //   };
-  //   // TODO: Create a list of the matches locations
-  //   // Call the geocoder address function on each location , and append it to a new list
-  //   // send this list as a prop to the Mapping component
-
-
-  useEffect(() => {
-      getCoordinates(profiles);
-      getUserCoords(userProfile)
-  }, [profiles])
-  const getCoordinates = (matches) => {
-      if (matches) {
-        for (let i = 0; i < matches.length; i++) {
-          if(matches[i].address != null || matches[i].address !="" ){
+//   const getCoordinates = (matches) => {
+//       if (matches) {
+//         for (let i = 0; i < matches.length; i++) {
+//           if(matches[i].address != null || matches[i].address !="" ){
           
-          Geocode.fromAddress(matches[i].address).then(
-            (response) => {
-              const { lat, lng } = response.results[0].geometry.location;
-              setMatchesPlusCoordinates([...matchesPlusCoordinates, {id: i, position: {lat, lng}, user: matches[i]}])
+//           Geocode.fromAddress(matches[i].address).then(
+//             (response) => {
+//               const { lat, lng } = response.results[0].geometry.location;
+//               setMatchesPlusCoordinates([...matchesPlusCoordinates, {id: i, position: {lat, lng}, user: matches[i]}])
               
-            },
-            (error) => {
-              console.error(error);
-            }
-          );
-        }
-        }
-        // Get latitude & longitude from address.
-      }
-    };
-    const getUserCoords = (user) => 
-    {Geocode.fromAddress(user.address).then(
-      (response) => {
-        const { lat, lng } = response.results[0].geometry.location;
-        setUserCoordinates( {id: 0, position: {lat, lng}, user: user})
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
+//             },
+//             (error) => {
+//               console.error(error);
+//             }
+//           );
+//         }
+//         }
+//         // Get latitude & longitude from address.
+//       }
+//     };
+//     const getUserCoords = (user) => 
+//     {Geocode.fromAddress(user.address).then(
+//       (response) => {
+//         const { lat, lng } = response.results[0].geometry.location;
+//         setUserCoordinates( {id: 0, position: {lat, lng}, user: user})
+//       },
+//       (error) => {
+//         console.error(error);
+//       }
+//     );
+//   }
 //   const { isLoaded } = useLoadScript({
 //     googleMapsApiKey: "", // Add your API key
 //   });
 
 
+  // return (
+  //   <div className="match-grid">
+  //     <h1>Here are your matches!</h1>
+  //     {matches != [] ? (
+  //       matches.map((sortedMatch, idx) => {
+  //         return (
+  //           <MatchCard
+  //             name={sortedMatch.match.name}
+  //             bio={sortedMatch.match.bio}
+  //             picture={sortedMatch.match.picture}
+  //             country={sortedMatch.match.country}
+  //             accomodation={sortedMatch.match.accomodation}
+  //             key={idx}
+  //           />
+  //         );
+  //       })
+  //     ) : (
+  //         <h1> Sorry we couldn't find any matches for you!</h1>
+  //     )}
+  //   </div>
+  // );
+
+
   return (
     <div className="match-grid">
+      {loadingComplete
+      ? 
+      <div>
       <h1>Here are your matches!</h1>
-      {sorted != [] ? (
-        sorted.map((sortedMatch, idx) => {
+      {matches != [] ? (
+        matches.map((sortedMatch, idx) => {
           return (
             <MatchCard
               name={sortedMatch.match.name}
               bio={sortedMatch.match.bio}
               picture={sortedMatch.match.picture}
               country={sortedMatch.match.country}
-              accomodation={sortedMatch.match.accomodation}
+              accomodation={sortedMatch.match.accomodations}
               key={idx}
             />
           );
@@ -129,6 +165,9 @@ useEffect(() => {
       ) : (
           <h1> Sorry we couldn't find any matches for you!</h1>
       )}
+      </div>
+      : <h1> Sorry we couldn't load your matches</h1>
+}
     </div>
   );
 }

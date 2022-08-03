@@ -27,7 +27,7 @@ export default function App() {
   const [profileCreated, setProfileCreated] = useState(false);
   const [profileEdited, setProfileEdited] = useState(false);
   const [profileList, setProfileList] = useState([]);
-  const [currUser, setCurrUser] = useState()
+  const [currUser, setCurrUser] = useState({})
   const [userProfile, setProfile] = React.useState({});
   const [id, setId] = React.useState();
   // For every network request, add a custom header for the logged in user
@@ -88,7 +88,6 @@ export default function App() {
       try {
         const res = await axios.get(`${config.API_BASE_URL}/matches`);
         setProfileList(res.data.profiles);
-        console.log("currUser :", currUser);
         console.log("profile List :", res);
       } catch (err) {
         console.log(err);
@@ -96,11 +95,11 @@ export default function App() {
     })();
   }, [id]);
 
-  const findProfile = (user) => {
+  const findProfile = () => {
     // setId(localStorage.getItem("current_user_id"));
-    let found = profileList.find(profile => profile.user.objectId == id)
-    setCurrUser(found);
-    console.log("found: ", found)
+    setCurrUser(profileList.find(profile => profile.user.objectId == id))
+    // setCurrUser(found);
+    // console.log("found: ", found)
     console.log("profiles: ", profileList)
     console.log("curr user: ", currUser)
   }
@@ -171,7 +170,7 @@ export default function App() {
                 
               <Route
                 path="/profileDisplay"
-                element={<ProfileDisplay userProfile={currUser}/>}
+                element={<ProfileDisplay profiles={profileList} userProfile={currUser}/>}
               />
             </Route>
             

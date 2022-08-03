@@ -36,6 +36,7 @@ export default function ProfileView({
   let monthList = months.list;
   const handleSubmit = (event) => {
     event.preventDefault();
+    setProfile({});
     const profile = async () => {
       try {
         const res = await axios.post(
@@ -54,7 +55,8 @@ export default function ProfileView({
           { maxContentLength: Infinity, maxBodyLength: Infinity }
         );
         console.log("res.data.profile.user: ", res.data.profile.user)     
-        handleCreateProfile(res.data.profile);
+        handleCreateProfile(res.data.profile.user);
+        setProfile(res.data.profile);
         navigate("/preferences")
         
       } catch (err) {
@@ -177,6 +179,7 @@ export default function ProfileView({
           {/* <MatchGrid profiles={profiles} userProfile={userProfile}/> */}
         <AllUsers profiles={profiles} /> 
         <p> Here are the matches</p>
+        <MatchGrid profiles={profiles} userProfile={userProfile} /> 
         {/* userProfile={userProfile} /> */}
         <Footer />
         </div>

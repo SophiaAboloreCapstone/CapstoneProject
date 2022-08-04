@@ -174,7 +174,6 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
     <div className="preferences">
        <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>
       <div className="questionaire">  
-      {/* onSubmit={(event) => handleSubmit(event)}> */}
         <div className="employment">
           <h3>What best describes the field you work in?</h3>
           <select

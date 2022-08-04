@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import "./ProfileView.css";
-import MatchGrid from "../MatchGrid/MatchGrid";
 import axios from "axios";
 import * as config from "../../config";
 import countries from "../../data/countries.json";
@@ -65,7 +64,6 @@ export default function ProfileView({
       }
     };
     profile();
-    // <ProfileDisplay name={username} picture={picture} age={} bio, country, month, accomodation, location
   };
 
   let base64code = "";
@@ -114,7 +112,7 @@ export default function ProfileView({
     <div className="profile">
       {!profileCreated ? (
         <div className="profile-creation">
-          <form onSubmit={handleSubmit}>
+          <form className="profile-view-form" onSubmit={handleSubmit}>
             <div className="title">Set up your profile</div>
             <label>
               <span>Username</span>
@@ -128,10 +126,8 @@ export default function ProfileView({
               <span>Profile Picture</span>
               <input
                 type="file"
-                // ref={picture}
                 id="profile-picture"
                 name="picture"
-                //   onChange={onChangePicture}
                 accept="image/*"
                 value={base64code}
                 onChange={onChange}
@@ -176,20 +172,12 @@ export default function ProfileView({
             </label>
             <button type="submit">Create Profile</button>
           </form>
-          {/* <MatchGrid profiles={profiles} userProfile={userProfile}/> */}
         <AllUsers profiles={profiles} /> 
-        <p> Here are the matches</p>
-        
-        <MatchGrid profiles={profiles} userProfile={userProfile} /> 
-        {/* userProfile={userProfile} /> */}
         <Footer />
         </div>
       ) 
       : (
-        <></>
-        // <div className="display-profile">
-        //   <ProfileDisplay profileInfo={userProfile} />
-        // </div>
+        <></> 
       )
       }
 

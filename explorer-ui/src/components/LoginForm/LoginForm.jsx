@@ -4,10 +4,8 @@ import axios from "axios"
 import * as config from "../../config"
 import styled from "styled-components";
 import Footer from "../Home/Footer/Footer"
-import ProfileView from "../ProfileView/ProfileView";
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react";
-import NotFound from "../NotFound/NotFound";
 export default function LoginForm({profileCreated, findProfile, handleLogin}) {
     const username = React.createRef();
     const password = React.createRef();
@@ -37,7 +35,6 @@ export default function LoginForm({profileCreated, findProfile, handleLogin}) {
             } catch (err) {
                 alert(err)
                 console.log(err)
-                // setSuccessful("failure")
             }
         }
         login()
@@ -145,19 +142,5 @@ const HorizontalRule = styled.hr`
     </MainContainer>
     <Footer />
     </div>
-      // <div className="login">
-      // <form onSubmit={handleSubmit}>
-      //   <div className="title">Login</div>
-      //   <label>
-      //     <span>Username</span>
-      //     <input ref={username}></input>
-      //   </label>
-      //   <label>
-      //     <span>Password</span>
-      //     <input type="password" ref={password}></input>
-      //   </label>
-      //   <button type="submit">Login</button>
-      // </form>
-      // </div>
     )
 }

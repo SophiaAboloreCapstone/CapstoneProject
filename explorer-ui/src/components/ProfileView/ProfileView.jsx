@@ -53,7 +53,6 @@ export default function ProfileView({
           },
           { maxContentLength: Infinity, maxBodyLength: Infinity }
         );
-        console.log("res.data.profile.user: ", res.data.profile.user)     
         handleCreateProfile(res.data.profile.user);
         setProfile(res.data.profile);
         navigate("/preferences")

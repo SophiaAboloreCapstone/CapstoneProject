@@ -20,10 +20,9 @@ export default function LoginForm({profileCreated, findProfile, handleLogin}) {
                     "username" : username.current.value,
                     "password" : password.current.value
                     })          
-                console.log("res.data.user: ", res.data.user)  
                 handleLogin(res.data.user)
                 findProfile(res.data.user)
-                console.log("logged in")
+
                 if(profileCreated){
                   navigate("/profileView");
                 }

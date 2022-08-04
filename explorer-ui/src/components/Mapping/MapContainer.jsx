@@ -52,7 +52,6 @@ function MapContainer({ coordinates, currLocation}) {
     setshowingInfoWindow(true);
     setCurrProfile(user);
     generateAttractionCoordinates(user)
-    console.log("curr profile is changing state: ", currProfile)
 
   };
 
@@ -82,13 +81,11 @@ function MapContainer({ coordinates, currLocation}) {
       destination: destiantionRef.current.value,
       travelMode: google.maps.TravelMode.DRIVING,
     });
-    console.log("route is :", results)
     setDirectionsResponse(results);
     setDistance(results.routes[0].legs[0].distance.text);
     setDuration(results.routes[0].legs[0].duration.text);
   }
   async function calculateRouteBetweenUsers(profileLocation) {
-  console.log("called")
     if (originString  === "" || String(profileLocation) === "") {
       return;
     }
@@ -98,13 +95,12 @@ function MapContainer({ coordinates, currLocation}) {
       destination: profileLocation,
       travelMode: google.maps.TravelMode.DRIVING,
     });
-    console.log("route is :", results)
     setDirectionsResponse(results);
   }
 
+  // Get latitude & longitude from address.
   const generateAttractionCoordinates = (currProfile) => {
     let attractions = currProfile.user.preferenceInfo.attractions;
-    console.log("profile I'm pulling attractions from: ", currProfile)
     if (attractions) {
       for (let i = 0; i < attractions.length; i++) {
         if(( attractions[i] != null || attractions[i]!="")){ 
@@ -119,9 +115,7 @@ function MapContainer({ coordinates, currLocation}) {
         );
         }
       }
-      // Get latitude & longitude from address.
     }
-    console.log("got attractions: ", attractionCoords)
   };
 
   function clearRoute() {

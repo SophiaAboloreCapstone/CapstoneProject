@@ -17,7 +17,6 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
   let interestsArr = interestsJSON.interests;
   let employment_fields = employmentJSON.employment;
   let budgestsArr = budgets.ranges;
-  console.log("interestsArr: ", interestsArr);
   const [preferenceInfo, setPreferenceInfo] = useState({
     interests: new Set(),
     attractions: new Set(),
@@ -53,8 +52,6 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       visibility: preferenceInfo.visibility,
     });
     navigate("/profileDisplay")
-    console.log("preferenceInfo: ", preferenceInfo);
-    console.log("interests so far: ", interests);
   }
 
   // Update the state array for the users attractions interests
@@ -72,8 +69,6 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: preferenceInfo.currLocation,
       visibility: preferenceInfo.visibility,
     });
-    console.log("preferenceInfo: ", preferenceInfo);
-    console.log("attractions so far: ", touristAttractions);
   }
 
   // Update the state array for the users attractions interests
@@ -88,7 +83,6 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: preferenceInfo.currLocation,
       visibility: preferenceInfo.visibility,
     });
-    console.log("occupation is: ", employment);
   }
 
   // Update the state array for the users attractions interests
@@ -103,7 +97,6 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: preferenceInfo.currLocation,
       visibility: preferenceInfo.visibility,
     });
-    console.log("budget is: ", budget);
   }
 
   // Update the state array for the users attractions interests
@@ -118,7 +111,6 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: preferenceInfo.currLocation,
       visibility: visibility,
     });
-    console.log("visibility is: ", visibililityChoice);
   }
   // Update the state array for the users attractions interests
   function handleLocationSet(event, region) {
@@ -132,24 +124,21 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: currLocation,
       visibility: preferenceInfo.visibility,
     });
+
     // Get latitude & longitude from address.
     Geocode.fromAddress(region.current.value).then(
       (response) => {
         const { lat, lng } = response.results[0].geometry.location;
         setPosition({ lat: lat, lng: lng });
-        console.log(lat, lng);
       },
       (error) => {
         console.error(error);
       }
     );
-
-    console.log("current location is: ", currLocation);
   }
 
 // Send the profile information to the database
   function handleSubmit(event) {
-    console.log("submitted");
     event.preventDefault();
     const preferences = async () => {
       try {
@@ -166,7 +155,6 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       }
     };
     preferences();
-    console.log("preferences posted!");
   }
 
   // RETURN

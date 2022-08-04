@@ -1,0 +1,14 @@
+.logged-out{
+    height: 100vh;
+  display: flex;
+  flex-direction: column;
+    background-color: black;
+}
+.box {
+    display: flex;
+}
+/* body{
+    background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+  background-size: 400% 400%;
+  animation: Gradient 15s ease infinite;
+} */

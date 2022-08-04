@@ -1,0 +1,71 @@
+.preferences{
+    /* all: initial; */
+    background-color: black;
+    padding-left: 200px;
+    padding-right: 200px;
+}
+.questionaire{
+    padding-top: 100px;
+}
+.grid {
+    max-width: 1800px;
+    margin: 0 auto;
+    display: grid;
+    gap: 1rem;
+    /* #ffd9e3(166, 224, 255); */
+  }
+  @media (min-width: 1200px) {
+    .grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+
+  @media (min-width: 900px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (min-width: 600px) {
+    .grid { grid-template-columns: repeat(4 , 1fr); }
+  }
+  .card{
+    background-color: pink;
+    color: white;
+  padding: 1rem;
+  height: 100px;
+  width: 150px;
+  border-radius: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.questionaire{
+    background-color: black;
+}
+.interests{
+    background-color: black;
+}
+.employment{
+    background-color: black;
+}
+.grid{
+    background-color: black;
+}
+.tourist-attractions{
+    background-color: black;
+}
+.curr-location{
+    background-color: black;
+}
+.budget{
+    background-color: black;
+}
+.visibility-preference{
+    background-color: black;
+}
+.card:hover{
+    background-color: rgb(221, 192, 255);
+    color: black;
+  transform: scale(1.05);
+}
+.activity:visited{
+    background-color: rgb(221, 192, 255);
+    color: black;
+  transform: scale(1.05);
+}

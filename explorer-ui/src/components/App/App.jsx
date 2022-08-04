@@ -1,31 +1,36 @@
 import * as React from "react";
 // import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
-// import Home from "./components/Home/Home";
-// import Navbar from "./components/Home/Navbar/Navbar";
-// import Footer from "./components/Footer/Footer";
-// import Login from "./components/Login/Login";
-// import SignIn from "./components/Login/SignIn";
-// import SignUp from "./components/Login/SignUp";
-// import Profile from "./components/Profile/Profile";
-// import MatchGrid from "./components/MatchGrid/MatchGrid";
-// import TravellerMap from "./components/TravellerMap/TravellerMap";
-import NavBar from "../NavBar/NavBar";
-import MessagesView from "../MessagesView/MessagesView";
 import LoggedOutView from "../LoggedOutView/LoggedOutView";
 import ProfileView from "../ProfileView/ProfileView";
-import Home from "../Home/Home"
-import MatchGrid from "../MatchGrid/MatchGrid"
+import Home from "../Home/Home";
+import MatchGrid from "../MatchGrid/MatchGrid";
+import ProfileDisplay from "../ProfileView/ProfileDisplay/ProfileDisplay";
+import RegisterForm from "../LoginForm/RegisterForm/RegisterForm";
+import NotFound from "../NotFound/NotFound";
+import Preferences from "../ProfileView/Preferences/Preferences";
+import * as config from "../../config";
 import { useState } from "react";
 import { useEffect } from "react";
-// import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+} from "react-router-dom";
+import PrivateRoutes from "../PrivateRoutes"
 import axios from "axios";
+import 'bootstrap/dist/css/bootstrap.min.css';
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("current_user_id") != null
   );
   const [profileCreated, setProfileCreated] = useState(false);
   const [profileEdited, setProfileEdited] = useState(false);
+  const [profileList, setProfileList] = useState([]);
+  const [currUser, setCurrUser] = useState({})
+  const [userProfile, setProfile] = React.useState({});
+  const [id, setId] = React.useState();
   // For every network request, add a custom header for the logged in user
   // The backend API can check the header for the user id
   //
@@ -40,6 +45,7 @@ export default function App() {
       };
     }
   };
+
   addAuthenticationHeader();
 
   const handleLogout = () => {
@@ -49,60 +55,76 @@ export default function App() {
   };
 
   const handleLogin = (user) => {
-    console.log(user);
     localStorage.setItem("current_user_id", user["objectId"]);
     addAuthenticationHeader();
-
+    setId(user.objectId);
+    console.log("user id: ", user.objectId)
     setIsLoggedIn(true);
   };
 
   const handleCreateProfile = (profileInfo) => {
-    console.log("your profile: ", profileInfo)
-    localStorage.setItem("current_user_id", profileInfo["objectId"]);
+    let ids = localStorage.getItem("current_user_id");
+    console.log("ids: ", ids)
+    localStorage.setItem("current_user_id", profileInfo.user["objectId"]);
     addAuthenticationHeader();
-
-    // setIsLoggedIn(true);
-    setProfileCreated(true)
-    // console.log("profile creation stat: ", profileCreated)
+    setProfile(profileInfo)
+    setProfileCreated(true);
   };
-  
+
+  React.useEffect(() => {
+    const fetchProfiles = (async () => {
+      try {
+        const res = await axios.get(`${config.API_BASE_URL}/matches`);
+        setProfileList(res.data.profiles);
+        console.log("profile List :", res);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, [id]);
+
+  const findProfile = () => {
+    setCurrUser(profileList.find(profile => profile.user.objectId == id))
+  }
 
   return (
-    // <div className="app">
-    //   <BrowserRouter>
-    //     <main>
-    //       {/* YOUR CODE HERE! */}
-    //       <Navbar />
-    //       {/* <Sidebar /> */}
-    //       <Routes>
-    //         <Route path="/" element={<Home />} />
-    //         {/* <Route path="/login" element={<Login />} /> */}
-    //         <Route path="/login" element={<Login />} />
-    //         <Route exact path="/sign-up" element={<SignUp />} />
-    //         <Route path="/sign-in" element={<SignIn />} />
-    //         <Route path="/profile" element={<Profile />} />
-    //         <Route path="/matches" element={<MatchGrid />} />
-    //         <Route path="/map" element={<TravellerMap />} />
-    //       </Routes>
-    //       <Footer />
-    //     </main>
-    //   </BrowserRouter>
-    // </div>
     <div className="App">
-      {/* <BrowserRouter> */}
-      <main>
-      <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-      {isLoggedIn
-        ? <ProfileView handleCreateProfile={handleCreateProfile} profileCreated={profileCreated} profileEdited={profileEdited}/>
-        : <LoggedOutView handleLogin={handleLogin} />
-      }
-      </main>
-      {/* <Routes>
-        <Route path="/" element={<Home />}/>
-        <Route path="/matches" elememt={<MatchGrid />}/>
-        </Routes>
-      </main>
-      </BrowserRouter> */}
+      <Router>
+          <Routes>
+            <Route element={<PrivateRoutes/>}>
+              <Route path="/preferences" element={<Preferences  isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>} />
+              <Route
+                path="/profileView"
+                element={
+                  <ProfileView
+                    handleCreateProfile={handleCreateProfile}
+                    profileCreated={profileCreated}
+                    profileEdited={profileEdited}
+                    isLoggedIn={isLoggedIn} handleLogout={handleLogout}
+                    
+                  />
+                }/>
+                
+              <Route
+                path="/profileDisplay"
+                element={<ProfileDisplay profiles={profileList} userProfile={currUser}/>}
+              />
+            </Route>
+            
+            <Route path="/" element={<Home isLoggedIn={isLoggedIn}  handleLogout={handleLogout}/>} />
+            <Route 
+              path="/login"
+              element={<LoggedOutView profileCreated={profileCreated} findProfile={findProfile} handleLogin={handleLogin} isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>}
+            />
+            <Route
+              path="/register"
+              element={<RegisterForm handleLogin={handleLogin} isLoggedIn={isLoggedIn} handleLogout={handleLogout} />}
+            />
+            
+            <Route path="/notFound" element={<NotFound />} />
+          </Routes>
+        {/* </main> */}
+      </Router>
     </div>
   );
 }

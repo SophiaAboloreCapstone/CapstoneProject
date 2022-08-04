@@ -1,0 +1,34 @@
+{
+    "interests": [
+        {"id": "alcohol", "string": "Drinking"},
+        {"id": "casino", "string": "Casinos"},
+        {"id": "nightclubs", "string": "Clubbing"},
+        {"id": "amusements", "string": "Amusement and Water Parks"},
+        {"id": "architecture", "string": "Architecture"},
+        {"id": "museums", "string": "Museums"},
+        {"id": "circuses", "string": "Circus Shows"},
+        {"id": "theatres_and_entertainments", "string": "Theater"},
+        {"id": "opera_houses", "string": "Opera"},
+        {"id": "urban_environment", "string": "Gardens and Parks"},
+        {"id": "archaeology", "string": "Archaeology"},
+        {"id": "historic", "string": "Historical Sites"},
+        {"id": "industrial_facilities", "string": "Industrial Facilities"},
+        {"id": "beaches", "string": "Beaches"},
+        {"id": "nature_reserves", "string": "Nature"},
+        {"id": "water", "string": "Rivers and Lakes"},
+        {"id": "islands", "string": "Islands"},
+        {"id": "geological_formations", "string": "Mountains and Canyons"},
+        {"id": "baths_and_saunas", "string": "Bath Houses"},
+        {"id": "climbing", "string": "Rock Climbing"},
+        {"id": "kitesurfing", "string": "Kite Surfing"},
+        {"id": "pools", "string": "Pools"},
+        {"id": "surfing", "string": "Surfing"},
+        {"id": "stadiums", "string": "Stadiums"},
+        {"id": "foods", "string": "Food"}, 
+        {"id": "bakeries", "string": "Baked Goods"},
+        {"id": "shops", "string": "Shopping"},
+        {"id": "religion", "string": "Religion"}
+
+
+    ]
+}

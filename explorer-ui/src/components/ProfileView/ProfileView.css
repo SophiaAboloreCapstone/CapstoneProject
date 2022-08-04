@@ -1,5 +1,9 @@
-profile-input{
+/* profile-input{
     padding-bottom: 200px;
+} */
+.profile{
+    background-color: black;
+    color: black;
 }
 .map{
     padding-top: 100px;
@@ -7,30 +11,20 @@ profile-input{
 .match-grid{
     padding-top: 400px;
 }
-matches{
+.matches{
     padding-top: 200px;
 }
 .ProfileView {
     margin-top: 10px;
 }
 
-.MessagesView form input {
-    width: 75%;
-    padding: 5px;
-    margin-right: 10px;
-}
-
-.MessagesView form button {
-    padding: 5px;
-}
-
-.MessagesList {
-    margin-top: 20px;
-}
-
-.MessageItem {
-    margin-bottom: 20px;
-}
 .profileDisplay{
     background-color: aqua;
+}
+.profile-creation{
+    background: black;
+    color: black;
+}
+.display-map{
+    padding-top: 50px;
 }

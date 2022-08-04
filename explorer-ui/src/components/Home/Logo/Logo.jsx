@@ -1,5 +1,6 @@
 import * as React from "react"
 import "./Logo.css"
+import logo from "../../../data/imgs/Explorer.png"
 import {
     Link
 } from "react-router-dom";
@@ -7,9 +8,9 @@ import {
 export default function Logo() {
     return (
         <div className="logo">
-            <Link to={"/"}>
+            <Link to={"/"}> 
                 <a href="">
-                    <img className="logo-img" src="./assets/images/Explorer.png" width="50" height="70"></img>
+                    <img className="logo-img" src={logo} ></img>
                 </a>
             </Link>
         </div>

@@ -154,6 +154,7 @@ function MapContainer({ coordinates, currLocation}) {
   }
 
   return (
+    // <ChakraProvider theme={theme}>
     <div className="map-container">
       {/* <ChakraProvider theme={theme}></ChakraProvider> */}
     <Flex
@@ -305,6 +306,7 @@ function MapContainer({ coordinates, currLocation}) {
       }
       
     </div>
+    // </ChakraProvider>
   );
 }
 

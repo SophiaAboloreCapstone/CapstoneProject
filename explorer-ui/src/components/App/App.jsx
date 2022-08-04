@@ -20,6 +20,7 @@ import {
 } from "react-router-dom";
 import PrivateRoutes from "../PrivateRoutes"
 import axios from "axios";
+import 'bootstrap/dist/css/bootstrap.min.css';
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("current_user_id") != null

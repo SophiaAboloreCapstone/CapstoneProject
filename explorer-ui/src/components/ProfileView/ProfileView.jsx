@@ -179,6 +179,7 @@ export default function ProfileView({
           {/* <MatchGrid profiles={profiles} userProfile={userProfile}/> */}
         <AllUsers profiles={profiles} /> 
         <p> Here are the matches</p>
+        
         <MatchGrid profiles={profiles} userProfile={userProfile} /> 
         {/* userProfile={userProfile} /> */}
         <Footer />

@@ -12,11 +12,11 @@
     box-sizing: border-box;
 }
 
-footer {
+/* footer {
     display: block;
     padding-left: 200px;
     padding-right: 200px;
-}
+} */
 .footer .content .top {
     flex: 1;
     padding-top: 40px;

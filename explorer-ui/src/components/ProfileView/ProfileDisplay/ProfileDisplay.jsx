@@ -48,16 +48,17 @@ export default function ProfileDisplay({profiles, userProfile}) {
   // Get the list of matches
     const getMatches = () => {
       const profilesToAdd = new Set();
-      for (let i = 0; i <Object.keys(profiles).length; i++) {
+      Object.values(profiles).forEach(profile => {
         if (
-          profiles[i].country === userProfile.country 
+          profile.country === userProfile.country 
           &&
-          profiles[i].travelMonth == userProfile.travelMonth &&
-          profiles[i].accomodation == userProfile.accomodation
+          profile.travelMonth == userProfile.travelMonth &&
+          profile.accomodation == userProfile.accomodation
         ) {
-          profilesToAdd.add(profiles[i])
+          profilesToAdd.add(profile)
         }
       }
+        )
       setMatches([...matches, ...profilesToAdd])
       
     };
@@ -86,21 +87,23 @@ export default function ProfileDisplay({profiles, userProfile}) {
     // Get latitude & longitude position based off the address of each match
     const getCoordinates = (rankedMatches) => {
       if (rankedMatches) {
-        for (let i = 0; i < rankedMatches.length; i++) {
-          if(rankedMatches[i].match.address != null || rankedMatches[i].match.address !="" ){
+        rankedMatches.forEach(rankedMatch =>{
+         if(rankedMatch.match.address != null || rankedMatch.match.address !="" ){
           
-          Geocode.fromAddress(rankedMatches[i].match.address).then(
+          Geocode.fromAddress(rankedMatch.match.address).then(
             (response) => {
-              const { lat, lng } = response.results[0].geometry.location;
-              setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {id: i, position: {lat, lng}, user: matches[i]}])
+              const res = response.results[0].geometry;
+              const { lat, lng } = res.location;
+              setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {position: {lat, lng}, user: rankedMatch.match}])
               
             },
             (error) => {
               console.error(error);
             }
-          );
+          )  
         }
         }
+        )
         setCoordsLoaded(true);
       }
     };

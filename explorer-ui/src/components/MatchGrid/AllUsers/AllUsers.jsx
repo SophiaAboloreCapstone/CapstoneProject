@@ -29,19 +29,33 @@ export default function AllUsers({profiles}) {
     }, [profiles])
     const getCoordinates = (profiles) => {
         if (profiles) {
-          for (let i = 0; i < profiles.length; i++) {
-            if(( profiles[i].address != null || profiles[i].address!="")){ //&& profiles[i].preferenceInfo.visibility =="yes"){
-            Geocode.fromAddress(profiles[i].address).then(
+          // for (let i = 0; i < profiles.length; i++) {
+          //   if(( profiles[i].address != null || profiles[i].address!="")){ //&& profiles[i].preferenceInfo.visibility =="yes"){
+          //   Geocode.fromAddress(profiles[i].address).then(
+          //     (response) => {
+          //       const { lat, lng } = response.results[0].geometry.location;
+          //       setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {id: i, position: {lat, lng}, user: profiles[i]}])
+          //     },
+          //     (error) => {
+          //       console.error(error);
+          //     }
+          //   );
+          //   }
+          // }
+          Object.values(profiles).forEach(profile => {
+          if(( profile.address != null || profile.address!="")){ //&& profiles[i].preferenceInfo.visibility =="yes"){
+            Geocode.fromAddress(profile.address).then(
               (response) => {
-                const { lat, lng } = response.results[0].geometry.location;
-                setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {id: i, position: {lat, lng}, user: profiles[i]}])
+                const res = response.results[0].geometry;
+                const { lat, lng } = res.location;
+                setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {position: {lat, lng}, user: profile}])
               },
               (error) => {
                 console.error(error);
               }
             );
             }
-          }
+          })
           // Get latitude & longitude from address.
         }
       };

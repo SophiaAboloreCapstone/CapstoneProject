@@ -87,14 +87,6 @@ export default function AllUsers({profiles}) {
           :<></>
           }
           </div> 
-
-            {/* <h1>Here are all the users on the app!</h1>
-            {profiles != null && profiles.map((profile, idx) => {
-                return (
-                    <MatchCard name="Sophia" bio={profile.bio} picture={profile.picture} country={profile.country} accomodation={profile.accomodation} key={idx} />
-                )
-            })
-        } */}
           
         </div>
     )

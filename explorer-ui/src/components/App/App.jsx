@@ -99,7 +99,7 @@ export default function App() {
                 
               <Route
                 path="/profileDisplay"
-                element={<ProfileDisplay profiles={profileList} userProfile={currUser}/>}
+                element={<ProfileDisplay profiles={profileList} userProfile={currUser} handleLogout={handleLogout}/>}
               />
             </Route>
             

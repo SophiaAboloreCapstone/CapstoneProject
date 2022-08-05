@@ -2,10 +2,13 @@ import * as React from "react";
 import "./NavBar.css";
 import Logo from "../Logo/Logo";
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 export default function NavBar({ isLoggedIn, handleLogout }) {
-  const onClick = (event) => {
+  const navigate = useNavigate();
+  const onLogoutClick = (event) => {
     event.preventDefault();
     handleLogout();
+    navigate("/");
   };
 
   return (
@@ -54,12 +57,9 @@ export default function NavBar({ isLoggedIn, handleLogout }) {
         </div>
       : <div className="nav-directory">
       <li>
-        <Link 
-        to="/login">
-        <button className="login-button" href="">
+        <button onClick={(event) => onLogoutClick(event)} className="login-button" href="">
           Logout
         </button>
-        </Link>
       </li>
     </div>
 }

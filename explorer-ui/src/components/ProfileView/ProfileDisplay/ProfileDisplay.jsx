@@ -24,7 +24,7 @@ import {
 } from 'react-icons/fa';
 
 import { ChakraProvider, theme } from "@chakra-ui/react";
-export default function ProfileDisplay({profiles, userProfile}) {
+export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
   const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
   const [matches, setMatches] = useState([]);
   const [rankedMatches, setRankedMatches] = useState([])
@@ -177,7 +177,7 @@ export default function ProfileDisplay({profiles, userProfile}) {
   // and then a map of their matches locations
   return (
     <div className="dashboard">
-       <Navbar isLoggedIn={true}/> 
+       <Navbar isLoggedIn={true} handleLogout={handleLogout}/> 
        <div className='landing'>
             <div className='landing--container'>
                 <div

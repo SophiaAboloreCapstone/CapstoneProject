@@ -87,22 +87,20 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
     }
 
     // Get latitude & longitude position based off the address of each match
-    const getCoordinates = (rankedMatches) => {
+    const getCoordinates = async(rankedMatches) => {
       if (rankedMatches != null && rankedMatches.length > 0) {
-        rankedMatches.forEach(rankedMatch =>{
+        rankedMatches.forEach(async rankedMatch =>{
          if(rankedMatch.match.address != null || rankedMatch.match.address !="" ){
-          
-          Geocode.fromAddress(rankedMatch.match.address).then(
-            (response) => {
-              const res = response.results[0].geometry;
+          try{
+            const response = await Geocode.fromAddress(rankedMatch.match.address);
+            const res = response.results[0].geometry;
               const { lat, lng } = res.location;
               setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {position: {lat, lng}, user: rankedMatch.match}])
               
-            },
-            (error) => {
-              console.error(error);
-            }
-          )  
+          }
+          catch(error){
+            console.error(error);
+          }
         }
         }
         )

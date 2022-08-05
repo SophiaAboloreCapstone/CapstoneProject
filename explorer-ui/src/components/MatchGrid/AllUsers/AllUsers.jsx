@@ -16,20 +16,19 @@ export default function AllUsers({profiles}) {
         getCoordinates(profiles);
         // getUserCoords(profiles[0])
     }, [profiles])
-    const getCoordinates = (profiles) => {
+    const getCoordinates = async(profiles) => {
         if (profiles != null && profiles.length > 0) {
-          Object.values(profiles).forEach(profile => {
+          Object.values(profiles).forEach(async profile => {
           if(( profile.address != null || profile.address!="")){
-            Geocode.fromAddress(profile.address).then(
-              (response) => {
-                const res = response.results[0].geometry;
+            try{
+              const response = await Geocode.fromAddress(profile.address)
+              const res = response.results[0].geometry;
                 const { lat, lng } = res.location;
                 setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {position: {lat, lng}, user: profile}])
-              },
-              (error) => {
-                console.error(error);
-              }
-            );
+            }
+            catch(error){
+              console.error(error);
+            }
             }
           })
           // Get latitude & longitude from address.

@@ -10,7 +10,7 @@ import { useState, useEffect, useRef } from "react";
 import { ChakraProvider, theme } from "@chakra-ui/react";
 export default function AllUsers({profiles}) {
     const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
-    const [userCoordinates, setUserCoordinates] = useState({"string":"", "position":{}});
+    const [userCoordinates, setUserCoordinates] = useState({"name":"", "position":{}});
     const region = useRef();
     useEffect(() => {
         getCoordinates(profiles);
@@ -39,7 +39,7 @@ export default function AllUsers({profiles}) {
         Geocode.fromAddress(region.current.value).then(
           (response) => {
             const { lat, lng } = response.results[0].geometry.location;
-            setUserCoordinates({"string": region.current.value, "position": {lat, lng}})
+            setUserCoordinates({"name": region.current.value, "position": {lat, lng}})
           },
           (error) => {
             console.error(error);
@@ -55,7 +55,7 @@ export default function AllUsers({profiles}) {
             <button type="click" onClick={(event) => getCurrLocation(event)}>Save Region</button>
             <h1>Here is the map of all users</h1>
             <div className="display-map">
-            {userCoordinates.position != {"string":"", "position":{}}
+            {userCoordinates.position != {"name":"", "position":{}}
             ?<ChakraProvider theme={theme}>
             <MapContainer coordinates={matchesPlusCoordinates} currLocation ={userCoordinates}/>
           </ChakraProvider>

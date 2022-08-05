@@ -113,7 +113,7 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
       Geocode.fromAddress(userProfile.address).then(
         (response) => {
           const { lat, lng } = response.results[0].geometry.location;
-          setUserCoordinates({"string": userProfile.address, "position": {lat, lng}})
+          setUserCoordinates({"name": userProfile.address, "position": {lat, lng}})
         },
         (error) => {
           console.error(error);

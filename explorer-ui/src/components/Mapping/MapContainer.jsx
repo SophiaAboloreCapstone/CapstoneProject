@@ -42,7 +42,7 @@ function MapContainer({ coordinates, currLocation}) {
   const [currProfile, setCurrProfile] = useState(null);
   const [attractionCoords, setAttractionCoords] = useState([])
   const origin = currLocation.position
-  const originString= currLocation.string;
+  const originname= currLocation.name;
   const onMarkerClick = (user, marker) => {
     setActiveProfile(true);
     calculateRouteBetweenUsers(user.user.address);
@@ -91,7 +91,7 @@ function MapContainer({ coordinates, currLocation}) {
     }
     const directionsService = new google.maps.DirectionsService();
     const results = await directionsService.route({
-      origin: currLocation.string,
+      origin: currLocation.name,
       destination: profileLocation,
       travelMode: google.maps.TravelMode.DRIVING,
     });

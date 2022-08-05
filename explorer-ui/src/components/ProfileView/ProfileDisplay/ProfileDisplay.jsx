@@ -49,7 +49,7 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
     const getMatches = () => {
       const profilesToAdd = new Set();
 
-      if(profiles != null && Object.keys(profiles.length) > 0){
+      if(profiles != null && Object.keys(profiles).length > 0){
       Object.values(profiles).forEach(profile => {
         if (
           profile.country === userProfile.country 

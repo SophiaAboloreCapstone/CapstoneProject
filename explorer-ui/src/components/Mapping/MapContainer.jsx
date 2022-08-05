@@ -106,7 +106,8 @@ function MapContainer({ coordinates, currLocation}) {
         if(( attractions[i] != null || attractions[i]!="")){ 
         Geocode.fromAddress(attractions[i]).then(
           (response) => {
-            const { lat, lng } = response.results[0].geometry.location;
+            const res = response.results[0].geometry
+            const { lat, lng } = res.location;
             setAttractionCoords(attractionCoords => [...attractionCoords,  {lat, lng}])
           },
           (error) => {

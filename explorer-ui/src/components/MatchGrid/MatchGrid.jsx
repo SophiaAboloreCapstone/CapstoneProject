@@ -19,7 +19,7 @@ useEffect( () => {
       ? 
       <div>
       <h1>Here are your matches!</h1>
-      {matches != [] ? (
+      {matches !== [] ? (
         matches.map((sortedMatch, idx) => {
           return (
             <MatchCard

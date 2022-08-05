@@ -17,9 +17,9 @@ export default function AllUsers({profiles}) {
         // getUserCoords(profiles[0])
     }, [profiles])
     const getCoordinates = async(profiles) => {
-        if (profiles != null && profiles.length > 0) {
+        if (profiles !== null && profiles.length > 0) {
           Object.values(profiles).forEach(async profile => {
-          if(( profile.address != null || profile.address!="")){
+          if(( profile.address !== null || profile.address!=="")){
             try{
               const response = await Geocode.fromAddress(profile.address)
               const res = response.results[0].geometry;
@@ -55,7 +55,7 @@ export default function AllUsers({profiles}) {
             <button type="click" onClick={(event) => getCurrLocation(event)}>Save Region</button>
             <h1>Here is the map of all users</h1>
             <div className="display-map">
-            {userCoordinates.position != {"name":"", "position":{}}
+            {userCoordinates.position !== {"name":"", "position":{}}
             ?<ChakraProvider theme={theme}>
             <MapContainer coordinates={matchesPlusCoordinates} currLocation ={userCoordinates}/>
           </ChakraProvider>

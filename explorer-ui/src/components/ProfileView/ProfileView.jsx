@@ -1,11 +1,9 @@
 import * as React from "react";
-
 import "./ProfileView.css";
 import axios from "axios";
 import * as config from "../../config";
 import countries from "../../data/countries.json";
 import months from "../../data/months.json"
-import AllUsers from "../MatchGrid/AllUsers/AllUsers";
 import Footer from "../Home/Footer/Footer";
 import NavBar from "../Home/NavBar/NavBar";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +16,6 @@ export default function ProfileView({
 }) {
 
   const [picture, setPicture] = React.useState("");
-  // const picture = React.createRef();
   const username = React.createRef();
   const bio = React.createRef();
   const age = React.createRef();
@@ -29,13 +26,12 @@ export default function ProfileView({
   const location = React.createRef();
   const [profiles, setProfiles] = React.useState([]);
   const navigate = useNavigate();
-  const [locations, setLocations] = React.useState([]);
 
   let countryList = countries.list;
   let monthList = months.list;
   const handleSubmit = (event) => {
     event.preventDefault();
-    setProfile({});
+    // setProfile({});
     const profile = async () => {
       try {
         const res = await axios.post(
@@ -53,8 +49,8 @@ export default function ProfileView({
           },
           { maxContentLength: Infinity, maxBodyLength: Infinity }
         );
-        handleCreateProfile(res.data.profile.user);
-        setProfile(res.data.profile);
+        handleCreateProfile(res.data.profile);
+        // setProfile(res.data.profile);
         navigate("/preferences")
         
       } catch (err) {
@@ -171,7 +167,7 @@ export default function ProfileView({
             </label>
             <button type="submit">Create Profile</button>
           </form>
-        <AllUsers profiles={profiles} /> 
+        {/* <AllUsers profiles={profiles} />  */}
         <Footer />
         </div>
       ) 

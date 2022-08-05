@@ -42,7 +42,7 @@ function MapContainer({ coordinates, currLocation}) {
   const [currProfile, setCurrProfile] = useState(null);
   const [attractionCoords, setAttractionCoords] = useState([])
   const origin = currLocation.position
-  const originname= currLocation.name;
+  const originString= currLocation.name;
   const onMarkerClick = (user, marker) => {
     setActiveProfile(true);
     calculateRouteBetweenUsers(user.user.address);
@@ -86,7 +86,7 @@ function MapContainer({ coordinates, currLocation}) {
     setDuration(res.duration.text);
   }
   async function calculateRouteBetweenUsers(profileLocation) {
-    if (originString  === "" || String(profileLocation) === "" || String(profileLocation) == null) {
+    if (originString  === "" || String(profileLocation) === "" ||  String(profileLocation) === null) {
       return;
     }
     const directionsService = new google.maps.DirectionsService();
@@ -103,7 +103,7 @@ function MapContainer({ coordinates, currLocation}) {
     let attractions = currProfile.user.preferenceInfo.attractions;
     if (attractions) {
       for (let i = 0; i < attractions.length; i++) {
-        if(( attractions[i] != null || attractions[i]!="")){ 
+        if(( attractions[i] !== null || attractions[i]!=="")){ 
         Geocode.fromAddress(attractions[i]).then(
           (response) => {
             const res = response.results[0].geometry
@@ -155,7 +155,7 @@ function MapContainer({ coordinates, currLocation}) {
               position={currLocation.position} 
               icon="http://maps.google.com/mapfiles/ms/icons/pink-dot.png"
                 />
-          {coordinates != null &&
+          {coordinates !== null &&
             coordinates.map((profile, idx) => {
               // TODO: Figure out a central location to pass in here
                // Maybe take in the users location when they register
@@ -167,7 +167,7 @@ function MapContainer({ coordinates, currLocation}) {
                     key={idx}
                     onClick={()=> onMarkerClick(profile, idx)}
                   />
-                  {activeProfile != false
+                  {activeProfile !== false
                     ?attractionCoords.map((coords, idx) => 
                     {
                       return(
@@ -184,7 +184,7 @@ function MapContainer({ coordinates, currLocation}) {
             );
           })}
           <div className="info-window">
-                  {currProfile != null
+                  {currProfile !== null
           ?<InfoWindow
                   position={currProfile.position}
                   marker={activeMarker}
@@ -262,7 +262,7 @@ function MapContainer({ coordinates, currLocation}) {
         </HStack>
       </Box>
     </Flex>
-     {activeProfile != false
+     {activeProfile !== false
       ? <MatchDisplay name={currProfile.user.name} age={currProfile.user.age} bio={currProfile.user.bio} picture={currProfile.user.picture} country={currProfile.user.country} accomodation={currProfile.user.accomodations} preferences={currProfile.user.preferenceInfo.attractions}/>
       : <></>
       }

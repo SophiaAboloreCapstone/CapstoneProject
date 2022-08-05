@@ -1,27 +1,16 @@
 import * as React from "react";
-import Style from "./ProfileDisplay.css";
-
-import { useState, useEffect , useContext, useRef} from "react";
+import { useState, useEffect } from "react";
 import MatchGrid from "../../MatchGrid/MatchGrid";
 import MapContainer from "../../Mapping/MapContainer";
 import Geocode from "react-geocode";
+import "../ProfileDisplay/ProfileDisplay.css"
 import Navbar from "../../Home/NavBar/NavBar"
 Geocode.setApiKey("AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0");
 Geocode.setLanguage("en");
 Geocode.setLocationType("ROOFTOP");
 Geocode.enableDebug();
-import { Button } from '@material-ui/core';
-import { NavHashLink as NavLink } from 'react-router-hash-link';
 import { makeStyles } from '@material-ui/core/styles';
-// import { ThemeContext } from "./ThemeContext"
 import { themeData } from './ThemeData'
-import {
-  FaTwitter,
-  FaLinkedin,
-  FaGithub,
-  FaYoutube,
-  FaBlogger,
-} from 'react-icons/fa';
 
 import { ChakraProvider, theme } from "@chakra-ui/react";
 export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
@@ -49,13 +38,13 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
     const getMatches = () => {
       const profilesToAdd = new Set();
 
-      if(profiles != null && Object.keys(profiles).length > 0){
+      if(profiles !== null && Object.keys(profiles).length > 0){
       Object.values(profiles).forEach(profile => {
         if (
           profile.country === userProfile.country 
           &&
-          profile.travelMonth == userProfile.travelMonth &&
-          profile.accomodation == userProfile.accomodation
+          profile.travelMonth === userProfile.travelMonth &&
+          profile.accomodation === userProfile.accomodation
         ) {
           profilesToAdd.add(profile)
         }
@@ -67,9 +56,9 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
   
       // Calculate the intersections between interests and attractions
     function findIntersections(match){
-      if((match.preferenceInfo.interests != null && userProfile.preferenceInfo.interests != null) && (match.preferenceInfo.interests != null && userProfile.preferenceInfo.interests != null)){
-        let interstIntersection = userProfile.preferenceInfo.interests.filter(x => match.preferenceInfo.interests.includes(x));
-        let attractionIntersection = userProfile.preferenceInfo.attractions.filter(y =>  match.preferenceInfo.attractions.includes(y));
+      if((match.preferenceInfo.interests !== null && userProfile.preferenceInfo.interests !== null) && (match.preferenceInfo.interests !== null && userProfile.preferenceInfo.interests !== null)){
+        const interstIntersection = userProfile.preferenceInfo.interests.filter(x => match.preferenceInfo.interests.includes(x));
+        const attractionIntersection = userProfile.preferenceInfo.attractions.filter(y =>  match.preferenceInfo.attractions.includes(y));
         return {"interestIntersection": interstIntersection, "attractionIntersection": attractionIntersection, "match": match};
       }
       return {"interestIntersection": {}, "attractionIntersection": {}, "match": match};
@@ -77,7 +66,7 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
     
     // Rank the matches based off number of intersections in descending order 
     const rankMatches = (matches) =>{
-      if(matches != null && matches.length > 0){
+      if(matches !== null && matches.length > 0){
       // Create a state to keep track of the intersection data and iterate through each match to get that data
       const matchesToRank = []
       matches.forEach((match) => matchesToRank.push(findIntersections(match)))
@@ -88,9 +77,9 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
 
     // Get latitude & longitude position based off the address of each match
     const getCoordinates = async(rankedMatches) => {
-      if (rankedMatches != null && rankedMatches.length > 0) {
+      if (rankedMatches !== null && rankedMatches.length > 0) {
         rankedMatches.forEach(async rankedMatch =>{
-         if(rankedMatch.match.address != null || rankedMatch.match.address !="" ){
+         if(rankedMatch.match.address !== null || rankedMatch.match.address !=="" ){
           try{
             const response = await Geocode.fromAddress(rankedMatch.match.address);
             const res = response.results[0].geometry;
@@ -178,6 +167,7 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
   return (
     <div className="dashboard">
        <Navbar isLoggedIn={true} handleLogout={handleLogout}/> 
+       {userProfile.length !== 0 && userProfile !== null}
        <div className='landing'>
             <div className='landing--container'>
                 <div

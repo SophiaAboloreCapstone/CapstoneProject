@@ -19,7 +19,7 @@ import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("current_user_id") != null
+    localStorage.getItem("current_user_id") !== null
   );
   const [profileCreated, setProfileCreated] = useState(false);
   const [profileEdited, setProfileEdited] = useState(false);

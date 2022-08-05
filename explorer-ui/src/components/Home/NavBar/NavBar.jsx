@@ -45,7 +45,7 @@ export default function NavBar({ isLoggedIn, handleLogout }) {
             </a>
           </li>
         </ul>
-        {isLoggedIn != true
+        {isLoggedIn !== true
         ? <div className="nav-directory">
           <li>
             <Link 

@@ -20,7 +20,7 @@ const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
 export default function Activities({region, latitude, longitude, handleAttractionsSelected}) {
   const [eventData, setEventData] = useState([]);
   const [xid, setXID] = useState([]);
-  const [events, setEvents] = useState([]);
+  const [offset, setOffset] = useState(0);
 
 // Fetch data from the open trips maps API
   function apiGet(method, query) {
@@ -60,13 +60,13 @@ export default function Activities({region, latitude, longitude, handleAttractio
       "radius",
       `radius=1000&limit=${pageLength}&offset=${offset}&lon=${longitude}&lat=${latitude}&rate=2&format=json`
     ).then(function (data) {
-      data.forEach(element => setEventData(eventData => [...eventData, element]));
+      data.forEach(element => setEventData([...eventData, element]));
     });
   }
 
  function loadMoreActivities(event){
   event.preventDefault();
-  offset += pageLength;
+  setOffset(offset += pageLength)
   loadList();
  }
 
@@ -75,8 +75,8 @@ export default function Activities({region, latitude, longitude, handleAttractio
 const getXID = async(event, id) => {
   event.preventDefault();
   try{
-      const xidData = await apiGet("xid/" + id.xid)
-      setXID(xidData);
+      const xidData = apiGet("xid/" + id.xid)
+      setXID([...xid, xidData]);
   }
   catch(error){
     console.log(error);
@@ -86,7 +86,7 @@ const getXID = async(event, id) => {
   return (
     <div className="activities">
       <div className="activities-grid">
-      {eventData != null && eventData.length >0 ? (
+      {eventData !== null && eventData.length >0 ? (
             eventData.map((event, idx) => {
               return (
                 <div className="activities">

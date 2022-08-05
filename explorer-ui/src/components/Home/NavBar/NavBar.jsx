@@ -17,6 +17,7 @@ export default function NavBar({ isLoggedIn, handleLogout }) {
         <div className="navbar-logo">
           <Logo />
         </div>
+        {/* These links are just here for decoration and to make the page look like other web applications */}
         <ul className="links">
           <li>
             <a className="pages" href="">
@@ -24,22 +25,22 @@ export default function NavBar({ isLoggedIn, handleLogout }) {
             </a>
           </li>
           <li>
-            <a className="pages" href="#Buy">
+            <a className="pages" href="">
               Learn
             </a>
           </li>
           <li>
-            <a className="pages" href="#About">
+            <a className="pages" href="">
               Safety
             </a>
           </li>
           <li>
-            <a className="pages" href="#Contact">
+            <a className="pages" href="">
               Support
             </a>
           </li>
           <li>
-            <a className="pages" href="#Contact">
+            <a className="pages" href="">
               Download
             </a>
           </li>

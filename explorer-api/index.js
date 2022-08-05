@@ -40,21 +40,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/messages", async (req, res) => {
-  try {
-    const query = new Parse.Query("Messages");
-
-    query.descending("createdAt");
-    query.include("user");
-
-    messages = await query.find();
-
-    res.send({ messages: messages });
-  } catch (error) {
-    res.status(400);
-    res.send({ error: "Message query failed: " + error });
-  }
-});
 app.get("/currUser", (req, res) => {
   try {
     const currentUser = Parse.User.current();

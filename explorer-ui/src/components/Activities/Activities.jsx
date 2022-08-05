@@ -25,7 +25,7 @@ export default function Activities({region, latitude, longitude, handleAttractio
 // Fetch data from the open trips maps API
   function apiGet(method, query) {
     return new Promise(function (resolve, reject) {
-      var otmAPI =
+      let otmAPI =
         "https://api.opentripmap.com/0.1/en/places/" +
         method +
         "?apikey=" +

@@ -1,21 +1,16 @@
 import * as React from "react";
 import "./MatchGrid.css";
 import MatchCard from "../MatchGrid/MatchCard/MatchCard";
-import MapContainer from "../Mapping/MapContainer";
 import { useEffect, useState } from "react";
 import Geocode from "react-geocode";
-
-import { useLoadScript } from "@react-google-maps/api";
-import ReactDOM from "react-dom/client";
 Geocode.setApiKey("AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0");
 Geocode.setLanguage("en");
 Geocode.setLocationType("ROOFTOP");
 // Enable or disable logs. Its optional.
 Geocode.enableDebug();
-import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
 export default function MatchGrid({ matches , userProfile}) {
   const [loadingComplete, setLoadingComplete] = useState(false)
-useEffect(() => {
+useEffect( () => {
     setLoadingComplete(true)
 }, [matches])
   return (

@@ -81,11 +81,12 @@ function MapContainer({ coordinates, currLocation}) {
       travelMode: google.maps.TravelMode.DRIVING,
     });
     setDirectionsResponse(results);
-    setDistance(results.routes[0].legs[0].distance.text);
-    setDuration(results.routes[0].legs[0].duration.text);
+    const res = results.routes[0].legs[0];
+    setDistance(res.distance.text);
+    setDuration(res.duration.text);
   }
   async function calculateRouteBetweenUsers(profileLocation) {
-    if (originString  === "" || String(profileLocation) === "") {
+    if (originString  === "" || String(profileLocation) === "" || profileLocation == null) {
       return;
     }
     const directionsService = new google.maps.DirectionsService();

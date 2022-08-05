@@ -17,22 +17,9 @@ export default function AllUsers({profiles}) {
         // getUserCoords(profiles[0])
     }, [profiles])
     const getCoordinates = (profiles) => {
-        if (profiles) {
-          // for (let i = 0; i < profiles.length; i++) {
-          //   if(( profiles[i].address != null || profiles[i].address!="")){ //&& profiles[i].preferenceInfo.visibility =="yes"){
-          //   Geocode.fromAddress(profiles[i].address).then(
-          //     (response) => {
-          //       const { lat, lng } = response.results[0].geometry.location;
-          //       setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {id: i, position: {lat, lng}, user: profiles[i]}])
-          //     },
-          //     (error) => {
-          //       console.error(error);
-          //     }
-          //   );
-          //   }
-          // }
+        if (profiles != null && profiles.length > 0) {
           Object.values(profiles).forEach(profile => {
-          if(( profile.address != null || profile.address!="")){ //&& profiles[i].preferenceInfo.visibility =="yes"){
+          if(( profile.address != null || profile.address!="")){
             Geocode.fromAddress(profile.address).then(
               (response) => {
                 const res = response.results[0].geometry;

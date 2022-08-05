@@ -48,6 +48,8 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
   // Get the list of matches
     const getMatches = () => {
       const profilesToAdd = new Set();
+
+      if(profiles != null && Object.keys(profiles.length) > 0){
       Object.values(profiles).forEach(profile => {
         if (
           profile.country === userProfile.country 
@@ -60,7 +62,7 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
       }
         )
       setMatches([...matches, ...profilesToAdd])
-      
+    }
     };
   
       // Calculate the intersections between interests and attractions
@@ -75,7 +77,7 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
     
     // Rank the matches based off number of intersections in descending order 
     const rankMatches = (matches) =>{
-      if(matches){
+      if(matches != null && matches.length > 0){
       // Create a state to keep track of the intersection data and iterate through each match to get that data
       const matchesToRank = []
       matches.forEach((match) => matchesToRank.push(findIntersections(match)))
@@ -86,7 +88,7 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
 
     // Get latitude & longitude position based off the address of each match
     const getCoordinates = (rankedMatches) => {
-      if (rankedMatches) {
+      if (rankedMatches != null && rankedMatches.length > 0) {
         rankedMatches.forEach(rankedMatch =>{
          if(rankedMatch.match.address != null || rankedMatch.match.address !="" ){
           

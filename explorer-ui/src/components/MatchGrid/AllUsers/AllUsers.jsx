@@ -1,21 +1,10 @@
 import * as React from "react"
 import "../MatchGrid.css"
 import Geocode from "react-geocode";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  HStack,
-  IconButton,
-  Input,
-  Text,
-} from '@chakra-ui/react'
 Geocode.setApiKey("AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0");
 Geocode.setLanguage("en");
 Geocode.setLocationType("ROOFTOP");
 Geocode.enableDebug();
-import MatchCard from "../MatchCard/MatchCard"
 import MapContainer from "../../Mapping/MapContainer";
 import { useState, useEffect, useRef } from "react";
 import { ChakraProvider, theme } from "@chakra-ui/react";

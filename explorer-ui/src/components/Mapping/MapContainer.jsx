@@ -6,7 +6,6 @@ import {
   HStack,
   IconButton,
   Input,
-  SkeletonText,
   Text,
 } from "@chakra-ui/react";
 import { FaLocationArrow, FaTimes } from "react-icons/fa";
@@ -24,7 +23,7 @@ Geocode.setApiKey("AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0");
 Geocode.setLanguage("en");
 Geocode.setLocationType("ROOFTOP");
 Geocode.enableDebug();
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState} from "react";
 const libraries = ["places"];
 function MapContainer({ coordinates, currLocation}) {
   const { isLoaded } = useLoadScript({

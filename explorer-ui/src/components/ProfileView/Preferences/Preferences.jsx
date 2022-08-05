@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect,useCallback } from "react";
+import { useState, } from "react";
 import { useNavigate} from "react-router-dom";
 import "./Preferences.css";
 import NavBar from "../../Home/NavBar/NavBar";
@@ -12,7 +12,6 @@ import * as config from "../../../config";
 import Geocode from "react-geocode";
 // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
 Geocode.setApiKey("AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0");
-import Card from "../../Card/Card";
 export default function Preferences({ isLoggedIn, handleLogout}) {
   let interestsArr = interestsJSON.interests;
   let employment_fields = employmentJSON.employment;

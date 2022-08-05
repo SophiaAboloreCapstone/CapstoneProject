@@ -9,7 +9,6 @@ import { useState } from "react";
 export default function LoginForm({profileCreated, findProfile, handleLogin}) {
     const username = React.createRef();
     const password = React.createRef();
-    const [currentUser, setCurrentUser] = useState(null);
     const navigate = useNavigate();
     const handleSubmit = event => {
         event.preventDefault();

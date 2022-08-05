@@ -1,29 +1,25 @@
 import * as React from "react";
-// import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import LoggedOutView from "../LoggedOutView/LoggedOutView";
 import ProfileView from "../ProfileView/ProfileView";
 import Home from "../Home/Home";
-import MatchGrid from "../MatchGrid/MatchGrid";
 import ProfileDisplay from "../ProfileView/ProfileDisplay/ProfileDisplay";
 import RegisterForm from "../LoginForm/RegisterForm/RegisterForm";
 import NotFound from "../NotFound/NotFound";
 import Preferences from "../ProfileView/Preferences/Preferences";
 import * as config from "../../config";
 import { useState } from "react";
-import { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link,
 } from "react-router-dom";
 import PrivateRoutes from "../PrivateRoutes"
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("current_user_id") != null
+    localStorage.getItem("current_user_id") !== null
   );
   const [profileCreated, setProfileCreated] = useState(false);
   const [profileEdited, setProfileEdited] = useState(false);
@@ -58,13 +54,11 @@ export default function App() {
     localStorage.setItem("current_user_id", user["objectId"]);
     addAuthenticationHeader();
     setId(user.objectId);
-    console.log("user id: ", user.objectId)
     setIsLoggedIn(true);
   };
 
   const handleCreateProfile = (profileInfo) => {
     let ids = localStorage.getItem("current_user_id");
-    console.log("ids: ", ids)
     localStorage.setItem("current_user_id", profileInfo.user["objectId"]);
     addAuthenticationHeader();
     setProfile(profileInfo)
@@ -76,7 +70,6 @@ export default function App() {
       try {
         const res = await axios.get(`${config.API_BASE_URL}/matches`);
         setProfileList(res.data.profiles);
-        console.log("profile List :", res);
       } catch (err) {
         console.log(err);
       }
@@ -100,14 +93,13 @@ export default function App() {
                     handleCreateProfile={handleCreateProfile}
                     profileCreated={profileCreated}
                     profileEdited={profileEdited}
-                    isLoggedIn={isLoggedIn} handleLogout={handleLogout}
-                    
+                    isLoggedIn={isLoggedIn} handleLogout={handleLogout}      
                   />
                 }/>
                 
               <Route
                 path="/profileDisplay"
-                element={<ProfileDisplay profiles={profileList} userProfile={currUser}/>}
+                element={<ProfileDisplay profiles={profileList} userProfile={currUser} handleLogout={handleLogout}/>}
               />
             </Route>
             
@@ -123,7 +115,6 @@ export default function App() {
             
             <Route path="/notFound" element={<NotFound />} />
           </Routes>
-        {/* </main> */}
       </Router>
     </div>
   );

@@ -5,7 +5,6 @@ import  "../MatchCard/MatchCard.css"
 // } from "react-router-dom";
 
 export default function matchCard({ name, bio, picture, country, accomodation }) {
-  console.log("creating card")
   return (
     <section className="match-card">
       <div className="match-card">

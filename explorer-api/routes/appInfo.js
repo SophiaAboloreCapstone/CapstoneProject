@@ -2,7 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const Parse = require("parse/node");
-const { PARSE_APP_ID, PARSE_JAVASCRIPT_KEY, MASTER_KEY } = require("./config");
+const { PARSE_APP_ID, PARSE_JAVASCRIPT_KEY, MASTER_KEY } = require("../config");
 const { query } = require("express");
 const { Schema } = require("parse/node");
 const app = express();
@@ -12,8 +12,6 @@ app.use(morgan("tiny"));
 app.use(cors());
 
 Parse.initialize(PARSE_APP_ID, PARSE_JAVASCRIPT_KEY, MASTER_KEY);
-// Parse.initialize(appConfig.parse.PARSE_APP_ID);
-// Parse.masterKey = appConfig.parse.masterKey;
 Parse.serverURL = "https://parseapi.back4app.com";
 
 app.post("/register", async (req, res) => {
@@ -68,7 +66,7 @@ app.post("/profileInfo", async (req, res) => {
 
     profile.set("user", user);
 
-    await profile.save(); //(null, { useMasterKey: true });
+    await profile.save();
     res.status(201);
     res.send({ profile: profile });
   } catch (error) {

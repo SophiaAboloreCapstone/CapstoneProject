@@ -6,14 +6,11 @@ import {
   HStack,
   IconButton,
   Input,
-  SkeletonText,
   Text,
 } from "@chakra-ui/react";
 import { FaLocationArrow, FaTimes } from "react-icons/fa";
-import MatchCard from "../MatchGrid/MatchCard/MatchCard";
 import MatchDisplay from "../MatchGrid/MatchCard/MatchDisplay";
 import {
-  useJsApiLoader,
   GoogleMap,
   Marker,
   InfoWindow,
@@ -26,10 +23,7 @@ Geocode.setApiKey("AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0");
 Geocode.setLanguage("en");
 Geocode.setLocationType("ROOFTOP");
 Geocode.enableDebug();
-import { useRef, useState, useEffect } from "react";
-import { ChakraProvider, theme } from "@chakra-ui/react";
-// const { REACT_APP_GOOGLE_MAPS_API_KEY } = require("./config");
-// import { REACT_APP_GOOGLE_MAPS_API_KEY} from require('config');
+import { useRef, useState} from "react";
 const libraries = ["places"];
 function MapContainer({ coordinates, currLocation}) {
   const { isLoaded } = useLoadScript({
@@ -48,7 +42,7 @@ function MapContainer({ coordinates, currLocation}) {
   const [currProfile, setCurrProfile] = useState(null);
   const [attractionCoords, setAttractionCoords] = useState([])
   const origin = currLocation.position
-  const originString= currLocation.string;
+  const originString= currLocation.name;
   const onMarkerClick = (user, marker) => {
     setActiveProfile(true);
     calculateRouteBetweenUsers(user.user.address);
@@ -57,19 +51,9 @@ function MapContainer({ coordinates, currLocation}) {
     setshowingInfoWindow(true);
     setCurrProfile(user);
     generateAttractionCoordinates(user)
-    console.log("curr profile is changing state: ", currProfile)
 
   };
-  // const onMouseOver = (profile, marker) => {
-  //   console.log("user address: ", profile.address)
-  //   setSelectedPlace(profile.user.address);
-  //   setActiveMarker(marker);
-  //   setshowingInfoWindow(true);
-  //   setCurrProfile(profile)
-  //   // console.log("user is: ", user);
-  //   // setActiveProfile(user);
-  //   // calculateRouteBetweenUsers(user.address)
-  // };
+
   const onClose = async (e) => {
     if (showingInfoWindow) {
       setshowingInfoWindow(false);
@@ -84,54 +68,46 @@ function MapContainer({ coordinates, currLocation}) {
 
   if (!isLoaded) {
     return <></>
-    // return <SkeletonText />;
   }
 
   async function calculateRoute() {
     if (originRef.current.value === "" || destiantionRef.current.value === "") {
       return;
     }
-    // eslint-disable-next-line no-undef
     const directionsService = new google.maps.DirectionsService();
     const results = await directionsService.route({
       origin: originRef.current.value,
       destination: destiantionRef.current.value,
-      // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING,
     });
-    console.log("route is :", results)
     setDirectionsResponse(results);
-    setDistance(results.routes[0].legs[0].distance.text);
-    setDuration(results.routes[0].legs[0].duration.text);
+    const res = results.routes[0].legs[0];
+    setDistance(res.distance.text);
+    setDuration(res.duration.text);
   }
   async function calculateRouteBetweenUsers(profileLocation) {
-  console.log("called")
-    if (originString  === "" || String(profileLocation) === "") {
+    if (originString  === "" || String(profileLocation) === "" ||  String(profileLocation) === null) {
       return;
     }
-    // eslint-disable-next-line no-undef
     const directionsService = new google.maps.DirectionsService();
     const results = await directionsService.route({
-      origin: currLocation.string,
+      origin: currLocation.name,
       destination: profileLocation,
-      // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING,
     });
-    console.log("route is :", results)
     setDirectionsResponse(results);
-    // setDistance(results.routes[0].legs[0].distance.text);
-    // setDuration(results.routes[0].legs[0].duration.text);
   }
 
+  // Get latitude & longitude from address.
   const generateAttractionCoordinates = (currProfile) => {
     let attractions = currProfile.user.preferenceInfo.attractions;
-    console.log("profile I'm pulling attractions from: ", currProfile)
     if (attractions) {
       for (let i = 0; i < attractions.length; i++) {
-        if(( attractions[i] != null || attractions[i]!="")){ //&& profiles[i].preferenceInfo.visibility =="yes"){
+        if(( attractions[i] !== null || attractions[i]!=="")){ 
         Geocode.fromAddress(attractions[i]).then(
           (response) => {
-            const { lat, lng } = response.results[0].geometry.location;
+            const res = response.results[0].geometry
+            const { lat, lng } = res.location;
             setAttractionCoords(attractionCoords => [...attractionCoords,  {lat, lng}])
           },
           (error) => {
@@ -140,9 +116,7 @@ function MapContainer({ coordinates, currLocation}) {
         );
         }
       }
-      // Get latitude & longitude from address.
     }
-    console.log("got attractions: ", attractionCoords)
   };
 
   function clearRoute() {
@@ -154,9 +128,7 @@ function MapContainer({ coordinates, currLocation}) {
   }
 
   return (
-    // <ChakraProvider theme={theme}>
     <div className="map-container">
-      {/* <ChakraProvider theme={theme}></ChakraProvider> */}
     <Flex
       position="relative"
       flexDirection="column"
@@ -183,7 +155,7 @@ function MapContainer({ coordinates, currLocation}) {
               position={currLocation.position} 
               icon="http://maps.google.com/mapfiles/ms/icons/pink-dot.png"
                 />
-          {coordinates != null &&
+          {coordinates !== null &&
             coordinates.map((profile, idx) => {
               // TODO: Figure out a central location to pass in here
                // Maybe take in the users location when they register
@@ -191,13 +163,11 @@ function MapContainer({ coordinates, currLocation}) {
                 <div className="user-marker">
                   <Marker
                     position={profile.position}
-                    // onClick={onMarkerClick(profile.user)}
                     name={profile.user.username}
                     key={idx}
-                    // onMouseOver={() => onMouseOver(profile, idx)}
                     onClick={()=> onMarkerClick(profile, idx)}
                   />
-                  {activeProfile != false
+                  {activeProfile !== false
                     ?attractionCoords.map((coords, idx) => 
                     {
                       return(
@@ -214,7 +184,7 @@ function MapContainer({ coordinates, currLocation}) {
             );
           })}
           <div className="info-window">
-                  {currProfile != null
+                  {currProfile !== null
           ?<InfoWindow
                   position={currProfile.position}
                   marker={activeMarker}
@@ -235,15 +205,7 @@ function MapContainer({ coordinates, currLocation}) {
           {directionsResponse && (
             <DirectionsRenderer directions={directionsResponse} />
           )}
-           {/* <InfoWindow
-            marker={activeMarker}
-            visible={showingInfoWindow}
-            onClose={onClose}
-          >
-            <div>
-              <h4>{selectedPlace}</h4>
-            </div>
-          </InfoWindow> */}
+
         </GoogleMap>
       </Box>
       <Box
@@ -257,12 +219,12 @@ function MapContainer({ coordinates, currLocation}) {
       >
         <HStack spacing={2} justifyContent="space-between">
           <Box flexGrow={1}>
-            <Autocomplete color={"black"}>
+            <Autocomplete colorScheme={"black"}>
               <Input type="text" placeholder="Origin" color={"black"} ref={originRef} />
             </Autocomplete>
           </Box>
           <Box flexGrow={1}>
-            <Autocomplete color={"black"}>
+            <Autocomplete colorScheme={"black"}>
               <Input
                 type="text"
                 placeholder="Destination"
@@ -300,182 +262,13 @@ function MapContainer({ coordinates, currLocation}) {
         </HStack>
       </Box>
     </Flex>
-     {activeProfile != false
+     {activeProfile !== false
       ? <MatchDisplay name={currProfile.user.name} age={currProfile.user.age} bio={currProfile.user.bio} picture={currProfile.user.picture} country={currProfile.user.country} accomodation={currProfile.user.accomodations} preferences={currProfile.user.preferenceInfo.attractions}/>
       : <></>
       }
       
     </div>
-    // </ChakraProvider>
   );
 }
 
 export default MapContainer;
-// import React, {  useState , Component } from "react";
-// import "./Mapping.css";
-// import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
-// import { useEffect } from "react";
-// // import React, { useState } from 'react'
-// const mapStyles = {
-//   position: "absolute",
-//   width: "50%",
-//   height: "50%",
-// };
-
-// function MapContainer({otherUsers}) {
-//   // constructor(props){
-//   //   super(props)
-//   //   this.state{
-
-//   //   }
-//   // }
-
-// const [showingInfoWindow, setshowingInfoWindow] = useState(false);
-// const [activeMarker, setActiveMarker] = useState({})
-// const [selectedPlace, setSelectedPlace] = useState({})
-// const profiles = otherUsers
-// const cntr = {lat: 48.856614,
-//   lng: 2.3522219}
-// // useEffect(() =>{
-// //   const onMarkerClick(props, marker) =>{
-// //     setSelectedPlace(props)
-// //     setActiveMarker(marker)
-// //     setshowingInfoWindow(true)
-// //     }
-// // }, [])
-// useEffect(() =>{
-// const onMarkerClick = (props, marker) =>{
-//   setSelectedPlace(props)
-//   setActiveMarker(marker)
-//   setshowingInfoWindow(true)
-//   }
-//   const onClose = (e) => {
-//     if (showingInfoWindow) {
-//         setshowingInfoWindow(false);
-//         setActiveMarker(null)
-//     }
-//   }; onClose()
-// }, [])
-//     // setState({
-//     //   selectedPlace: props,
-//     //   activeMarker: marker,
-//     //   showingInfoWindow: true,
-//     // });
-// //   useEffect(() =>{
-// //   const onClose = async(e) => {
-// //     if (showingInfoWindow) {
-// //         setshowingInfoWindow(false);
-// //         setActiveMarker(null)
-// //     }
-// //   }
-// // }, []);
-// console.log("all other users: ",otherUsers)
-// console.log("center: ",cntr)
-//     return (
-//       <Map
-//         google={Map.google}
-//         zoom={14}
-//         style={mapStyles}
-//         initialCenter={{lat: 37.36883 , lng: -122.0363496}}
-//       >
-//         {otherUsers != null ? (
-//           otherUsers.map((profile, idx) => {
-//             return (
-//               <div className="profile-marker">
-//                 {profile != null
-//                 ?
-//                 <div> <Marker
-//                 position={profile.position}
-//                   onClick={() => onMarkerClick(profile.user.address, idx)}
-//                   name={profile.user.username}
-//                 />
-//                 <InfoWindow
-//                   marker={activeMarker}
-//                   visible={showingInfoWindow}
-//                   onClose={onClose}
-//                 >
-//                   <div>
-//                     <h4>{selectedPlace}</h4>
-//                   </div>
-//                 </InfoWindow>
-//                 </div>
-//                 : <h1>No profiles to generate a map from</h1>
-//           }
-//               </div>
-//             );
-//           })
-//         ) : (
-//           <></>
-//         )}
-//       </Map>
-//     );
-//   }
-
-// // export class MapContainer extends Component {
-// //   // constructor(props){
-// //   //   super(props)
-// //   //   this.state{
-
-// //   //   }
-// //   // }
-// //   state = {
-// //     showingInfoWindow: false, // Hides or shows the InfoWindow
-// //     activeMarker: {}, // Shows the active marker upon click
-// //     selectedPlace: {}, // Shows the InfoWindow to the selected place upon a marker
-// //   };
-// //   onMarkerClick = (props, marker, e) =>
-// //     setState({
-// //       selectedPlace: props,
-// //       activeMarker: marker,
-// //       showingInfoWindow: true,
-// //     });
-
-// //   onClose = (props) => {
-// //     if (state.showingInfoWindow) {
-// //     setState({
-// //         showingInfoWindow: false,
-// //         activeMarker: null,
-// //       });
-// //     }
-// //   };
-
-// //   render() {
-// //     return (
-// //       <Map
-// //         google={this.props.google}
-// //         zoom={14}
-// //         style={mapStyles}
-// //         initialCenter={this.props.center}
-// //       >
-// //         {this.props.allCoordsAndMatches != null ? (
-// //           allCoordsAndMatches.map((profile, idx) => {
-// //             return (
-// //               <div className="profile-marker">
-// //                 <Marker
-// //                 position={profile.position}
-// //                   onClick={this.onMarkerClick}
-// //                   name={profile.user.username}
-// //                 />
-// //                 <InfoWindow
-// //                   marker={this.state.activeMarker}
-// //                   visible={this.state.showingInfoWindow}
-// //                   onClose={this.onClose}
-// //                 >
-// //                   <div>
-// //                     <h4>{this.state.selectedPlace.name}</h4>
-// //                   </div>
-// //                 </InfoWindow>
-// //               </div>
-// //             );
-// //           })
-// //         ) : (
-// //           <></>
-// //         )}
-// //       </Map>
-// //     );
-// //   }
-// // }
-
-// export default GoogleApiWrapper({
-//   apiKey: "AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0",
-// })(MapContainer);

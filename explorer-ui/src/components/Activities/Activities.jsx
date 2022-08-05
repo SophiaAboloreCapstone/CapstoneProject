@@ -86,7 +86,7 @@ const getXID = async(event, id) => {
   return (
     <div className="activities">
       <div className="activities-grid">
-      {eventData != [] ? (
+      {eventData != null && eventData.length >0 ? (
             eventData.map((event, idx) => {
               return (
                 <div className="activities">

@@ -86,7 +86,7 @@ function MapContainer({ coordinates, currLocation}) {
     setDuration(res.duration.text);
   }
   async function calculateRouteBetweenUsers(profileLocation) {
-    if (originString  === "" || String(profileLocation) === "" || profileLocation == null) {
+    if (originString  === "" || String(profileLocation) === "" || String(profileLocation) == null) {
       return;
     }
     const directionsService = new google.maps.DirectionsService();

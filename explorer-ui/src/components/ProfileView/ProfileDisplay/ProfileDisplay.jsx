@@ -67,7 +67,7 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
   
       // Calculate the intersections between interests and attractions
     function findIntersections(match){
-      if(match.preferenceInfo.interests && userProfile.preferenceInfo.interests){
+      if((match.preferenceInfo.interests != null && userProfile.preferenceInfo.interests != null) && (match.preferenceInfo.interests != null && userProfile.preferenceInfo.interests != null)){
         let interstIntersection = userProfile.preferenceInfo.interests.filter(x => match.preferenceInfo.interests.includes(x));
         let attractionIntersection = userProfile.preferenceInfo.attractions.filter(y =>  match.preferenceInfo.attractions.includes(y));
         return {"interestIntersection": interstIntersection, "attractionIntersection": attractionIntersection, "match": match};

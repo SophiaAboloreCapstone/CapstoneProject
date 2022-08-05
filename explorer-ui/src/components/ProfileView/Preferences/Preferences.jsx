@@ -41,7 +41,6 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
   // Update the state array for the users interests
   function handleInterestSelected(event, interest) {
     event.preventDefault();
-    setInterests((interests) => [...interests, interest]);
     setPreferenceInfo({
       interests: interests,
       attractions: preferenceInfo.attractions,
@@ -50,16 +49,13 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: preferenceInfo.currLocation,
       visibility: preferenceInfo.visibility,
     });
+    setInterests((interests) => [...interests, interest]);
     navigate("/profileDisplay")
   }
 
   // Update the state array for the users attractions interests
   function handleAttractionsSelected(event, attraction) {
     event.preventDefault();
-    setTouristAttractions((touristAttractions) => [
-      ...touristAttractions,
-      attraction,
-    ]);
     setPreferenceInfo({
       interests: preferenceInfo.interests,
       attractions: touristAttractions,
@@ -68,12 +64,15 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: preferenceInfo.currLocation,
       visibility: preferenceInfo.visibility,
     });
+    setTouristAttractions((touristAttractions) => [
+      ...touristAttractions,
+      attraction,
+    ]);
   }
 
   // Update the state array for the users attractions interests
   function handleOccupationsSelected(event, occupation) {
     event.preventDefault();
-    setEmployment(occupation.current.value);
     setPreferenceInfo({
       interests: preferenceInfo.interests,
       attractions: preferenceInfo.attractions,
@@ -82,12 +81,12 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: preferenceInfo.currLocation,
       visibility: preferenceInfo.visibility,
     });
+    setEmployment(occupation.current.value);
   }
 
   // Update the state array for the users attractions interests
   function handleBudgetSelected(event, selectedBudget) {
     event.preventDefault();
-    setBudget(selectedBudget.current.value);
     setPreferenceInfo({
       interests: preferenceInfo.interests,
       attractions: preferenceInfo.attractions,
@@ -96,25 +95,25 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: preferenceInfo.currLocation,
       visibility: preferenceInfo.visibility,
     });
+    setBudget(selectedBudget.current.value);
   }
 
   // Update the state array for the users attractions interests
   function handleVisibilitySelected(event, visibililityChoice) {
     event.preventDefault();
-    setVisibility(visibililityChoice.current.value);
     setPreferenceInfo({
       interests: preferenceInfo.interests,
       attractions: preferenceInfo.attractions,
       occupation: preferenceInfo.occupation,
       budget: preferenceInfo.budget,
       currLocation: preferenceInfo.currLocation,
-      visibility: visibility,
+      visibility: visibilityOption.current.value,
     });
+    setVisibility(visibililityChoice.current.value);
   }
   // Update the state array for the users attractions interests
   function handleLocationSet(event, region) {
     event.preventDefault();
-    setCurrLocation(region.current.value);
     setPreferenceInfo({
       interests: preferenceInfo.interests,
       attractions: preferenceInfo.attractions,
@@ -123,6 +122,7 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: currLocation,
       visibility: preferenceInfo.visibility,
     });
+    setCurrLocation(region.current.value);
 
     // Get latitude & longitude from address.
     Geocode.fromAddress(region.current.value).then(

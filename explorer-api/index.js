@@ -56,25 +56,6 @@ app.get("/currUser", (req, res) => {
   }
 });
 
-app.post("/messages", async (req, res) => {
-  try {
-    const message = new Parse.Object("Messages", req.body);
-
-    currentUserId = req.headers["current_user_id"];
-    const user = new Parse.User();
-    user.id = currentUserId;
-
-    message.set("user", user);
-
-    await message.save();
-    res.status(201);
-    res.send({ message: message });
-  } catch (error) {
-    res.status(400);
-    res.send({ error: "Create message failed: " + error });
-  }
-});
-
 // Profile Information
 
 app.post("/profileInfo", async (req, res) => {

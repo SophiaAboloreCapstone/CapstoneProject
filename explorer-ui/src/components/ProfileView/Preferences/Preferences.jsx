@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect,useCallback } from "react";
+import { useState, } from "react";
 import { useNavigate} from "react-router-dom";
 import "./Preferences.css";
 import NavBar from "../../Home/NavBar/NavBar";
@@ -10,14 +10,13 @@ import budgets from "../../../data/budget_ranges.json";
 import axios from "axios";
 import * as config from "../../../config";
 import Geocode from "react-geocode";
+import Loading from "../../Loading/Loading"
 // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
 Geocode.setApiKey("AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0");
-import Card from "../../Card/Card";
 export default function Preferences({ isLoggedIn, handleLogout}) {
   let interestsArr = interestsJSON.interests;
   let employment_fields = employmentJSON.employment;
   let budgestsArr = budgets.ranges;
-  console.log("interestsArr: ", interestsArr);
   const [preferenceInfo, setPreferenceInfo] = useState({
     interests: new Set(),
     attractions: new Set(),
@@ -26,6 +25,7 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
     currLocation: "",
     visibility: "",
   });
+  const [loading, setLoading] = useState(false);
   const [employment, setEmployment] = useState();
   const [interests, setInterests] = useState([]);
   const [touristAttractions, setTouristAttractions] = useState([]);
@@ -43,7 +43,6 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
   // Update the state array for the users interests
   function handleInterestSelected(event, interest) {
     event.preventDefault();
-    setInterests((interests) => [...interests, interest]);
     setPreferenceInfo({
       interests: interests,
       attractions: preferenceInfo.attractions,
@@ -52,18 +51,13 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: preferenceInfo.currLocation,
       visibility: preferenceInfo.visibility,
     });
+    setInterests((interests) => [...interests, interest]);
     navigate("/profileDisplay")
-    console.log("preferenceInfo: ", preferenceInfo);
-    console.log("interests so far: ", interests);
   }
 
   // Update the state array for the users attractions interests
   function handleAttractionsSelected(event, attraction) {
     event.preventDefault();
-    setTouristAttractions((touristAttractions) => [
-      ...touristAttractions,
-      attraction,
-    ]);
     setPreferenceInfo({
       interests: preferenceInfo.interests,
       attractions: touristAttractions,
@@ -72,14 +66,15 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: preferenceInfo.currLocation,
       visibility: preferenceInfo.visibility,
     });
-    console.log("preferenceInfo: ", preferenceInfo);
-    console.log("attractions so far: ", touristAttractions);
+    setTouristAttractions((touristAttractions) => [
+      ...touristAttractions,
+      attraction,
+    ]);
   }
 
   // Update the state array for the users attractions interests
   function handleOccupationsSelected(event, occupation) {
     event.preventDefault();
-    setEmployment(occupation.current.value);
     setPreferenceInfo({
       interests: preferenceInfo.interests,
       attractions: preferenceInfo.attractions,
@@ -88,13 +83,12 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: preferenceInfo.currLocation,
       visibility: preferenceInfo.visibility,
     });
-    console.log("occupation is: ", employment);
+    setEmployment(occupation.current.value);
   }
 
   // Update the state array for the users attractions interests
   function handleBudgetSelected(event, selectedBudget) {
     event.preventDefault();
-    setBudget(selectedBudget.current.value);
     setPreferenceInfo({
       interests: preferenceInfo.interests,
       attractions: preferenceInfo.attractions,
@@ -103,27 +97,25 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: preferenceInfo.currLocation,
       visibility: preferenceInfo.visibility,
     });
-    console.log("budget is: ", budget);
+    setBudget(selectedBudget.current.value);
   }
 
   // Update the state array for the users attractions interests
   function handleVisibilitySelected(event, visibililityChoice) {
     event.preventDefault();
-    setVisibility(visibililityChoice.current.value);
     setPreferenceInfo({
       interests: preferenceInfo.interests,
       attractions: preferenceInfo.attractions,
       occupation: preferenceInfo.occupation,
       budget: preferenceInfo.budget,
       currLocation: preferenceInfo.currLocation,
-      visibility: visibility,
+      visibility: visibilityOption.current.value,
     });
-    console.log("visibility is: ", visibililityChoice);
+    setVisibility(visibililityChoice.current.value);
   }
   // Update the state array for the users attractions interests
   function handleLocationSet(event, region) {
     event.preventDefault();
-    setCurrLocation(region.current.value);
     setPreferenceInfo({
       interests: preferenceInfo.interests,
       attractions: preferenceInfo.attractions,
@@ -132,24 +124,23 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       currLocation: currLocation,
       visibility: preferenceInfo.visibility,
     });
+    setCurrLocation(region.current.value);
+
     // Get latitude & longitude from address.
     Geocode.fromAddress(region.current.value).then(
       (response) => {
         const { lat, lng } = response.results[0].geometry.location;
         setPosition({ lat: lat, lng: lng });
-        console.log(lat, lng);
       },
       (error) => {
         console.error(error);
       }
     );
-
-    console.log("current location is: ", currLocation);
   }
 
 // Send the profile information to the database
   function handleSubmit(event) {
-    console.log("submitted");
+    setLoading(true)
     event.preventDefault();
     const preferences = async () => {
       try {
@@ -166,15 +157,15 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       }
     };
     preferences();
-    console.log("preferences posted!");
   }
 
   // RETURN
   return (
     <div className="preferences">
-       <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>
+      {!loading
+      ? (<div>
+         <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>
       <div className="questionaire">  
-      {/* onSubmit={(event) => handleSubmit(event)}> */}
         <div className="employment">
           <h3>What best describes the field you work in?</h3>
           <select
@@ -202,7 +193,7 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
                     handleInterestSelected(event, interest.id)
                   }
                 >
-                  {interest.string}
+                  {interest.name}
                 </button>
               </div>
             ))}
@@ -268,6 +259,12 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       <button className="profile-complete" type="click" onClick={(event) => handleSubmit(event)}>
           Complete Profile and View Matches
         </button>
+      </div>)
+      : (<div>
+        <Loading loading={loading}/>
+      </div>)
+      }
+      
     </div>
   );
 }

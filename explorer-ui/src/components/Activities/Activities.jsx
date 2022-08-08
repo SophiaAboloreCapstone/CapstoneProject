@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Card from "../Card/Card";
 import "./Activities.css"
 import AttractionContainer from "./AttractionContainer";
+import Loading from "../Loading/Loading";
 //You should get your API key at https://opentripmap.io
 const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
   // Init global variables for paging:
@@ -20,12 +21,12 @@ const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
 export default function Activities({region, latitude, longitude, handleAttractionsSelected}) {
   const [eventData, setEventData] = useState([]);
   const [xid, setXID] = useState([]);
-  const [events, setEvents] = useState([]);
-
+  const [offset, setOffset] = useState(0);
+  const [loading, setLoading] = useState(false);
 // Fetch data from the open trips maps API
   function apiGet(method, query) {
     return new Promise(function (resolve, reject) {
-      var otmAPI =
+      let otmAPI =
         "https://api.opentripmap.com/0.1/en/places/" +
         method +
         "?apikey=" +
@@ -41,26 +42,6 @@ export default function Activities({region, latitude, longitude, handleAttractio
         });
     });
   }
-
-  // This block uses the placename from input textbox and gets place location from API. If place was found it calls list loading function:
-
-  // function handleTripSubmit() {
-  //   console.log("clicked");
-  //   let name = region;
-  //   apiGet("geoname", "name=" + name).then(function (data) {
-  //     let message = "Name not found";
-  //     if (data.status == "OK") {
-  //       message = data.name + ", " +region;
-  //       lon = longitude;
-  //       lat = latitude;
-  //       firstLoad();
-  //     }
-  //   });
-  //   // return;
-  // }
-  // handleTripSubmit()
-
-  // This function gets total objects count within 1000 meters from specified location (lon, lat) and then loads first objects page:
 
   function firstLoad() {
     apiGet(
@@ -80,17 +61,15 @@ export default function Activities({region, latitude, longitude, handleAttractio
       "radius",
       `radius=1000&limit=${pageLength}&offset=${offset}&lon=${longitude}&lat=${latitude}&rate=2&format=json`
     ).then(function (data) {
-      console.log("data: ", data);
-      data.forEach(element => setEventData(eventData => [...eventData, element]));
-      console.log("event data: ", eventData);
+      data.forEach(element => setEventData([...eventData, element]));
     });
+    setLoading(false)
   }
 
  function loadMoreActivities(event){
+  setLoading(true)
   event.preventDefault();
-  offset += pageLength;
-  console.log("offset: ", offset)
-  console.log("page length: ", pageLength)
+  setOffset(offset += pageLength)
   loadList();
  }
 
@@ -98,13 +77,9 @@ export default function Activities({region, latitude, longitude, handleAttractio
       // This function create a list item at the left pane:
 const getXID = async(event, id) => {
   event.preventDefault();
-  console.log("events are: ",events)
   try{
-      const xidData = await apiGet("xid/" + id.xid)
-      setXID(xidData);
-      console.log("xid list so far: ", xid)
-      console.log("xid is: ", xidData); 
-    // return xidList
+      const xidData = apiGet("xid/" + id.xid)
+      setXID([...xid, xidData]);
   }
   catch(error){
     console.log(error);
@@ -114,7 +89,7 @@ const getXID = async(event, id) => {
   return (
     <div className="activities">
       <div className="activities-grid">
-      {eventData != [] ? (
+      {eventData !== null && eventData.length >0 ? (
             eventData.map((event, idx) => {
               return (
                 <div className="activities">
@@ -125,7 +100,6 @@ const getXID = async(event, id) => {
                   handleAttractionsSelected={handleAttractionsSelected}
                   key={idx}
                 />
-                {/* <button className="more-info" type="click" onclick={(event) => getXID(event, event.xid)}>More Info</button> */}
                 {xid.xid == event.xid
                 ? <AttractionContainer name={xid.name} image={xid.image} description={xid.info.descr} source={xid.wikipedia} />
                 : <></>
@@ -137,9 +111,18 @@ const getXID = async(event, id) => {
             <p>Sorry no activities available</p>
           )}
       </div>
-      <button className="next_button" type="click" onClick={(e) => loadMoreActivities(e)}>
+      {
+        !loading
+        ?(<div>
+           <button className="next_button" type="click" onClick={(e) => loadMoreActivities(e)}>
           Load More Attractions
         </button>
+        </div>)
+        :(<div>
+          <Loading loading={loading}/>
+        </div>)
+      }
+     
     </div>
 
   );

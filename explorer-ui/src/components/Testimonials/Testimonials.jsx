@@ -1,7 +1,7 @@
 import * as React from "react"
 import "./Testimonials.css"
-const colors = ["#000000", "#808080", "#000000"];
-const delay = 2500;
+const COLORS = ["#000000", "#808080", "#000000"];
+const DELAY = 2500;
 
 export default function Testimonials() {
   const [index, setIndex] = React.useState(0);
@@ -18,9 +18,9 @@ export default function Testimonials() {
     timeoutRef.current = setTimeout(
       () =>
         setIndex((prevIndex) =>
-          prevIndex === colors.length - 1 ? 0 : prevIndex + 1
+          prevIndex === COLORS.length - 1 ? 0 : prevIndex + 1
         ),
-      delay
+      DELAY
     );
 
     return () => {
@@ -34,7 +34,7 @@ export default function Testimonials() {
         className="slideshowSlider"
         style={{ transform: `translate3d(${-index * 100}%, 0, 0)` }}
       >
-        {colors.map((backgroundColor, index) => (
+        {COLORS.map((backgroundColor, index) => (
           <div
             className="slide"
             key={index}
@@ -44,7 +44,7 @@ export default function Testimonials() {
       </div>
 
       <div className="slideshowDots">
-        {colors.map((_, idx) => (
+        {COLORS.map((_, idx) => (
           <div
             key={idx}
             className={`slideshowDot${index === idx ? " active" : ""}`}

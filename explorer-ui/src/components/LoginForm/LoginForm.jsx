@@ -4,16 +4,17 @@ import axios from "axios"
 import * as config from "../../config"
 import styled from "styled-components";
 import Footer from "../Home/Footer/Footer"
-import ProfileView from "../ProfileView/ProfileView";
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate} from "react-router-dom"
+import Loading from "../Loading/Loading";
 import { useState } from "react";
-import NotFound from "../NotFound/NotFound";
+
 export default function LoginForm({profileCreated, findProfile, handleLogin}) {
     const username = React.createRef();
     const password = React.createRef();
-    const [currentUser, setCurrentUser] = useState(null);
     const navigate = useNavigate();
+    const [loading, setLoading] = React.useState(false);
     const handleSubmit = event => {
+      setLoading(true)
         event.preventDefault();
 
         const login = async () => {
@@ -22,10 +23,9 @@ export default function LoginForm({profileCreated, findProfile, handleLogin}) {
                     "username" : username.current.value,
                     "password" : password.current.value
                     })          
-                console.log("res.data.user: ", res.data.user)  
                 handleLogin(res.data.user)
                 findProfile(res.data.user)
-                console.log("logged in")
+
                 if(profileCreated){
                   navigate("/profileView");
                 }
@@ -37,7 +37,6 @@ export default function LoginForm({profileCreated, findProfile, handleLogin}) {
             } catch (err) {
                 alert(err)
                 console.log(err)
-                // setSuccessful("failure")
             }
         }
         login()
@@ -125,7 +124,9 @@ const HorizontalRule = styled.hr`
   
     return (
       <div className="login-form">
-      <MainContainer>
+        {!loading
+        ?(<div>
+                <MainContainer>
       <h2 className="welcome-text">Welcome Back</h2>
       <div className="login-form-input-container">
         <input className="login-input" ref={username} type="text" placeholder="Username" />
@@ -143,21 +144,13 @@ const HorizontalRule = styled.hr`
         </Link>
       </div>
     </MainContainer>
+        </div>)
+      :(<div>
+        <Loading loading={loading}/>
+      </div>)
+      }
+
     <Footer />
     </div>
-      // <div className="login">
-      // <form onSubmit={handleSubmit}>
-      //   <div className="title">Login</div>
-      //   <label>
-      //     <span>Username</span>
-      //     <input ref={username}></input>
-      //   </label>
-      //   <label>
-      //     <span>Password</span>
-      //     <input type="password" ref={password}></input>
-      //   </label>
-      //   <button type="submit">Login</button>
-      // </form>
-      // </div>
     )
 }

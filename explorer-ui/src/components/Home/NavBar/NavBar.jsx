@@ -2,10 +2,13 @@ import * as React from "react";
 import "./NavBar.css";
 import Logo from "../Logo/Logo";
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 export default function NavBar({ isLoggedIn, handleLogout }) {
-  const onClick = (event) => {
+  const navigate = useNavigate();
+  const onLogoutClick = (event) => {
     event.preventDefault();
     handleLogout();
+    navigate("/");
   };
 
   return (
@@ -14,6 +17,7 @@ export default function NavBar({ isLoggedIn, handleLogout }) {
         <div className="navbar-logo">
           <Logo />
         </div>
+        {/* These links are just here for decoration and to make the page look like other web applications */}
         <ul className="links">
           <li>
             <a className="pages" href="">
@@ -21,27 +25,27 @@ export default function NavBar({ isLoggedIn, handleLogout }) {
             </a>
           </li>
           <li>
-            <a className="pages" href="#Buy">
+            <a className="pages" href="">
               Learn
             </a>
           </li>
           <li>
-            <a className="pages" href="#About">
+            <a className="pages" href="">
               Safety
             </a>
           </li>
           <li>
-            <a className="pages" href="#Contact">
+            <a className="pages" href="">
               Support
             </a>
           </li>
           <li>
-            <a className="pages" href="#Contact">
+            <a className="pages" href="">
               Download
             </a>
           </li>
         </ul>
-        {isLoggedIn != true
+        {isLoggedIn !== true
         ? <div className="nav-directory">
           <li>
             <Link 
@@ -54,12 +58,9 @@ export default function NavBar({ isLoggedIn, handleLogout }) {
         </div>
       : <div className="nav-directory">
       <li>
-        <Link 
-        to="/login">
-        <button className="login-button" href="">
+        <button onClick={(event) => onLogoutClick(event)} className="login-button" href="">
           Logout
         </button>
-        </Link>
       </li>
     </div>
 }

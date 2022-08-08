@@ -188,7 +188,7 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
                     handleInterestSelected(event, interest.id)
                   }
                 >
-                  {interest.string}
+                  {interest.name}
                 </button>
               </div>
             ))}

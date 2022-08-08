@@ -8,7 +8,7 @@ import RegisterForm from "../LoginForm/RegisterForm/RegisterForm";
 import NotFound from "../NotFound/NotFound";
 import Preferences from "../ProfileView/Preferences/Preferences";
 import * as config from "../../config";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -43,6 +43,19 @@ export default function App() {
   };
 
   addAuthenticationHeader();
+  const makeAPICall = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/cors', { mode: 'cors' });
+      const data = await response.json();
+      console.log({ data })
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+  useEffect(() => {
+    makeAPICall();
+  }, [])
 
   const handleLogout = () => {
     localStorage.removeItem("current_user_id");

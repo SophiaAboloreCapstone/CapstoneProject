@@ -7,11 +7,12 @@ import months from "../../data/months.json"
 import Footer from "../Home/Footer/Footer";
 import NavBar from "../Home/NavBar/NavBar";
 import { useNavigate } from "react-router-dom";
+import Resizer from "react-image-file-resizer";
+
 export default function ProfileView({
   handleCreateProfile,
   profileCreated,
   profileEdited,
-  setProfile,
   isLoggedIn, handleLogout
 }) {
 
@@ -29,6 +30,8 @@ export default function ProfileView({
 
   let countryList = countries.list;
   let monthList = months.list;
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     // setProfile({});
@@ -50,7 +53,6 @@ export default function ProfileView({
           { maxContentLength: Infinity, maxBodyLength: Infinity }
         );
         handleCreateProfile(res.data.profile);
-        // setProfile(res.data.profile);
         navigate("/preferences")
         
       } catch (err) {
@@ -61,30 +63,42 @@ export default function ProfileView({
     profile();
   };
 
-  let base64code = "";
-  const onChange = (e) => {
-    const files = e.target.files;
-    const file = files[0];
-    getBase64(file);
-  };
-  const onLoad = (fileString) => {
-    base64code = fileString;
-    setPicture(base64code);
-  };
-  const getBase64 = (file) => {
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      onLoad(reader.result);
-    };
-  };
+  const [croppedImg, setCroppedImg] = React.useState()
+  const fileChangedHandler =(event) => {
+    var fileInput = false;
+    if (event.target.files[0]) {
+      fileInput = true;
+    }
+    if (fileInput) {
+      try {
+        Resizer.imageFileResizer(
+          event.target.files[0],
+          300,
+          300,
+          "JPEG",
+          70,
+          0,
+          (uri) => {
+            console.log("uri:", uri);
+            setPicture(uri);
+          },
+          "base64",
+          200,
+          200
+        );
+        // getBase64(croppedImg);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
 
 
   React.useEffect(() => {
     const fetchProfileInfo = (async () => {
       try {
         const res = await axios.get(`${config.API_BASE_URL}/profileInfo`);
-        setProfile(res.data.profileInfo[res.data.profileInfo.length - 1]);
+        // setProfile(res.data.profileInfo[res.data.profileInfo.length - 1]);
       } catch (err) {
         console.log(err);
       }
@@ -94,7 +108,7 @@ export default function ProfileView({
     const fetchProfiles = (async () => {
       try {
         const res = await axios.get(`${config.API_BASE_URL}/matches`);
-        setProfiles(res.data.profiles);
+        // setProfiles(res.data.profiles);
 
       } catch (err) {
         console.log(err);
@@ -124,8 +138,8 @@ export default function ProfileView({
                 id="profile-picture"
                 name="picture"
                 accept="image/*"
-                value={base64code}
-                onChange={onChange}
+                // value={base64code}
+                onChange={fileChangedHandler}
               ></input>
             </label>
             <label>
@@ -167,7 +181,6 @@ export default function ProfileView({
             </label>
             <button type="submit">Create Profile</button>
           </form>
-        {/* <AllUsers profiles={profiles} />  */}
         <Footer />
         </div>
       ) 

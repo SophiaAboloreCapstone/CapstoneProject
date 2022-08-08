@@ -7,7 +7,7 @@ import Footer from "./Footer/Footer"
 export default function Home({ isLoggedIn, handleLogout }) {
     return (
         <div className="home">
-            <NavBar  isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>
+            <NavBar  isLoggedIn={false} handleLogout={handleLogout}/>
             <Hero />
             <Testimonials />
             <Footer />

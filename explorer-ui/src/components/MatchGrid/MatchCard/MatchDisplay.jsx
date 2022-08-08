@@ -5,7 +5,6 @@ import  "../MatchCard/MatchDisplay.css"
 // } from "react-router-dom";
 
 export default function MatchDisplay({ name, bio, picture, country, accomodation }) {
-  console.log("creating card")
   return (
     <section className="match-display">
       <div className="match-card">

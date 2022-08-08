@@ -3,7 +3,6 @@
     margin: 0 auto;
     display: grid;
     gap: 1rem;
-    /* #ffd9e3(166, 224, 255); */
   }
   @media (min-width: 1200px) {
     .activities-grid { grid-template-columns: repeat(4, 1fr); }

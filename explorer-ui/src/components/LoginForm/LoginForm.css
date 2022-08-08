@@ -41,8 +41,7 @@ body{
 .welcome-text{
     margin: 3rem 0 2rem 0;
 }
-/* background-color: #f2ed01;
-  color:#f7a9e3; */
+
 .login-page-button{
     background: linear-gradient(to right, #f2ee018d 0%, #f2ed01 79%);
     text-transform: uppercase;

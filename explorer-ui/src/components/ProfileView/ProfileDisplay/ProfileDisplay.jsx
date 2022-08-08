@@ -1,30 +1,19 @@
 import * as React from "react";
-import Style from "./ProfileDisplay.css";
-
-import { useState, useEffect , useContext, useRef} from "react";
+import { useState, useEffect } from "react";
 import MatchGrid from "../../MatchGrid/MatchGrid";
 import MapContainer from "../../Mapping/MapContainer";
 import Geocode from "react-geocode";
+import "../ProfileDisplay/ProfileDisplay.css"
 import Navbar from "../../Home/NavBar/NavBar"
 Geocode.setApiKey("AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0");
 Geocode.setLanguage("en");
 Geocode.setLocationType("ROOFTOP");
 Geocode.enableDebug();
-import { Button } from '@material-ui/core';
-import { NavHashLink as NavLink } from 'react-router-hash-link';
 import { makeStyles } from '@material-ui/core/styles';
-// import { ThemeContext } from "./ThemeContext"
 import { themeData } from './ThemeData'
-import {
-  FaTwitter,
-  FaLinkedin,
-  FaGithub,
-  FaYoutube,
-  FaBlogger,
-} from 'react-icons/fa';
 
 import { ChakraProvider, theme } from "@chakra-ui/react";
-export default function ProfileDisplay({profiles, userProfile}) {
+export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
   const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
   const [matches, setMatches] = useState([]);
   const [rankedMatches, setRankedMatches] = useState([])
@@ -48,25 +37,28 @@ export default function ProfileDisplay({profiles, userProfile}) {
   // Get the list of matches
     const getMatches = () => {
       const profilesToAdd = new Set();
-      for (let i = 0; i <Object.keys(profiles).length; i++) {
+
+      if(profiles !== null && Object.keys(profiles).length > 0){
+      Object.values(profiles).forEach(profile => {
         if (
-          profiles[i].country === userProfile.country 
+          profile.country === userProfile.country 
           &&
-          profiles[i].travelMonth == userProfile.travelMonth &&
-          profiles[i].accomodation == userProfile.accomodation
+          profile.travelMonth === userProfile.travelMonth &&
+          profile.accomodation === userProfile.accomodation
         ) {
-          profilesToAdd.add(profiles[i])
+          profilesToAdd.add(profile)
         }
       }
+        )
       setMatches([...matches, ...profilesToAdd])
-      
+    }
     };
   
       // Calculate the intersections between interests and attractions
     function findIntersections(match){
-      if(match.preferenceInfo.interests && userProfile.preferenceInfo.interests){
-        let interstIntersection = userProfile.preferenceInfo.interests.filter(x => match.preferenceInfo.interests.includes(x));
-        let attractionIntersection = userProfile.preferenceInfo.attractions.filter(y =>  match.preferenceInfo.attractions.includes(y));
+      if((match.preferenceInfo.interests !== null && userProfile.preferenceInfo.interests !== null) && (match.preferenceInfo.interests !== null && userProfile.preferenceInfo.interests !== null)){
+        const interstIntersection = userProfile.preferenceInfo.interests.filter(x => match.preferenceInfo.interests.includes(x));
+        const attractionIntersection = userProfile.preferenceInfo.attractions.filter(y =>  match.preferenceInfo.attractions.includes(y));
         return {"interestIntersection": interstIntersection, "attractionIntersection": attractionIntersection, "match": match};
       }
       return {"interestIntersection": {}, "attractionIntersection": {}, "match": match};
@@ -74,7 +66,7 @@ export default function ProfileDisplay({profiles, userProfile}) {
     
     // Rank the matches based off number of intersections in descending order 
     const rankMatches = (matches) =>{
-      if(matches){
+      if(matches !== null && matches.length > 0){
       // Create a state to keep track of the intersection data and iterate through each match to get that data
       const matchesToRank = []
       matches.forEach((match) => matchesToRank.push(findIntersections(match)))
@@ -84,23 +76,23 @@ export default function ProfileDisplay({profiles, userProfile}) {
     }
 
     // Get latitude & longitude position based off the address of each match
-    const getCoordinates = (rankedMatches) => {
-      if (rankedMatches) {
-        for (let i = 0; i < rankedMatches.length; i++) {
-          if(rankedMatches[i].match.address != null || rankedMatches[i].match.address !="" ){
-          
-          Geocode.fromAddress(rankedMatches[i].match.address).then(
-            (response) => {
-              const { lat, lng } = response.results[0].geometry.location;
-              setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {id: i, position: {lat, lng}, user: matches[i]}])
+    const getCoordinates = async(rankedMatches) => {
+      if (rankedMatches !== null && rankedMatches.length > 0) {
+        rankedMatches.forEach(async rankedMatch =>{
+         if(rankedMatch.match.address !== null || rankedMatch.match.address !=="" ){
+          try{
+            const response = await Geocode.fromAddress(rankedMatch.match.address);
+            const res = response.results[0].geometry;
+              const { lat, lng } = res.location;
+              setMatchesPlusCoordinates(matchesPlusCoordinates => [...matchesPlusCoordinates, {position: {lat, lng}, user: rankedMatch.match}])
               
-            },
-            (error) => {
-              console.error(error);
-            }
-          );
+          }
+          catch(error){
+            console.error(error);
+          }
         }
         }
+        )
         setCoordsLoaded(true);
       }
     };
@@ -110,7 +102,7 @@ export default function ProfileDisplay({profiles, userProfile}) {
       Geocode.fromAddress(userProfile.address).then(
         (response) => {
           const { lat, lng } = response.results[0].geometry.location;
-          setUserCoordinates({"string": userProfile.address, "position": {lat, lng}})
+          setUserCoordinates({"name": userProfile.address, "position": {lat, lng}})
         },
         (error) => {
           console.error(error);
@@ -174,7 +166,8 @@ export default function ProfileDisplay({profiles, userProfile}) {
   // and then a map of their matches locations
   return (
     <div className="dashboard">
-       <Navbar isLoggedIn={true}/> 
+       <Navbar isLoggedIn={true} handleLogout={handleLogout}/> 
+       {userProfile.length !== 0 && userProfile !== null}
        <div className='landing'>
             <div className='landing--container'>
                 <div

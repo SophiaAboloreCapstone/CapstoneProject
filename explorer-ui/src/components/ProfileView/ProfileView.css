@@ -1,7 +1,6 @@
-/* profile-input{
-    padding-bottom: 200px;
-} */
 .profile{
+    padding-top: 200px;
+    height: 100%;
     background-color: black;
     color: black;
 }
@@ -14,7 +13,10 @@
 .matches{
     padding-top: 200px;
 }
-.ProfileView {
+.profile-view-form{
+    padding-bottom: 100px;
+}
+.profile-view {
     margin-top: 10px;
 }
 
@@ -27,4 +29,101 @@
 }
 .display-map{
     padding-top: 50px;
+}
+
+/* CSS from login form */
+.login-form{
+    padding-top:50px;
+}
+
+form .title {
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+form span {
+    margin-right: 10px;
+}
+
+form button {
+    margin-top: 10px;
+}
+body{
+    background-color: black;
+}
+.profile-button-container{
+    margin: 1rem 0 2rem 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-input-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 20%;
+    width: 100%;
+}
+
+
+.profile-title{
+    text-align: center;
+    margin: 3rem 0 2rem 0;
+}
+
+.profile-button-container{
+    margin: 1rem 0 2rem 0;
+    border-radius: 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-page-button{
+    background: linear-gradient(to right, #f2ee018d 0%, #f2ed01 79%);
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    width: 65%;
+    height: 3rem;
+    border: none;
+    color: black;
+    border-radius: 2rem;
+    cursor: pointer;
+}
+.profile-page-button:hover{
+    background: black;
+    color: #f7a9e3;
+}
+.profile-input{
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    border-radius: 2rem;
+    width: 80%;
+    height: 3rem;
+    padding: 1rem;
+    border: none;
+    outline: none;
+    color: black;
+    font-size: 1rem;
+    font-weight: bold;
+}
+.profile-input:focus{
+        display: inline-block;
+        box-shadow: 0 0 0 0.2rem #514b6399;
+        backdrop-filter: blur(12rem);
+        border-radius: 2rem;
+}
+.profile-input::placeholder{
+    color: #514b6399;
+      font-weight: 100;
+      font-size: 1rem;
 }

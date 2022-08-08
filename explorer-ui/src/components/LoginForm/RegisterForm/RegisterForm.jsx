@@ -5,14 +5,16 @@ import * as config from "../../../config"
 import styled from "styled-components";
 import { Link,useNavigate } from "react-router-dom";
 import Footer from "../../Home/Footer/Footer";
-import NavBar from "../../Home/NavBar/NavBar";
+import Loading from "../../Loading/Loading";
 export default function RegisterForm({ handleLogin }) {
     const username = React.createRef();
     const password = React.createRef();
     const age = React.createRef();
     const email = React.createRef();
     const navigate = useNavigate();
+    const [loading, setLoading] = React.useState(false);
     const handleSubmit = event => {
+      setLoading(true)
         event.preventDefault();
 
         const register = async () => {
@@ -116,7 +118,9 @@ backdrop-filter: blur(25px);
 
     return (
 <div className="register">
-    <MainContainer>
+    {!loading
+    ?(<div>
+        <MainContainer>
       <h2 className="welcome-text">Welcome</h2>
       <div className="register-form-input-container">
         <div className="input-container">
@@ -143,27 +147,13 @@ backdrop-filter: blur(25px);
         </Link>
       </div>
     </MainContainer>
+    </div>)
+    :(<div>
+      <Loading loading={loading} />
+    </div>)
+  }
+  
     <Footer />
-        {/* <form onSubmit={handleSubmit}>
-            <div className="title">Register</div>
-            <label>
-                <span>Email</span>
-                <input type="email" ref={email}></input>
-            </label>
-            <label>
-                <span>Username</span>
-                <input ref={username}></input>
-            </label>
-            <label>
-                <span>Password</span>
-                <input type="password" ref={password}></input>
-            </label>
-            <label>
-                <span>Age</span>
-                <input ref={age}></input>
-            </label>
-            <button type="submit">Register</button>
-        </form>    */}
         </div>     
     )
 }

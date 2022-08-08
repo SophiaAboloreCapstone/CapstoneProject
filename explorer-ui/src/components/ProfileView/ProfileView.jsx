@@ -6,8 +6,9 @@ import countries from "../../data/countries.json";
 import months from "../../data/months.json"
 import Footer from "../Home/Footer/Footer";
 import NavBar from "../Home/NavBar/NavBar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate   } from "react-router-dom";
 import Resizer from "react-image-file-resizer";
+import Loading from "../Loading/Loading";
 
 export default function ProfileView({
   handleCreateProfile,
@@ -16,6 +17,7 @@ export default function ProfileView({
   isLoggedIn, handleLogout
 }) {
 
+  
   const [picture, setPicture] = React.useState("");
   const username = React.createRef();
   const bio = React.createRef();
@@ -25,7 +27,7 @@ export default function ProfileView({
   const accomodations = React.createRef();
   const address = React.createRef();
   const location = React.createRef();
-  const [profiles, setProfiles] = React.useState([]);
+  let [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
 
   let countryList = countries.list;
@@ -37,6 +39,7 @@ export default function ProfileView({
     // setProfile({});
     const profile = async () => {
       try {
+        setLoading(true)
         const res = await axios.post(
           `${config.API_BASE_URL}/profileInfo`,
           {
@@ -121,7 +124,10 @@ export default function ProfileView({
     <div className="profile">
       {!profileCreated ? (
         <div className="profile-creation">
-          <form className="profile-view-form" onSubmit={handleSubmit}>
+          {!loading
+          ? (
+            <div>
+                  <form className="profile-view-form" onSubmit={handleSubmit}>
             <div className="title">Set up your profile</div>
             <label>
               <span>Username</span>
@@ -188,6 +194,14 @@ export default function ProfileView({
         <></> 
       )
       }
+            </div> 
+          )
+          : (<div>
+           <Loading loading={loading}/>
+          </div> 
+          )
+          }
+      
 
     </div>
     </div>

@@ -4,13 +4,15 @@ import axios from "axios"
 import * as config from "../../config"
 import styled from "styled-components";
 import Footer from "../Home/Footer/Footer"
-import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react";
+import { Link, useNavigate, useState, createRef} from "react-router-dom"
+import Loading from "../Loading/Loading";
 export default function LoginForm({profileCreated, findProfile, handleLogin}) {
-    const username = React.createRef();
-    const password = React.createRef();
+    const username = createRef();
+    const password = createRef();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const handleSubmit = event => {
+      setLoading(true)
         event.preventDefault();
 
         const login = async () => {
@@ -120,7 +122,9 @@ const HorizontalRule = styled.hr`
   
     return (
       <div className="login-form">
-      <MainContainer>
+        {!loading
+        ?(<div>
+                <MainContainer>
       <h2 className="welcome-text">Welcome Back</h2>
       <div className="login-form-input-container">
         <input className="login-input" ref={username} type="text" placeholder="Username" />
@@ -138,6 +142,12 @@ const HorizontalRule = styled.hr`
         </Link>
       </div>
     </MainContainer>
+        </div>)
+      :(<div>
+       <Loading loading={loading}/>
+      </div>)
+      }
+
     <Footer />
     </div>
     )

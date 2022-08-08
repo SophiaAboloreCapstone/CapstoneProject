@@ -10,6 +10,7 @@ import budgets from "../../../data/budget_ranges.json";
 import axios from "axios";
 import * as config from "../../../config";
 import Geocode from "react-geocode";
+import Loading from "../../Loading/Loading"
 // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
 Geocode.setApiKey("AIzaSyA4B7q2I3Alla6f8udR0Nr-_3vB8lW5Te0");
 export default function Preferences({ isLoggedIn, handleLogout}) {
@@ -24,6 +25,7 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
     currLocation: "",
     visibility: "",
   });
+  const [loading, setLoading] = useState(false);
   const [employment, setEmployment] = useState();
   const [interests, setInterests] = useState([]);
   const [touristAttractions, setTouristAttractions] = useState([]);
@@ -138,6 +140,7 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
 
 // Send the profile information to the database
   function handleSubmit(event) {
+    setLoading(true)
     event.preventDefault();
     const preferences = async () => {
       try {
@@ -159,7 +162,9 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
   // RETURN
   return (
     <div className="preferences">
-       <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>
+      {!loading
+      ? (<div>
+         <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>
       <div className="questionaire">  
         <div className="employment">
           <h3>What best describes the field you work in?</h3>
@@ -254,6 +259,12 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       <button className="profile-complete" type="click" onClick={(event) => handleSubmit(event)}>
           Complete Profile and View Matches
         </button>
+      </div>)
+      : (<div>
+        <Loading loading={loading}/>
+      </div>)
+      }
+      
     </div>
   );
 }

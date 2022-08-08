@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Card from "../Card/Card";
 import "./Activities.css"
 import AttractionContainer from "./AttractionContainer";
+import Loading from "../Loading/Loading";
 //You should get your API key at https://opentripmap.io
 const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
   // Init global variables for paging:
@@ -21,7 +22,7 @@ export default function Activities({region, latitude, longitude, handleAttractio
   const [eventData, setEventData] = useState([]);
   const [xid, setXID] = useState([]);
   const [offset, setOffset] = useState(0);
-
+  const [loading, setLoading] = useState(false);
 // Fetch data from the open trips maps API
   function apiGet(method, query) {
     return new Promise(function (resolve, reject) {
@@ -62,9 +63,11 @@ export default function Activities({region, latitude, longitude, handleAttractio
     ).then(function (data) {
       data.forEach(element => setEventData([...eventData, element]));
     });
+    setLoading(false)
   }
 
  function loadMoreActivities(event){
+  setLoading(true)
   event.preventDefault();
   setOffset(offset += pageLength)
   loadList();
@@ -108,9 +111,18 @@ const getXID = async(event, id) => {
             <p>Sorry no activities available</p>
           )}
       </div>
-      <button className="next_button" type="click" onClick={(e) => loadMoreActivities(e)}>
+      {
+        !loading
+        ?(<div>
+           <button className="next_button" type="click" onClick={(e) => loadMoreActivities(e)}>
           Load More Attractions
         </button>
+        </div>)
+        :(<div>
+          <Loading loading={loading}/>
+        </div>)
+      }
+     
     </div>
 
   );

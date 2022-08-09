@@ -1,11 +1,11 @@
-.activity{
+.activity button {
   background-color: pink;
   color: white;
-  padding: 1rem;
-  height: 100px;
-  width: 150px;
-  border-radius: 20px;
-    font-family: Arial, Helvetica, sans-serif;
+padding: 1rem;
+height: 100px;
+width: 150px;
+border-radius: 20px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 .activity:hover{
     background-color: rgb(221, 192, 255);
@@ -17,3 +17,4 @@
     color: black;
   transform: scale(1.05);
 }
+

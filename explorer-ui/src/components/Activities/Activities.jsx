@@ -1,5 +1,4 @@
 // This function calls API methods by fetch function (you can use XMLHttpRequest or $.ajax instead):
-import Grid from "../Grid/Grid";
 import { useState, useEffect } from "react";
 import Card from "../Card/Card";
 import "./Activities.css"
@@ -21,12 +20,12 @@ const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
 export default function Activities({region, latitude, longitude, handleAttractionsSelected}) {
   const [eventData, setEventData] = useState([]);
   const [xid, setXID] = useState([]);
-  const [offset, setOffset] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(false)
 // Fetch data from the open trips maps API
   function apiGet(method, query) {
     return new Promise(function (resolve, reject) {
-      let otmAPI =
+      var otmAPI =
         "https://api.opentripmap.com/0.1/en/places/" +
         method +
         "?apikey=" +
@@ -43,6 +42,8 @@ export default function Activities({region, latitude, longitude, handleAttractio
     });
   }
 
+  // This function gets total objects count within 1000 meters from specified location (lon, lat) and then loads first objects page:
+
   function firstLoad() {
     apiGet(
       "radius",
@@ -57,19 +58,21 @@ export default function Activities({region, latitude, longitude, handleAttractio
   // This function load POI's list page to the left pane. It uses 1000 meters radius for objects search:
 
   function loadList() {
+    setLoading(true)
     apiGet(
       "radius",
       `radius=1000&limit=${pageLength}&offset=${offset}&lon=${longitude}&lat=${latitude}&rate=2&format=json`
     ).then(function (data) {
-      data.forEach(element => setEventData([...eventData, element]));
+      data.forEach(element => setEventData(eventData => [...eventData, element]));
     });
     setLoading(false)
   }
 
  function loadMoreActivities(event){
-  setLoading(true)
   event.preventDefault();
-  setOffset(offset += pageLength)
+  offset += pageLength;
+  console.log("offset: ", offset)
+  console.log("page length: ", pageLength)
   loadList();
  }
 
@@ -78,8 +81,8 @@ export default function Activities({region, latitude, longitude, handleAttractio
 const getXID = async(event, id) => {
   event.preventDefault();
   try{
-      const xidData = apiGet("xid/" + id.xid)
-      setXID([...xid, xidData]);
+      const xidData = await apiGet("xid/" + id.xid)
+      setXID(xidData);
   }
   catch(error){
     console.log(error);
@@ -89,7 +92,7 @@ const getXID = async(event, id) => {
   return (
     <div className="activities">
       <div className="activities-grid">
-      {eventData !== null && eventData.length >0 ? (
+      {eventData.length !== 0 ? (
             eventData.map((event, idx) => {
               return (
                 <div className="activities">
@@ -100,6 +103,7 @@ const getXID = async(event, id) => {
                   handleAttractionsSelected={handleAttractionsSelected}
                   key={idx}
                 />
+                {/* <button className="more-info" type="click" onclick={(event) => getXID(event, event.xid)}>More Info</button> */}
                 {xid.xid == event.xid
                 ? <AttractionContainer name={xid.name} image={xid.image} description={xid.info.descr} source={xid.wikipedia} />
                 : <></>

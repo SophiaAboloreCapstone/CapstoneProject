@@ -52,7 +52,6 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       visibility: preferenceInfo.visibility,
     });
     setInterests((interests) => [...interests, interest]);
-    navigate("/profileDisplay")
   }
 
   // Update the state array for the users attractions interests
@@ -157,6 +156,7 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
       }
     };
     preferences();
+    navigate("/profileDisplay")
   }
 
   // RETURN
@@ -255,10 +255,11 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
             <option>No</option>
           </select>
         </div>
-      </div>
-      <button className="profile-complete" type="click" onClick={(event) => handleSubmit(event)}>
+        <button className="profile-complete" type="click" onClick={(event) => handleSubmit(event)}>
           Complete Profile and View Matches
         </button>
+        
+      </div>
       </div>)
       : (<div>
         <Loading loading={loading}/>

@@ -1,159 +1,175 @@
-import * as React from "react"
-import "./RegisterForm.css"
-import axios from "axios"
-import * as config from "../../../config"
+import * as React from "react";
+import "./RegisterForm.css";
+import axios from "axios";
+import * as config from "../../../config";
 import styled from "styled-components";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../../Home/Footer/Footer";
 import Loading from "../../Loading/Loading";
 export default function RegisterForm({ handleLogin }) {
-    const username = React.createRef();
-    const password = React.createRef();
-    const age = React.createRef();
-    const email = React.createRef();
-    const navigate = useNavigate();
-    const [loading, setLoading] = React.useState(false);
-    const handleSubmit = event => {
-      setLoading(true)
-        event.preventDefault();
+  const username = React.createRef();
+  const password = React.createRef();
+  const age = React.createRef();
+  const email = React.createRef();
+  const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
+  const handleSubmit = (event) => {
+    setLoading(true);
+    event.preventDefault();
 
-        const register = async () => {
-            try {
-                const res = await axios.post(`${config.API_BASE_URL}/register`, {
-                    "username" : username.current.value,
-                    "password" : password.current.value,
-                    "age": age.current.value,
-                    "email": email.current.value
-                    })
-                handleLogin(res.data.user)    
-                navigate("/profileView")
-            } catch (err) {
-                alert(err)
-                console.log(err)
-            }
-        }
-        register()
+    const register = async () => {
+      try {
+        const res = await axios.post(`${config.API_BASE_URL}/register`, {
+          username: username.current.value,
+          email: email.current.value,
+          password: password.current.value
+        });
+        handleLogin(res.data.user);
+        navigate("/profileView");
+      } catch (err) {
+        alert(err);
+        console.log(err);
+      }
+    };
+    register();
+  };
+
+  // Page Components
+  const MainContainer = styled.div`
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 30vw;
+    background: #f7a9e3;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(8.5px);
+    -webkit-backdrop-filter: blur(8.5px);
+    border-radius: 10px;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.4rem;
+    @media only screen and (min-width: 320px) {
+      width: 80vw;
+      height: 100vh;
+      hr {
+        margin-bottom: 0.3rem;
+      }
+      h4 {
+        font-size: small;
+      }
+    }
+    @media only screen and (min-width: 360px) {
+      width: 80vw;
+      height: 100vh;
+      h4 {
+        font-size: small;
+      }
+    }
+    @media only screen and (min-width: 411px) {
+      width: 80vw;
+      height: 90vh;
     }
 
+    @media only screen and (min-width: 768px) {
+      width: 80vw;
+      height: 90vh;
+    }
+    @media only screen and (min-width: 1024px) {
+      width: 70vw;
+      height: 90vh;
+    }
+    @media only screen and (min-width: 1280px) {
+      width: 50vw;
+      height: 100vh;
+    }
+  `;
 
-// Page Components
-const MainContainer = styled.div`
+  const WelcomeText = styled.h2`
+    margin: 3rem 0 2rem 0;
+  `;
 
-margin-left: auto;
-margin-right: auto;
-display: flex;
-align-items: center;
-flex-direction: column;
-height: 80vh;
-width: 30vw;
-background: #f7a9e3;
-box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-backdrop-filter: blur(8.5px);
--webkit-backdrop-filter: blur(8.5px);
-border-radius: 10px;
-color: #ffffff;
-text-transform: uppercase;
-letter-spacing: 0.4rem;
-@media only screen and (max-width: 320px) {
-width: 80vw;
-height: 90vh;
-hr {
-  margin-bottom: 0.3rem;
-}
-h4 {
-  font-size: small;
-}
-}
-@media only screen and (min-width: 360px) {
-width: 80vw;
-height: 90vh;
-h4 {
-  font-size: small;
-}
-}
-@media only screen and (min-width: 411px) {
-width: 80vw;
-height: 90vh;
-}
+  const InputContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 20%;
+    width: 100%;
+  `;
 
-@media only screen and (min-width: 768px) {
-width: 80vw;
-height: 80vh;
-}
-@media only screen and (min-width: 1024px) {
-width: 70vw;
-height: 50vh;
-}
-@media only screen and (min-width: 1280px) {
-width: 30vw;
-height: 80vh;
-}
-`;
+  const HorizontalRule = styled.hr`
+    width: 90%;
+    height: 0.3rem;
+    border-radius: 0.8rem;
+    border: none;
+    background: linear-gradient(to right, #14163c 0%, #03217b 79%);
+    background-color: #ebd0d0;
+    margin: 1.5rem 0 1rem 0;
+    backdrop-filter: blur(25px);
+  `;
 
-const WelcomeText = styled.h2`
-margin: 3rem 0 2rem 0;
-`;
-
-const InputContainer = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: space-around;
-align-items: center;
-height: 20%;
-width: 100%;
-`;
-
-
-
-const HorizontalRule = styled.hr`
-width: 90%;
-height: 0.3rem;
-border-radius: 0.8rem;
-border: none;
-background: linear-gradient(to right, #14163c 0%, #03217b 79%);
-background-color: #ebd0d0;
-margin: 1.5rem 0 1rem 0;
-backdrop-filter: blur(25px);
-`;
-
-    return (
-<div className="register">
-    {!loading
-    ?(<div>
-        <MainContainer>
-      <h2 className="welcome-text">Welcome</h2>
-      <div className="register-form-input-container">
-        <div className="input-container">
-        <input className="register-input" ref={email} type="email" placeholder="Email" ></input>
+  return (
+    <div className="register">
+      {!loading ? (
+        <div>
+          <MainContainer>
+            <h2 className="welcome-text">Welcome</h2>
+            <div className="register-form-input-container">
+              <div className="input-container">
+                <input
+                  className="register-input"
+                  ref={email}
+                  type="email"
+                  placeholder="Email"
+                ></input>
+              </div>
+              <div className="input-container">
+              <input
+                  className="register-input"
+                  ref={username}
+                  type="text"
+                  placeholder="Username"
+                ></input>
+              </div>
+              <div className="input-container">
+                <input
+                  className="register-input"
+                  ref={password}
+                  type="password"
+                  placeholder="Password"
+                ></input>
+              </div>
+            </div>
+            <div className="register-button-container">
+              <button
+                className="register-page-button"
+                onClick={handleSubmit}
+                content="register"
+              >
+                Register
+              </button>
+            </div>
+            <HorizontalRule />
+            <h3 className="register-prompt"> Already have an account?</h3>
+            <div className="register-button-container">
+              <Link to="/login">
+                <button className="register-page-button" content="Login">
+                  Login
+                </button>
+              </Link>
+            </div>
+          </MainContainer>
         </div>
-        <div className="input-container">
-        <input className="register-input" ref={username} type="text" placeholder="Username"></input>
+      ) : (
+        <div>
+          <Loading loading={loading} />
         </div>
-        <div className="input-container">
-        <input className="register-input" ref={age} type="text" placeholder="Age" ></input>
-        </div>
-        <div className="input-container">
-        <input className="register-input" ref={password} type="password" placeholder="Password"></input>
-        </div>
-      </div>
-      <div className="register-button-container">
-        <button className="register-page-button" onClick={handleSubmit} content="register">Register</button>
-      </div>
-      <HorizontalRule />
-      <h3 className="register-prompt"> Already have an account?</h3>
-      <div className="register-button-container">
-      <Link to="/login">
-        <button className="register-page-button"  content="Login">Login</button>
-        </Link>
-      </div>
-    </MainContainer>
-    </div>)
-    :(<div>
-      <Loading loading={loading} />
-    </div>)
-  }
-  
-    <Footer />
-        </div>     
-    )
+      )}
+
+      <Footer />
+    </div>
+  );
 }

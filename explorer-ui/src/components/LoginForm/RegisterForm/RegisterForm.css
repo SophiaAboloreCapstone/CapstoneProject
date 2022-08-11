@@ -49,7 +49,8 @@ body{
     margin: 3rem 0 2rem 0;
 
 }
-
+/* background-color: #f2ed01;
+  color:#f7a9e3; */
 .register-page-button{
     background: linear-gradient(to right, #f2ee018d 0%, #f2ed01 79%);
     text-transform: uppercase;
@@ -73,7 +74,7 @@ body{
     background: rgba(255, 255, 255, 0.15);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     border-radius: 2rem;
-    width: 80%;
+    width: 110%;
     height: 3rem;
     padding: 1rem;
     border: none;

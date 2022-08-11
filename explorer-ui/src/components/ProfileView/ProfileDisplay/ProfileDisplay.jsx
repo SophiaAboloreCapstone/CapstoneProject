@@ -11,9 +11,9 @@ Geocode.setLocationType("ROOFTOP");
 Geocode.enableDebug();
 import { makeStyles } from '@material-ui/core/styles';
 import { themeData } from './ThemeData'
-
 import { ChakraProvider, theme } from "@chakra-ui/react";
 export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
+  console.log("profile; ", userProfile )
   const [matchesPlusCoordinates, setMatchesPlusCoordinates] = useState([]);
   const [matches, setMatches] = useState([]);
   const [rankedMatches, setRankedMatches] = useState([])
@@ -69,6 +69,7 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
       if(matches !== null && matches.length > 0){
       // Create a state to keep track of the intersection data and iterate through each match to get that data
       const matchesToRank = []
+      console.log(matches)
       matches.forEach((match) => matchesToRank.push(findIntersections(match)))
       matchesToRank.sort((a, b) => b.attractionIntersection.length - a.attractionIntersection.length)
       setRankedMatches(matchesToRank)

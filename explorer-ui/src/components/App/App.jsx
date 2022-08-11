@@ -17,6 +17,7 @@ import {
 import PrivateRoutes from "../PrivateRoutes"
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useCallback } from "react";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("current_user_id") !== null
@@ -43,19 +44,19 @@ export default function App() {
   };
 
   addAuthenticationHeader();
-  const makeAPICall = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/cors', { mode: 'cors' });
-      const data = await response.json();
-      console.log({ data })
-    }
-    catch (e) {
-      console.log(e)
-    }
-  }
-  useEffect(() => {
-    makeAPICall();
-  }, [])
+  // const makeAPICall = async () => {
+  //   try {
+  //     const response = await fetch('http://localhost:3000/cors', { mode: 'cors' });
+  //     const data = await response.json();
+  //     console.log({ data })
+  //   }
+  //   catch (e) {
+  //     console.log(e)
+  //   }
+  // }
+  // useEffect(() => {
+  //   makeAPICall();
+  // }, [])
 
   const handleLogout = () => {
     localStorage.removeItem("current_user_id");
@@ -66,6 +67,7 @@ export default function App() {
   const handleLogin = (user) => {
     localStorage.setItem("current_user_id", user["objectId"]);
     addAuthenticationHeader();
+    console.log(user.objectId)
     setId(user.objectId);
     setIsLoggedIn(true);
   };
@@ -89,9 +91,19 @@ export default function App() {
     })();
   }, [id]);
 
-  const findProfile = () => {
+
+  const findProfile = useCallback(() => {
+    console.log("Profile list: ", profileList)
+    console.log("id: ", id)
     setCurrUser(profileList.find(profile => profile.user.objectId == id))
+    console.log(currUser)
+  }, [id, profileList]);
+
+  const setUserProfile = (profileInfo) => {
+    setCurrUser(profileInfo)
+    console.log("profile info: ", profileInfo)
   }
+
 
   return (
     <div className="App">
@@ -106,7 +118,8 @@ export default function App() {
                     handleCreateProfile={handleCreateProfile}
                     profileCreated={profileCreated}
                     profileEdited={profileEdited}
-                    isLoggedIn={isLoggedIn} handleLogout={handleLogout}      
+                    isLoggedIn={isLoggedIn} handleLogout={handleLogout}
+                    setUserProfile={setUserProfile}
                   />
                 }/>
                 

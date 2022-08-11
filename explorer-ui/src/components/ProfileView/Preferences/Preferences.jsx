@@ -255,11 +255,10 @@ export default function Preferences({ isLoggedIn, handleLogout}) {
             <option>No</option>
           </select>
         </div>
-        <button className="profile-complete" type="click" onClick={(event) => handleSubmit(event)}>
+      </div>
+      <button className="profile-complete" type="click" onClick={(event) => handleSubmit(event)}>
           Complete Profile and View Matches
         </button>
-        
-      </div>
       </div>)
       : (<div>
         <Loading loading={loading}/>

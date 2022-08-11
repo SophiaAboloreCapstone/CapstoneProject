@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import ClipLoader from "react-spinners/ClipLoader";
+import ClipLoader from "react-spinners/FadeLoader";
 
 export default function Loading({loading}) {
     const [color, setColor] = React.useState("#ffffff");

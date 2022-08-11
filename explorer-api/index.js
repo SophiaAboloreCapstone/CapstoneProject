@@ -46,7 +46,7 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    const user = await Parse.User.logIn(req.body.username, req.body.password);
+    const user = await Parse.User.logIn(req.body.email, req.body.password);
     res.send({ user: user });
   } catch (error) {
     res.status(400);

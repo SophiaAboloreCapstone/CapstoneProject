@@ -114,83 +114,83 @@ export default function ProfileView({
       }
     })();
   }, []);
+// Page Components
+const MainContainer = styled.div`
+margin-left: auto;
+margin-right: auto;
+display: flex;
+align-items: center;
+flex-direction: column;
+height: 100vh;
+width: 30vw;
+background: #f7a9e3;
+box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+backdrop-filter: blur(8.5px);
+-webkit-backdrop-filter: blur(8.5px);
+border-radius: 10px;
+color: #ffffff;
+text-transform: uppercase;
+letter-spacing: 0.4rem;
+@media only screen and (max-width: 320px) {
+  width: 80vw;
+  height: 100vh;
+  hr {
+    margin-bottom: 0.3rem;
+  }
+  h4 {
+    font-size: small;
+  }
+}
+@media only screen and (min-width: 360px) {
+  width: 80vw;
+  height: 100vh;
+  h4 {
+    font-size: small;
+  }
+}
+@media only screen and (min-width: 411px) {
+  width: 80vw;
+  height: 100vh;
+}
 
-  // Page Components
-  const MainContainer = styled.div`
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-    width: 30vw;
-    background: #f7a9e3;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    backdrop-filter: blur(8.5px);
-    -webkit-backdrop-filter: blur(8.5px);
-    border-radius: 10px;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 0.4rem;
-    @media only screen and (max-width: 320px) {
-      width: 80vw;
-      height: 100vh;
-      hr {
-        margin-bottom: 0.3rem;
-      }
-      h4 {
-        font-size: small;
-      }
-    }
-    @media only screen and (min-width: 360px) {
-      width: 80vw;
-      height: 100vh;
-      h4 {
-        font-size: small;
-      }
-    }
-    @media only screen and (min-width: 411px) {
-      width: 80vw;
-      height: 100vh;
-    }
+@media only screen and (min-width: 768px) {
+  width: 80vw;
+  height: 100vh;
+}
+@media only screen and (min-width: 1024px) {
+  width: 70vw;
+  height: 100vh;
+}
+@media only screen and (min-width: 1280px) {
+  width: 50vw;
+  height: 100vh;
+}
+`;
 
-    @media only screen and (min-width: 768px) {
-      width: 80vw;
-      height: 100vh;
-    }
-    @media only screen and (min-width: 1024px) {
-      width: 70vw;
-      height: 100vh;
-    }
-    @media only screen and (min-width: 1280px) {
-      width: 50vw;
-      height: 100vh;
-    }
-  `;
+const WelcomeText = styled.h2`
+margin: 3rem 0 2rem 0;
+`;
 
-  const WelcomeText = styled.h2`
-    margin: 3rem 0 2rem 0;
-  `;
+const InputContainer = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: space-around;
+align-items: center;
+height: 20%;
+width: 100%;
+`;
 
-  const InputContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    height: 20%;
-    width: 100%;
-  `;
+const HorizontalRule = styled.hr`
+width: 90%;
+height: 0.3rem;
+border-radius: 0.8rem;
+border: none;
+background: linear-gradient(to right, #14163c 0%, #03217b 79%);
+background-color: #ebd0d0;
+margin: 1.5rem 0 1rem 0;
+backdrop-filter: blur(25px);
+`;
 
-  const HorizontalRule = styled.hr`
-    width: 90%;
-    height: 0.3rem;
-    border-radius: 0.8rem;
-    border: none;
-    background: linear-gradient(to right, #14163c 0%, #03217b 79%);
-    background-color: #ebd0d0;
-    margin: 1.5rem 0 1rem 0;
-    backdrop-filter: blur(25px);
-  `;
 
   return (
     <div className="profile-view">
@@ -203,15 +203,6 @@ export default function ProfileView({
                 <MainContainer>
                 <form className="profile-view-form" onSubmit={handleSubmit}>
                   <h2 className="profile-title">Set up your profile</h2>
-                  {/* <div className="profile-input-container"> */}
-                  <label>
-                    <span>Username</span>
-                    <input className="profile-input" placeholder="Username" ref={username}></input>
-                  </label>
-                  <label>
-                    <span>Age</span>
-                    <input className="profile-input" placeholder="Your age" ref={age}></input>
-                  </label>
                   <label>
                     <span>Profile Picture</span>
                     <input
@@ -219,9 +210,16 @@ export default function ProfileView({
                       id="profile-picture"
                       name="picture"
                       accept="image/*"
-                      // value={base64code}
                       onChange={fileChangedHandler}
                     ></input>
+                  </label>
+                  <label>
+                    <span>Full Name</span>
+                    <input className="profile-input" placeholder="Full Name" ref={username}></input>
+                  </label>
+                  <label>
+                    <span>Age</span>
+                    <input className="profile-input" placeholder="Your age" ref={age}></input>
                   </label>
                   <label>
                     <span>Bio</span>
@@ -298,3 +296,4 @@ export default function ProfileView({
     </div>
   );
 }
+  

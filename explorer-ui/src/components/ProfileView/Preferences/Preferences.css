@@ -12,6 +12,7 @@
     margin: 0 auto;
     display: grid;
     gap: 1rem;
+    
   }
   @media (min-width: 1200px) {
     .grid { grid-template-columns: repeat(4, 1fr); }
@@ -35,9 +36,9 @@
 .employment{
     background-color: black;
 }
-.grid{
+/* .grid{
     background-color: black;
-}
+} */
 .tourist-attractions{
     background-color: black;
 }

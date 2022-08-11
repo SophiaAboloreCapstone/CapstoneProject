@@ -1,35 +1,17 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const Parse = require("parse/node");
 const { PARSE_APP_ID, PARSE_JAVASCRIPT_KEY, MASTER_KEY } = require("./config");
 const { query } = require("express");
 const { Schema } = require("parse/node");
-let bodyParser = require("body-parser");
 const app = express();
 const port = process.env.PORT || 3001;
-const cors = require("cors");
-app.get("/cors", (req, res) => {
-  res.set("Access-Control-Allow-Origin", "*");
-  res.send({ msg: "This has CORS enabled 🎈" });
-});
-app.use(cors()); // Use this after the variable declaration
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(cors());
-app.use(bodyParser.json({ limit: Infinity, extended: true }));
-app.use(
-  bodyParser.urlencoded({
-    limit: Infinity,
-    extended: true,
-    parameterLimit: Infinity,
-  })
-);
-app.use(bodyParser.text({ limit: Infinity }));
 Parse.initialize(PARSE_APP_ID, PARSE_JAVASCRIPT_KEY, MASTER_KEY);
-// Parse.initialize(appConfig.parse.PARSE_APP_ID);
-// Parse.masterKey = appConfig.parse.masterKey;
 Parse.serverURL = "https://parseapi.back4app.com";
-
 app.post("/register", async (req, res) => {
   // Create a Parse class called User
   let user = new Parse.User(req.body);
@@ -77,7 +59,7 @@ app.post("/profileInfo", async (req, res) => {
     const profile = new Parse.Object("ProfileInfo", req.body);
 
     currentUserId = req.headers["current_user_id"];
-    const user = new Parse.User();
+    const user = Parse.User.current();
     user.id = currentUserId;
 
     profile.set("user", user);

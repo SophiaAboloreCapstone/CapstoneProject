@@ -56,9 +56,9 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
   
       // Calculate the intersections between interests and attractions
     function findIntersections(match){
-      if((match.preferenceInfo.interests !== null && userProfile.preferenceInfo.interests !== null) && (match.preferenceInfo.interests !== null && userProfile.preferenceInfo.interests !== null)){
-        const interstIntersection = userProfile.preferenceInfo.interests.filter(x => match.preferenceInfo.interests.includes(x));
-        const attractionIntersection = userProfile.preferenceInfo.attractions.filter(y =>  match.preferenceInfo.attractions.includes(y));
+      if((match.interests !== null && userProfile.interests !== null) && (match.interests !== null && userProfile.interests !== null)){
+        const interstIntersection = userProfile.interests.filter(x => match.interests.includes(x));
+        const attractionIntersection = userProfile.touristAttractions.filter(y =>  match.touristAttractions.includes(y));
         return {"interestIntersection": interstIntersection, "attractionIntersection": attractionIntersection, "match": match};
       }
       return {"interestIntersection": {}, "attractionIntersection": {}, "match": match};
@@ -168,7 +168,7 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
   return (
     <div className="dashboard">
        <Navbar isLoggedIn={true} handleLogout={handleLogout}/> 
-       {userProfile.length !== 0 && userProfile !== null}
+       {userProfile !== {} && userProfile !== null}
        <div className='landing'>
             <div className='landing--container'>
                 <div
@@ -198,7 +198,7 @@ export default function ProfileDisplay({profiles, userProfile, handleLogout}) {
                         <p>Bio: {userProfile.bio}</p>
                         <h6>I'd love to visit:</h6>
                         <ul className="interest-ul">
-                        {userProfile.preferenceInfo.attractions.map((interest, idx)=>
+                        {userProfile.touristAttractions.map((interest, idx)=>
                         <li className="interest-display" key={idx}>{interest}</li>
                         )}
                         </ul>

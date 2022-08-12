@@ -10,14 +10,15 @@ export default function LoginForm({profileCreated, findProfile, handleLogin}) {
     const username = React.createRef();
     const password = React.createRef();
     const navigate = useNavigate();
+
     const handleSubmit = event => {
         event.preventDefault();
 
         const login = async () => {
             try {
                 const res = await axios.post(`${config.API_BASE_URL}/login`, {
-                    "username" : username.current.value,
-                    "password" : password.current.value
+                    username : username.current.value,
+                    password : password.current.value
                     })          
                 handleLogin(res.data.user)
                 findProfile(res.data.user)
@@ -37,7 +38,6 @@ export default function LoginForm({profileCreated, findProfile, handleLogin}) {
         }
         login()
     }
-
 // Page Components
     const MainContainer = styled.div`
     margin-left: auto;

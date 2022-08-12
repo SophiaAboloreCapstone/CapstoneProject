@@ -64,19 +64,25 @@ export default function App() {
     setIsLoggedIn(false);
   };
 
-  const handleLogin = (user) => {
+
+  const handleLogin = useCallback((user) => {
     localStorage.setItem("current_user_id", user["objectId"]);
     addAuthenticationHeader();
     console.log(user.objectId)
-    setId(user.objectId);
+    const foundId = user.objectId
+    console.log("foundId: ", foundId)
+    setId(foundId)
+    console.log("id: ", id)
     setIsLoggedIn(true);
-  };
+  }, [id]);
+
 
   const handleCreateProfile = (profileInfo) => {
     let ids = localStorage.getItem("current_user_id");
     localStorage.setItem("current_user_id", profileInfo.user["objectId"]);
     addAuthenticationHeader();
     setProfile(profileInfo)
+    console.log("profileInfo: ", profileInfo)
     setProfileCreated(true);
   };
 
@@ -94,10 +100,14 @@ export default function App() {
 
   const findProfile = useCallback(() => {
     console.log("Profile list: ", profileList)
-    console.log("id: ", id)
-    setCurrUser(profileList.find(profile => profile.user.objectId == id))
-    console.log(currUser)
-  }, [id, profileList]);
+    
+    if(id != null ){
+      console.log("id when finding profile: ", id)
+      setCurrUser(profileList.find(profile => profile.user.objectId == id))
+      console.log("current user: ", currUser)
+    }
+   
+  }, [profileList, id]);
 
   const setUserProfile = (profileInfo) => {
     setCurrUser(profileInfo)

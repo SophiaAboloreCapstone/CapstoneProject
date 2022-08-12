@@ -6,7 +6,7 @@ export default function Card({name, handleAttractionsSelected}) {
     
     return (
         <div className="activity-card">
-            <button className="activity" onClick={(event) => handleAttractionsSelected(event, name)}>{name}</button>
+            <button type="click" className="activity" onClick={(event) => handleAttractionsSelected(event, name)}>{name}</button>
         </div>
     )
 }

@@ -17,7 +17,7 @@ const apiKey = "5ae2e3f221c38a28845f05b66afc7a4b942f1b2a702f9c54e864e3c6";
   let count; // total objects count
 
 
-export default function Activities({region, latitude, longitude, handleAttractionsSelected}) {
+export default function Activities({region, latitude, longitude, handleAttractionsSelected, setAttractions}) {
   const [eventData, setEventData] = useState([]);
   const [xid, setXID] = useState([]);
   const [events, setEvents] = useState([]);
@@ -63,6 +63,7 @@ export default function Activities({region, latitude, longitude, handleAttractio
       "radius",
       `radius=1000&limit=${pageLength}&offset=${offset}&lon=${longitude}&lat=${latitude}&rate=2&format=json`
     ).then(function (data) {
+      console.log("data: ", data)
       data.forEach(element => setEventData(eventData => [...eventData, element]));
     });
     setLoading(false)

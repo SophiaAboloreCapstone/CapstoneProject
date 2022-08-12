@@ -186,7 +186,7 @@ function MapContainer({ coordinates, currLocation}) {
           <div className="info-window">
                   {currProfile !== null
           ?<InfoWindow
-                  position={currProfile.position}
+                  position={currProfile.user.position}
                   marker={activeMarker}
                   visible={showingInfoWindow}
                   color={"black"}

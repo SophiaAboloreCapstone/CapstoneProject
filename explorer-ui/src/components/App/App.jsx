@@ -17,7 +17,7 @@ import {
 import PrivateRoutes from "../PrivateRoutes"
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useCallback } from "react";
+import { useCallback} from "react";
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("current_user_id") !== null
@@ -27,7 +27,8 @@ export default function App() {
   const [profileList, setProfileList] = useState([]);
   const [currUser, setCurrUser] = useState({})
   const [userProfile, setProfile] = React.useState({});
-  const [id, setId] = React.useState();
+  const [id, setId] = React.useState("");
+  let foundId = null;
   // For every network request, add a custom header for the logged in user
   // The backend API can check the header for the user id
   //
@@ -62,20 +63,27 @@ export default function App() {
     localStorage.removeItem("current_user_id");
     axios.defaults.headers.common = {};
     setIsLoggedIn(false);
+    // setCurrUser(null)
   };
 
-
-  const handleLogin = useCallback((user) => {
+  const handleLogin = async (user) => {
     localStorage.setItem("current_user_id", user["objectId"]);
     addAuthenticationHeader();
     console.log(user.objectId)
-    const foundId = user.objectId
+    foundId = user.objectId
     console.log("foundId: ", foundId)
-    setId(foundId)
+    console.log("foundId type: ", typeof foundId)
+    setId(id => {
+      return foundId;
+    });
+    console.log("id =", id)
+    
+  };
+
+  useEffect (() => {
     console.log("id: ", id)
     setIsLoggedIn(true);
-  }, [id]);
-
+  }, [id])
 
   const handleCreateProfile = (profileInfo) => {
     let ids = localStorage.getItem("current_user_id");
@@ -84,6 +92,7 @@ export default function App() {
     setProfile(profileInfo)
     console.log("profileInfo: ", profileInfo)
     setProfileCreated(true);
+    setUserProfile(profileInfo)
   };
 
   React.useEffect(() => {
@@ -98,16 +107,15 @@ export default function App() {
   }, [id]);
 
 
-  const findProfile = useCallback(() => {
+  const findProfile = (userData) => {
     console.log("Profile list: ", profileList)
-    
-    if(id != null ){
-      console.log("id when finding profile: ", id)
-      setCurrUser(profileList.find(profile => profile.user.objectId == id))
+    if(userData.objectId != "" ){
+      console.log("id when finding profile: ", userData.objectId)
+      setCurrUser(profileList.find(profile => profile.user.objectId == userData.objectId))
       console.log("current user: ", currUser)
     }
    
-  }, [profileList, id]);
+  };
 
   const setUserProfile = (profileInfo) => {
     setCurrUser(profileInfo)

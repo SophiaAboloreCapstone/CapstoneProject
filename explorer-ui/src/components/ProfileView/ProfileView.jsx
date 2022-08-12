@@ -109,7 +109,7 @@ export default function ProfileView({
   handleLogout,
   isLoggedIn,
   profileCreated,
-  profileEdited,
+  setUserProfile
 }) {
   const [profileFormFields, setProfileFormFields] = useState({
     username: null,
@@ -170,6 +170,7 @@ export default function ProfileView({
             ...profileFormFields,
             position: {lat, lng},
           });
+
         },
         error => {
           setError(error);
@@ -197,9 +198,9 @@ export default function ProfileView({
           preferenceInfo: profileFormFields,
         },
         {maxContentLength: Infinity, maxBodyLength: Infinity}, // is this needed ?
+        
       );
-
-      handleCreateProfile(res.data.profile);
+      await handleCreateProfile(res.data.profile);
       navigate('/profileDisplay');
     } catch (e) {
       setError(e); // parse out info from error object / do something when this is set !

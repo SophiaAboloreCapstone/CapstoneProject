@@ -1,7 +1,10 @@
 import * as React from "react"
+import { ImageBackground } from "react-native-web";
 import "./Testimonials.css"
-const COLORS = ["#000000", "#808080", "#000000"];
-const DELAY = 2500;
+const PICS = ["https://i.insider.com/5f5a895be6ff30001d4e82b3?width=1000&format=jpeg&auto=webp",
+ "https://legacy.travelnoire.com/wp-content/uploads/2018/06/greece-yellow-e1528928597794.jpg",
+  "https://www.essence.com/wp-content/uploads/2019/09/Screen-Shot-2019-09-25-at-3.13.07-PM-1200x799.png"];
+const DELAY = 2000;
 
 export default function Testimonials() {
   const [index, setIndex] = React.useState(0);
@@ -18,7 +21,7 @@ export default function Testimonials() {
     timeoutRef.current = setTimeout(
       () =>
         setIndex((prevIndex) =>
-          prevIndex === COLORS.length - 1 ? 0 : prevIndex + 1
+          prevIndex === PICS.length - 1 ? 0 : prevIndex + 1
         ),
       DELAY
     );
@@ -34,17 +37,17 @@ export default function Testimonials() {
         className="slideshowSlider"
         style={{ transform: `translate3d(${-index * 100}%, 0, 0)` }}
       >
-        {COLORS.map((backgroundColor, index) => (
+        {PICS.map((image, index) => (
           <div
             className="slide"
             key={index}
-            style={{ backgroundColor }}
-          ></div>
+            // style={ImageBackground={"#000000"}}
+          > <img src={image} width="700px" height="400"></img></div>
         ))}
       </div>
 
       <div className="slideshowDots">
-        {COLORS.map((_, idx) => (
+        {PICS.map((_, idx) => (
           <div
             key={idx}
             className={`slideshowDot${index === idx ? " active" : ""}`}

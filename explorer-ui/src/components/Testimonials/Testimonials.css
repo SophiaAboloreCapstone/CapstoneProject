@@ -3,21 +3,19 @@
 .slideshow {
   margin: 0 auto;
   overflow: hidden;
-  padding-left: 200px;
-  padding-right:200px;
+  max-width: 500px;
 }
 
 .slideshowSlider {
   white-space: nowrap;
   transition: ease 1000ms;
-  
 }
 
 .slide {
   display: inline-block;
 
   height: 400px;
-  width: 1000px;
+  width: 100%;
   border-radius: 40px;
 }
 
@@ -40,5 +38,5 @@
 }
 
 .slideshowDot.active {
-  background-color: #6a0dad;
+  background-color: #f7a9e3;
 }

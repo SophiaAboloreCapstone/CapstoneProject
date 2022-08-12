@@ -5,12 +5,13 @@ import * as config from "../../config"
 import styled from "styled-components";
 import Footer from "../Home/Footer/Footer"
 import { Link, useNavigate } from "react-router-dom"
+import AllUsers from "../MatchGrid/AllUsers/AllUsers";
 import { useState } from "react";
 export default function LoginForm({profileCreated, findProfile, handleLogin}) {
     const username = React.createRef();
     const password = React.createRef();
     const navigate = useNavigate();
-
+    const [profiles, setProfiles] = React.useState([]);
     const handleSubmit = event => {
         event.preventDefault();
 
@@ -20,9 +21,10 @@ export default function LoginForm({profileCreated, findProfile, handleLogin}) {
                     username : username.current.value,
                     password : password.current.value
                     })          
+                // await handleLogin(res.data.user)
+                // findProfile(res.data.user)
                 handleLogin(res.data.user)
-                findProfile(res.data.user)
-
+                .then(() => {findProfile(res.data.user)})
                 if(profileCreated){
                   navigate("/profileView");
                 }
@@ -38,6 +40,17 @@ export default function LoginForm({profileCreated, findProfile, handleLogin}) {
         }
         login()
     }
+    React.useEffect(() => {
+      const fetchProfiles = (async () => {
+        try {
+          const res = await axios.get(`${config.API_BASE_URL}/matches`);
+          setProfiles(res.data.profiles);
+  
+        } catch (err) {
+          console.log(err);
+        }
+      })();
+    }, []);
 // Page Components
     const MainContainer = styled.div`
     margin-left: auto;
@@ -138,6 +151,7 @@ const HorizontalRule = styled.hr`
         </Link>
       </div>
     </MainContainer>
+    {/* <AllUsers profiles={profiles} /> */}
     <Footer />
     </div>
     )

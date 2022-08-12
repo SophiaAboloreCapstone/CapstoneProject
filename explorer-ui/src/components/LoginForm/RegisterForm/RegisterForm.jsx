@@ -24,7 +24,7 @@ export default function RegisterForm({ handleLogin }) {
           email: email.current.value,
           password: password.current.value
         });
-        handleLogin(res.data.user);
+        await handleLogin(res.data.user);
         navigate("/profileView");
       } catch (err) {
         alert(err);

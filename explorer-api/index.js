@@ -60,7 +60,8 @@ app.post("/profileInfo", async (req, res) => {
     const profile = new Parse.Object("ProfileInfo", req.body);
 
     currentUserId = req.headers["current_user_id"];
-    const user = Parse.User.current();
+    const user = new Parse.User();
+    // const user = Parse.User.current();
     user.id = currentUserId;
 
     profile.set("user", user);
